@@ -4,16 +4,7 @@ import { Link } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
-
-interface RegisterForm {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  terms: boolean;
-}
+import type { RegisterForm } from "../types/register.type";
 
 const features = [
   "Birinchi darslar bepul",
@@ -22,22 +13,12 @@ const features = [
 ];
 
 const Register = () => {
-  const form = useForm<RegisterForm>({
-    mode: "onChange",
-    defaultValues: { phone: "+998" },
-  });
+  const form = useForm<RegisterForm>();
+  const [showPassword, setShowPassword] = useState("password");
+  const [showConfirm, setShowConfirm] = useState("password");
   const {
-    register,
-    handleSubmit,
-    watch,
     formState: { errors },
   } = form;
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const emailValue = watch("email");
-  const passwordValue = watch("password");
 
   const onSubmit = (data: RegisterForm) => {
     console.log(data);
@@ -102,133 +83,166 @@ const Register = () => {
           </p>
 
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="mt-7 flex flex-col gap-y-4"
+            noValidate
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input
                 name="firstname"
-                label="Ism"
                 placeholder="Aziz"
                 form={form}
+                type="text"
+                label="Ism"
                 required
-                rules={{ required: "Ismni kiriting" }}
                 error={errors.firstname?.message}
+                rules={{
+                  required: "Ism kiritilishi shart",
+                  minLength: {
+                    value: 3,
+                    message: "Ism kamida 2 ta harfdan iborat bo'lishi kerak",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Ism 30 ta harfdan oshmasligi kerak",
+                  },
+                  pattern: {
+                    value: /^[A-Za-zÀ-ÿʼ'\s]+$/,
+                    message: "Ism faqat harflardan iborat bo'lishi kerak",
+                  },
+                }}
               />
               <Input
                 name="lastname"
-                label="Familiya"
-                placeholder="Karimov"
+                type="text"
                 form={form}
+                placeholder="Karimov"
+                label="Familiya"
                 required
-                rules={{ required: "Familiyani kiriting" }}
                 error={errors.lastname?.message}
+                rules={{
+                  required: "Familiya kiritilishi shart",
+                  minLength: {
+                    value: 3,
+                    message:
+                      "Familiya kamida 3 ta harfdan iborat bo'lishi kerak",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Familiya 30 ta harfdan oshmasligi kerak",
+                  },
+                  pattern: {
+                    value: /^[A-Za-zÀ-ÿʼ'\s]+$/,
+                    message: "Familiya faqat harflardan iborat bo'lishi kerak",
+                  },
+                }}
               />
             </div>
-
             <Input
               name="email"
               type="email"
-              label="Email"
-              placeholder="aziz@example.uz"
               form={form}
+              placeholder="aziz@example.com"
+              label="Email"
               required
               leftIcon={<Icon.mail />}
+              error={errors.email?.message}
               rules={{
-                required: "Email kiriting",
+                required: "Email kiritilishi shart",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Email formati noto'g'ri",
+                  message: "Email manzil noto'g'ri kiritilgan",
                 },
               }}
-              error={errors.email?.message}
-              success={
-                emailValue && !errors.email
-                  ? "Email mavjud va to'g'ri formatda"
-                  : undefined
-              }
             />
-
             <Input
               name="phone"
               type="tel"
-              label="Telefon raqam"
-              placeholder="+998"
               form={form}
+              placeholder="+998 90 123 45 67"
+              label="Telefon raqam"
               required
               leftIcon={<Icon.phone />}
+              error={errors.phone?.message}
               rules={{
-                required: "Telefon raqam kiriting",
+                required: "Telefon raqam kiritilishi shart",
                 pattern: {
-                  value: /^\+998\d{9}$/,
-                  message: "Telefon raqam to'liq emas — 9 raqam kiriting",
+                  value: /^\+?998\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/,
+                  message: "Telefon raqam +998 XX XXX XX XX formatida bo'lsin",
                 },
               }}
-              error={errors.phone?.message}
             />
-
             <Input
               name="password"
-              type={showPassword ? "text" : "password"}
-              label="Parol"
-              placeholder="Kamida 8 ta belgi"
+              type={showPassword}
               form={form}
+              placeholder="Kamida 8 ta belgi"
+              label="Parol"
               required
-              leftIcon={<Icon.lock />}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="text-slate-400 transition hover:text-slate-600"
-                >
-                  {showPassword ? <Icon.eyeOff /> : <Icon.eye />}
-                </button>
-              }
+              error={errors.password?.message}
+              leftIcon={<Icon.passwordIcon />}
               rules={{
-                required: "Parol kiriting",
-                minLength: {
-                  value: 8,
-                  message: "Kamida 8 ta belgi bo'lishi kerak",
-                },
+                required: "Parol kiritilishi shart",
                 pattern: {
-                  value: /^(?=.*[A-Z])(?=.*\d).+$/,
-                  message: "Katta harf va raqam bo'lishi kerak",
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                  message: "Parol mos emas",
+                },
+                minLength: {
+                  value: 6,
+                  message: "Password kamida 3 ta harfdan iborat bo'lishi kerak",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Password 30 ta harfdan oshmasligi kerak",
                 },
               }}
-              error={errors.password?.message}
-              helper="Kamida 8 ta belgi, katta harf va raqam bo'lsin"
-            />
-
-            <Input
-              name="confirmPassword"
-              type={showConfirm ? "text" : "password"}
-              label="Parolni tasdiqlang"
-              placeholder="Parolni qaytadan kiriting"
-              form={form}
-              required
-              leftIcon={<Icon.lock />}
               rightIcon={
                 <button
                   type="button"
-                  onClick={() => setShowConfirm((v) => !v)}
-                  className="text-slate-400 transition hover:text-slate-600"
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setShowPassword(
+                      showPassword === "password" ? "text" : "password",
+                    )
+                  }
                 >
-                  {showConfirm ? <Icon.eyeOff /> : <Icon.eye />}
+                  {showPassword === "password" ? <Icon.eye /> : <Icon.eyeOff />}
                 </button>
               }
+            />
+            <Input
+              name="confirmPassword"
+              type={showConfirm}
+              form={form}
+              placeholder="Kamida 8 ta belgi"
+              label="Paroldi tasdiqlang"
+              required
+              error={errors.confirmPassword?.message}
               rules={{
                 required: "Parolni tasdiqlang",
                 validate: (value) =>
-                  value === passwordValue || "Parollar mos kelmadi",
+                  value === form.watch("password") || "Parollar mos kelmadi",
               }}
-              error={errors.confirmPassword?.message}
+              leftIcon={<Icon.passwordIcon />}
+              rightIcon={
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setShowConfirm(
+                      showConfirm === "password" ? "text" : "password",
+                    )
+                  }
+                >
+                  {showConfirm === "password" ? <Icon.eye /> : <Icon.eyeOff />}
+                </button>
+              }
             />
-
             <label className="flex items-start gap-x-2.5 text-sm text-slate-600">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-200"
-                {...register("terms", { required: true })}
+                className="mt-0.5 h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+                {...form.register("terms", { required: true })}
               />
               <span>
                 <a
@@ -253,7 +267,7 @@ const Register = () => {
               variant="primary"
               fullWidth
               rightIcon={<Icon.arrowRight />}
-              className="mt-1"
+              className="mt-1 cursor-pointer"
             >
               Ro'yxatdan o'tish
             </Button>

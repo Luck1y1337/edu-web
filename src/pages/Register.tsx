@@ -5,6 +5,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import type { RegisterForm } from "../types/register.type";
+import { useRegister } from "../hooks/api/useRegister";
 
 const features = [
   "Birinchi darslar bepul",
@@ -14,6 +15,7 @@ const features = [
 
 const Register = () => {
   const form = useForm<RegisterForm>();
+  const { mutateAsync } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
   const [showConfirm, setShowConfirm] = useState("password");
   const {
@@ -21,7 +23,9 @@ const Register = () => {
   } = form;
 
   const onSubmit = (data: RegisterForm) => {
-    console.log(data);
+    delete data.confirmPassword;
+    delete data.terms;
+    mutateAsync(data);
   };
 
   return (
@@ -89,13 +93,13 @@ const Register = () => {
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input
-                name="firstname"
+                name="firstName"
                 placeholder="Aziz"
                 form={form}
                 type="text"
                 label="Ism"
                 required
-                error={errors.firstname?.message}
+                error={errors.firstName?.message}
                 rules={{
                   required: "Ism kiritilishi shart",
                   minLength: {
@@ -113,13 +117,13 @@ const Register = () => {
                 }}
               />
               <Input
-                name="lastname"
+                name="lastName"
                 type="text"
                 form={form}
                 placeholder="Karimov"
                 label="Familiya"
                 required
-                error={errors.lastname?.message}
+                error={errors.lastName?.message}
                 rules={{
                   required: "Familiya kiritilishi shart",
                   minLength: {

@@ -22,7 +22,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState("password");
-  
+
   const {
     formState: { errors, touchedFields },
     watch,
@@ -40,8 +40,8 @@ const Login = () => {
     } catch (err: any) {
       setErrorMessage(
         err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Tizimga kirishda xatolik yuz berdi"
+          err.response?.data?.error ||
+          "Tizimga kirishda xatolik yuz berdi",
       );
     } finally {
       setIsLoading(false);
@@ -66,15 +66,21 @@ const Login = () => {
         {/* Center: Content */}
         <div className="max-w-lg">
           <h1 className="text-[2.75rem] font-bold leading-[1.15] tracking-tight">
-            Bilim — kelajakka eng<br />yaxshi sarmoyadir.
+            Bilim — kelajakka eng
+            <br />
+            yaxshi sarmoyadir.
           </h1>
           <p className="mt-6 text-[17px] leading-relaxed text-indigo-100">
-            5000+ bitiruvchi bizning oilamiz tarkibida. Endi navbat sizniki. Bilim olishni davom ettiring va karyera maqsadlaringizga yeting.
+            5000+ bitiruvchi bizning oilamiz tarkibida. Endi navbat sizniki.
+            Bilim olishni davom ettiring va karyera maqsadlaringizga yeting.
           </p>
 
           <ul className="mt-10 flex flex-col gap-y-5">
             {features.map((item) => (
-              <li key={item} className="flex items-center gap-x-4 text-[15px] font-medium text-indigo-50">
+              <li
+                key={item}
+                className="flex items-center gap-x-4 text-[15px] font-medium text-indigo-50"
+              >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white">
                   <Icon.check />
                 </span>
@@ -87,7 +93,9 @@ const Login = () => {
         {/* Bottom: Footer */}
         <div className="flex items-center justify-between text-sm text-indigo-200">
           <span>© 2026 O'quv Markaz</span>
-          <a href="#" className="hover:text-white transition-colors">Yordam kerakmi?</a>
+          <a href="#" className="hover:text-white transition-colors">
+            Yordam kerakmi?
+          </a>
         </div>
       </aside>
 
@@ -105,7 +113,7 @@ const Login = () => {
         </div>
 
         {/* Center: Form */}
-        <div className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center">
+        <div className="mx-auto flex w-full max-w-105 flex-1 flex-col justify-center">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
               Hisobingizga kiring
@@ -168,7 +176,11 @@ const Login = () => {
                       )
                     }
                   >
-                    {showPassword === "password" ? <Icon.eye /> : <Icon.eyeOff />}
+                    {showPassword === "password" ? (
+                      <Icon.eye />
+                    ) : (
+                      <Icon.eyeOff />
+                    )}
                   </button>
                 }
               />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Input from "../components/ui/Input";
@@ -6,6 +6,8 @@ import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import type { RegisterForm } from "../types/register.type";
 import { useRegister } from "../hooks/api/useRegister";
+import { setItem } from "../utils/localstorage";
+import { toast } from "react-toastify";
 
 const features = [
   "Birinchi darslar bepul",
@@ -15,7 +17,7 @@ const features = [
 
 const Register = () => {
   const form = useForm<RegisterForm>();
-  const { mutateAsync } = useRegister();
+  const { mutateAsync, isSuccess, data, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
   const [showConfirm, setShowConfirm] = useState("password");
   const {
@@ -27,6 +29,17 @@ const Register = () => {
     delete data.terms;
     mutateAsync(data);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      const token: string = data?.data.data.tokens?.accessToken;
+      setItem(token);
+      toast.success("Ro'yxatdan o'tish yakunlandi");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 2000);
+    }
+  }, [isSuccess]);
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -270,6 +283,7 @@ const Register = () => {
               type="submit"
               variant="primary"
               fullWidth
+              loading={isPending}
               rightIcon={<Icon.arrowRight />}
               className="mt-1 cursor-pointer"
             >

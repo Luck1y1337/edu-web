@@ -1,3 +1,5 @@
+import Loader from "./Loader";
+
 type ButtonVariant = "primary" | "google" | "apple";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -5,6 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.JSX.Element;
   rightIcon?: React.JSX.Element;
   fullWidth?: boolean;
+  loading?: boolean;
   className?: string;
 }
 
@@ -21,6 +24,7 @@ const Button = ({
   leftIcon,
   rightIcon,
   fullWidth,
+  loading = false,
   className = "",
   type = "button",
   disabled,
@@ -29,16 +33,23 @@ const Button = ({
   return (
     <button
       type={type}
-      disabled={disabled}
+      disabled={disabled || loading}
+      aria-busy={loading}
       className={`inline-flex items-center justify-center gap-x-2 rounded-xl
         px-4 py-3 text-sm font-semibold transition focus:outline-none
         focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60
         ${variants[variant]} ${fullWidth ? "w-full" : ""} ${className}`}
       {...props}
     >
-      {leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
+      {loading ? (
+        <Loader size="sm" />
+      ) : (
+        leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>
+      )}
       {children}
-      {rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
+      {!loading && rightIcon && (
+        <span className="inline-flex shrink-0">{rightIcon}</span>
+      )}
     </button>
   );
 };

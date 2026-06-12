@@ -1,6 +1,6 @@
 export interface NavLink {
   label: string;
-  active: boolean;
+  path: string;
 }
 
 export interface Stat {

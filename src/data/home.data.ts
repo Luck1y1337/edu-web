@@ -9,11 +9,11 @@ import type {
 } from "../types/home.type";
 
 export const navLinks: NavLink[] = [
-  { label: "Bosh sahifa", active: true },
-  { label: "Kurslar", active: false },
-  { label: "O'qituvchilar", active: false },
-  { label: "Blog", active: false },
-  { label: "Aloqa", active: false },
+  { label: "Bosh sahifa", path: "/" },
+  { label: "Kurslar", path: "#" },
+  { label: "O'qituvchilar", path: "/teachers" },
+  { label: "Blog", path: "#" },
+  { label: "Aloqa", path: "/contact" },
 ];
 
 export const heroFeatures: string[] = [

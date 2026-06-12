@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { navLinks } from "../../data/home.data";
 
@@ -14,19 +14,31 @@ const Header = () => {
         </div>
 
         <nav className="hidden items-center gap-x-1 lg:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href="#"
-              className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
-                link.active
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) =>
+            link.path === "#" ? (
+              <a
+                key={link.label}
+                href="#"
+                className="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <NavLink
+                key={link.label}
+                to={link.path}
+                className={({ isActive }) =>
+                  `rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            )
+          )}
         </nav>
 
         <div className="flex items-center gap-x-4">

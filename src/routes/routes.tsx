@@ -1,11 +1,29 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Home from "../pages/Home";
+import Teachers from "../pages/Teachers";
+import Contact from "../pages/Contact";
+import Layout from "../components/ui/Layout";
 
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/register" replace />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/teachers",
+        element: <Teachers />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+    ],
   },
   {
     path: "/login",

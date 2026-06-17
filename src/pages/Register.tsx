@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
@@ -24,7 +24,9 @@ const Register = () => {
   
   const {
     formState: { errors },
+    control,
   } = form;
+  const passwordValue = useWatch({ control, name: "password" });
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
@@ -256,7 +258,7 @@ const Register = () => {
               rules={{
                 required: "Parolni tasdiqlang",
                 validate: (value) =>
-                  value === form.watch("password") || "Parollar mos kelmadi",
+                  value === passwordValue || "Parollar mos kelmadi",
               }}
               leftIcon={<Icon.passwordIcon />}
               rightIcon={

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
@@ -25,7 +25,7 @@ const Login = () => {
 
   const {
     formState: { errors, touchedFields },
-    watch,
+    control,
   } = form;
 
   const onSubmit = async (data: LoginForm) => {
@@ -48,7 +48,7 @@ const Login = () => {
     }
   };
 
-  const emailValue = watch("email");
+  const emailValue = useWatch({ control, name: "email" });
   const isEmailValid = emailValue && emailValue.length > 3 && !errors.email;
 
   return (

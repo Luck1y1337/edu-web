@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import useUserStore from "../store/user.store";
 
 const Login = () => {
-  const store = useUserStore();
+  const setUser = useUserStore((state) => state.setUser);
   useEffect(() => {
     setTimeout(() => {
-      store.setUser({ name: "Jasurbek", email: "jasurbek@gmail.com" });
+      setUser({ name: "Jasurbek", email: "jasurbek@gmail.com" });
     }, 8000);
-  }, []);
+  }, [setUser]);
   console.log("Login render");
   return <div>Login</div>;
 };

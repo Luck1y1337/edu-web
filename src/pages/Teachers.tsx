@@ -1,10 +1,12 @@
+import Header from "../components/home/Header";
+import Footer from "../components/home/Footer";
 import PageHero from "../components/ui/PageHero";
 import TeachersToolbar from "../components/teachers/TeachersToolbar";
 import TeachersGrid from "../components/teachers/TeachersGrid";
 
 const Teachers = () => {
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900">
       <PageHero
         breadcrumb="O'qituvchilar"
         title="Bizning o'qituvchilar"
@@ -16,7 +18,7 @@ const Teachers = () => {
           <TeachersGrid />
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

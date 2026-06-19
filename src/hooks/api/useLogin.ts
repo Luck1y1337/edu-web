@@ -1,28 +1,29 @@
 import axios from "../../config/axios";
 import { useMutation } from "@tanstack/react-query";
-import type { LoginForm } from "../../types/login.type";
 import Endpoints from "../../config/endpoints";
+import type { LoginForm } from "../../types/login.type";
+import type { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export const useLogin = () => {
   const onLogin = async (payload: LoginForm) => {
-    try {
-      const url = Endpoints.auth.login;
-      const response = await axios.post(url, {
-        identifier: payload.email,
-        password: payload.password
-      });
-      return response.data;
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Kirishda xatolik yuz berdi");
-      throw error;
-    }
+    const url = Endpoints.auth.login;
+    return axios.post(url, payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending, data, isSuccess } = useMutation({
     mutationKey: ["login"],
     mutationFn: async (data: LoginForm) => await onLogin(data),
+    onError: (error: AxiosError) => {
+      //@ts-ignore
+      const message = error.response?.data?.message;
+      toast.error(message || "Email yoki parol noto'g'ri");
+    },
   });
-  
-  return { mutateAsync };
+
+  return { mutateAsync, data, isPending, isSuccess };
 };

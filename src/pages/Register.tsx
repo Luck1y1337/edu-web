@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import type { RegisterForm } from "../types/register.type";
 import { useRegister } from "../hooks/api/useRegister";
+import { setItem } from "../utils/localstorage";
+import { toast } from "react-toastify";
 
 const features = [
   "Birinchi darslar bepul",
@@ -15,45 +17,29 @@ const features = [
 
 const Register = () => {
   const form = useForm<RegisterForm>();
-  const navigate = useNavigate();
-  const { mutateAsync } = useRegister();
+  const { mutateAsync, isSuccess, data, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
   const [showConfirm, setShowConfirm] = useState("password");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  
   const {
     formState: { errors },
-    control,
   } = form;
-  const passwordValue = useWatch({ control, name: "password" });
 
-  const onSubmit = async (data: RegisterForm) => {
-    setIsLoading(true);
-    setErrorMessage("");
-    try {
-      const payload = { ...data };
-      delete payload.confirmPassword;
-      delete payload.terms;
-      
-      const response = await mutateAsync(payload);
-      if (response?.data?.tokens?.accessToken) {
-        localStorage.setItem("accessToken", response.data.tokens.accessToken);
-        navigate("/");
-      } else {
-        // Fallback in case registration doesn't auto-login
-        navigate("/login");
-      }
-    } catch (err: any) {
-      setErrorMessage(
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Ro'yxatdan o'tishda xatolik yuz berdi"
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (data: RegisterForm) => {
+    delete data.confirmPassword;
+    delete data.terms;
+    mutateAsync(data);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      const token: string = data?.data.data.tokens?.accessToken;
+      setItem(token);
+      toast.success("Ro'yxatdan o'tish yakunlandi");
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 2000);
+    }
+  }, [isSuccess]);
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -112,12 +98,6 @@ const Register = () => {
           <p className="mt-2 text-sm text-slate-500">
             Ma'lumotlaringizni kiriting va bepul ro'yxatdan o'ting.
           </p>
-
-          {errorMessage && (
-            <div className="mb-6 rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-600">
-              {errorMessage}
-            </div>
-          )}
 
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -258,7 +238,7 @@ const Register = () => {
               rules={{
                 required: "Parolni tasdiqlang",
                 validate: (value) =>
-                  value === passwordValue || "Parollar mos kelmadi",
+                  value === form.watch("password") || "Parollar mos kelmadi",
               }}
               leftIcon={<Icon.passwordIcon />}
               rightIcon={
@@ -303,11 +283,11 @@ const Register = () => {
               type="submit"
               variant="primary"
               fullWidth
-              disabled={isLoading}
-              rightIcon={!isLoading ? <Icon.arrowRight /> : undefined}
-              className="mt-1 cursor-pointer bg-[#4F46E5] hover:bg-[#4338CA] focus:ring-[#4338CA] py-3.5"
+              loading={isPending}
+              rightIcon={<Icon.arrowRight />}
+              className="mt-1 cursor-pointer"
             >
-              {isLoading ? "Kutib turing..." : "Ro'yxatdan o'tish"}
+              Ro'yxatdan o'tish
             </Button>
           </form>
 

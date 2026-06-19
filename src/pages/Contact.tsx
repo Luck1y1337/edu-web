@@ -1,10 +1,12 @@
+import Header from "../components/home/Header";
+import Footer from "../components/home/Footer";
 import PageHero from "../components/ui/PageHero";
 import ContactForm from "../components/contact/ContactForm";
 import ContactInfo from "../components/contact/ContactInfo";
 
 const Contact = () => {
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900">
       <PageHero
         breadcrumb="Aloqa"
         title="Biz bilan bog'laning"
@@ -16,7 +18,7 @@ const Contact = () => {
           <ContactInfo />
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

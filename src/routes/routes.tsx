@@ -1,18 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
+import RootLayout from "../components/layouts/RootLayout";
+import DashboardLayout from "../components/layouts/DashboardLayout";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Home from "../pages/Home";
-import Teachers from "../pages/Teachers";
 import Contact from "../pages/Contact";
-import Layout from "../components/ui/Layout";
+import Register from "../pages/Register";
+import StudentDashboard from "../pages/StudentDashboard";
+import Teachers from "../pages/Teachers";
+import Home from "../pages/Home";
 
 const routes = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    element: <RootLayout />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
       {
@@ -22,6 +23,16 @@ const routes = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <StudentDashboard />,
       },
     ],
   },

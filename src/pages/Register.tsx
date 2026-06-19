@@ -36,7 +36,7 @@ const Register = () => {
       setItem(token);
       toast.success("Ro'yxatdan o'tish yakunlandi");
       setTimeout(() => {
-        window.location.replace("/");
+        window.location.replace("/dashboard");
       }, 2000);
     }
   }, [isSuccess]);

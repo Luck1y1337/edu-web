@@ -7,7 +7,6 @@ import TeachersGrid from "../components/teachers/TeachersGrid";
 const Teachers = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
       <PageHero
         breadcrumb="O'qituvchilar"
         title="Bizning o'qituvchilar"
@@ -19,7 +18,6 @@ const Teachers = () => {
           <TeachersGrid />
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

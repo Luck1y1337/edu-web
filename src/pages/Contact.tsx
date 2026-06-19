@@ -7,7 +7,6 @@ import ContactInfo from "../components/contact/ContactInfo";
 const Contact = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
       <PageHero
         breadcrumb="Aloqa"
         title="Biz bilan bog'laning"
@@ -19,7 +18,6 @@ const Contact = () => {
           <ContactInfo />
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

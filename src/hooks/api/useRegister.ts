@@ -20,9 +20,9 @@ export const useRegister = () => {
     }
   };
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isSuccess, data, isPending } = useMutation({
     mutationKey: ["register"],
     mutationFn: async (data: RegisterForm) => await onRegister(data),
   });
-  return { mutateAsync };
+  return { mutateAsync, isSuccess, data, isPending };
 };

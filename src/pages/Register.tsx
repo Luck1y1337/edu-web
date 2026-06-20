@@ -283,7 +283,7 @@ const Register = () => {
               type="submit"
               variant="primary"
               fullWidth
-              loading={isPending}
+              disabled={isPending}
               rightIcon={<Icon.arrowRight />}
               className="mt-1 cursor-pointer"
             >

@@ -1,5 +1,3 @@
-import Header from "../components/home/Header";
-import Footer from "../components/home/Footer";
 import PageHero from "../components/ui/PageHero";
 import TeachersToolbar from "../components/teachers/TeachersToolbar";
 import TeachersGrid from "../components/teachers/TeachersGrid";

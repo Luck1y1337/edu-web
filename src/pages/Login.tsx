@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
@@ -18,6 +18,7 @@ const features = [
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
+  const navigate = useNavigate();
   const form = useForm<LoginForm>();
   const { mutateAsync, isSuccess, data, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState("password");
@@ -39,10 +40,10 @@ const Login = () => {
       setItem(token);
       toast.success("Tizimga muvaffaqiyatli kirdingiz");
       setTimeout(() => {
-        window.location.replace("/dashboard");
+        navigate("/dashboard");
       }, 1500);
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate, data]);
 
   return (
     <div className="flex min-h-screen bg-white">

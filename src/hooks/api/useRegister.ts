@@ -4,6 +4,8 @@ import Endpoints from "../../config/endpoints";
 import type { RegisterForm } from "../../types/register.type";
 import { toast } from "react-toastify";
 
+import type { AxiosError } from "axios";
+
 export const useRegister = () => {
   const onRegister = async (payload: RegisterForm) => {
     try {
@@ -14,7 +16,8 @@ export const useRegister = () => {
         },
       });
       return response.data;
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message?: string }>;
       toast.error(error.response?.data?.message || "Ro'yxatdan o'tishda xatolik yuz berdi");
       throw error;
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
@@ -16,6 +16,7 @@ const features = [
 ];
 
 const Register = () => {
+  const navigate = useNavigate();
   const form = useForm<RegisterForm>();
   const { mutateAsync, isSuccess, data, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
@@ -36,10 +37,10 @@ const Register = () => {
       setItem(token);
       toast.success("Ro'yxatdan o'tish yakunlandi");
       setTimeout(() => {
-        window.location.replace("/dashboard");
-      }, 2000);
+        navigate("/dashboard");
+      }, 1500);
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate, data]);
 
   return (
     <div className="flex min-h-screen bg-white">

@@ -9,7 +9,7 @@ import Testimonials from "../components/home/Testimonials";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <>
       <section className="bg-linear-to-b from-blue-50/60 to-white">
         <Hero />
         <Stats />
@@ -20,7 +20,7 @@ const Home = () => {
       <Testimonials />
       <Faq />
       <Cta />
-    </div>
+    </>
   );
 };
 

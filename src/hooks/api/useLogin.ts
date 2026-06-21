@@ -18,8 +18,7 @@ export const useLogin = () => {
   const { mutateAsync, isPending, data, isSuccess } = useMutation({
     mutationKey: ["login"],
     mutationFn: async (data: LoginForm) => await onLogin(data),
-    onError: (error: AxiosError) => {
-      //@ts-ignore
+    onError: (error: AxiosError<{ message: string }>) => {
       const message = error.response?.data?.message;
       toast.error(message || "Email yoki parol noto'g'ri");
     },

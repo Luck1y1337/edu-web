@@ -1,18 +1,20 @@
-import PageHero from "../components/ui/PageHero";
+import { blogPosts } from "../data/blog.data";
+import BlogHero from "../components/blog/BlogHero";
+import BlogFeatured from "../components/blog/BlogFeatured";
+import BlogGrid from "../components/blog/BlogGrid";
 
 const Blog = () => {
+  const featured = blogPosts.find((p) => p.featured)!;
+
   return (
     <>
-      <PageHero
-        title="Blog"
-        subtitle="So'nggi yangiliklar, maqolalar va foydali maslahatlar."
-        breadcrumb="Blog"
-      />
-      <section className="py-24 container mx-auto px-4">
-        <div className="text-center text-gray-500">
-          <p>Blog Page Content (To be implemented from Figma)</p>
+      <BlogHero />
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8">
+          <BlogFeatured post={featured} />
+          <BlogGrid />
         </div>
-      </section>
+      </div>
     </>
   );
 };

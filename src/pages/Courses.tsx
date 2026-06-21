@@ -1,18 +1,13 @@
-import PageHero from "../components/ui/PageHero";
+import CoursesHero from "../components/courses/CoursesHero";
+import CoursesGrid from "../components/courses/CoursesGrid";
 
 const Courses = () => {
   return (
     <>
-      <PageHero
-        title="Barcha Kurslar"
-        subtitle="Bizning ta'lim yo'nalishlarimiz bilan tanishing."
-        breadcrumb="Kurslar"
-      />
-      <section className="py-24 container mx-auto px-4">
-        <div className="text-center text-gray-500">
-          <p>Courses Catalog Content (To be implemented from Figma)</p>
-        </div>
-      </section>
+      <CoursesHero />
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <CoursesGrid />
+      </div>
     </>
   );
 };

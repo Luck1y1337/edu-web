@@ -1,15 +1,24 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../components/layouts/RootLayout";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import GlobalError from "../components/ui/GlobalError";
-import Login from "../pages/Login";
-import Contact from "../pages/Contact";
-import Register from "../pages/Register";
-import StudentDashboard from "../pages/StudentDashboard";
-import Teachers from "../pages/Teachers";
-import Home from "../pages/Home";
-import NotFound from "../pages/NotFound";
+import GlobalSpinner from "../components/ui/GlobalSpinner";
+
+const Login = React.lazy(() => import("../pages/Login"));
+const Contact = React.lazy(() => import("../pages/Contact"));
+const Register = React.lazy(() => import("../pages/Register"));
+const StudentDashboard = React.lazy(() => import("../pages/StudentDashboard"));
+const Teachers = React.lazy(() => import("../pages/Teachers"));
+const Home = React.lazy(() => import("../pages/Home"));
+const NotFound = React.lazy(() => import("../pages/NotFound"));
+
+const withSuspense = (Component: React.ComponentType) => (
+  <Suspense fallback={<GlobalSpinner />}>
+    <Component />
+  </Suspense>
+);
 
 const routes = createBrowserRouter([
   {
@@ -18,19 +27,19 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: withSuspense(Home),
       },
       {
         path: "/teachers",
-        element: <Teachers />,
+        element: withSuspense(Teachers),
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: withSuspense(Contact),
       },
       {
         path: "*",
-        element: <NotFound />,
+        element: withSuspense(NotFound),
       },
     ],
   },
@@ -44,7 +53,7 @@ const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <StudentDashboard />,
+            element: withSuspense(StudentDashboard),
           },
         ],
       },
@@ -52,12 +61,12 @@ const routes = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: withSuspense(Login),
     errorElement: <GlobalError />,
   },
   {
     path: "/register",
-    element: <Register />,
+    element: withSuspense(Register),
     errorElement: <GlobalError />,
   },
 ]);

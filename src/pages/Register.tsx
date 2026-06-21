@@ -8,6 +8,7 @@ import type { RegisterForm } from "../types/register.type";
 import { useRegister } from "../hooks/api/useRegister";
 import { setItem } from "../utils/localstorage";
 import { toast } from "react-toastify";
+import useUserStore from "../store/user.store";
 
 const features = [
   "Birinchi darslar bepul",
@@ -19,11 +20,16 @@ const Register = () => {
   const navigate = useNavigate();
   const form = useForm<RegisterForm>();
   const { mutateAsync, isSuccess, data, isPending } = useRegister();
+  const setUser = useUserStore((state) => state.setUser);
   const [showPassword, setShowPassword] = useState("password");
   const [showConfirm, setShowConfirm] = useState("password");
   const {
     formState: { errors },
+    watch,
   } = form;
+
+  const firstNameValue = watch("firstName");
+  const emailValue = watch("email");
 
   const onSubmit = (data: RegisterForm) => {
     delete data.confirmPassword;
@@ -35,12 +41,19 @@ const Register = () => {
     if (isSuccess) {
       const token: string = data?.data.data.tokens?.accessToken;
       setItem(token);
+
+      const userObj = data?.data.data.user || {
+        name: firstNameValue,
+        email: emailValue
+      };
+      setUser(userObj);
+
       toast.success("Ro'yxatdan o'tish yakunlandi");
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
     }
-  }, [isSuccess, navigate, data]);
+  }, [isSuccess, navigate, data, setUser, firstNameValue, emailValue]);
 
   return (
     <div className="flex min-h-screen bg-white">

@@ -4,13 +4,16 @@ import ActiveCourses from "../components/dashboard/ActiveCourses";
 import WeeklyGoal from "../components/dashboard/WeeklyGoal";
 import RecommendedCourses from "../components/dashboard/RecommendedCourses";
 import { Icon } from "../components/ui/Icon";
+import useUserStore from "../store/user.store";
 
 const StudentDashboard = () => {
+  const user = useUserStore((state) => state.user);
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Salom, Bobur! 👋</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Salom, {user?.name || "Talaba"}! 👋</h1>
           <p className="mt-1 text-sm text-gray-500">
             Online o'qishingizni davom ettiring. Bugun yangi narsa o'rganish
             uchun ajoyib kun!

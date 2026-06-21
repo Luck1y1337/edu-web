@@ -1,8 +1,18 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { dashboardNav } from "../../data/dashboard.data";
+import useUserStore from "../../store/user.store";
 
 const DashboardSidebar = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useUserStore();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    logout();
+    navigate("/login");
+  };
+
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
       <div className="flex h-16 items-center gap-x-2.5 border-b border-gray-100 px-6">
@@ -56,20 +66,20 @@ const DashboardSidebar = () => {
       <div className="flex items-center gap-x-3 border-t border-gray-100 px-4 py-4">
         <img
           src="https://i.pravatar.cc/80?img=11"
-          alt="Bobur Tojiev"
+          alt={user?.name || "Talaba"}
           className="h-9 w-9 rounded-full object-cover"
         />
         <div className="flex-1">
-          <p className="text-sm font-semibold text-gray-900">Bobur Tojiev</p>
-          <p className="text-xs text-gray-400">Online talaba</p>
+          <p className="text-sm font-semibold text-gray-900">{user?.name || "Talaba"}</p>
+          <p className="text-xs text-gray-400">{user?.email || "Online talaba"}</p>
         </div>
-        <Link
-          to="/login"
+        <button
+          onClick={handleLogout}
           className="text-gray-400 transition-colors hover:text-gray-700"
           aria-label="Chiqish"
         >
           <Icon.logout />
-        </Link>
+        </button>
       </div>
     </aside>
   );

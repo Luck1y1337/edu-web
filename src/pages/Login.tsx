@@ -8,6 +8,7 @@ import type { LoginForm } from "../types/login.type";
 import { useLogin } from "../hooks/api/useLogin";
 import { setItem } from "../utils/localstorage";
 import { toast } from "react-toastify";
+import useUserStore from "../store/user.store";
 
 const features = [
   "Onlayn platforma — istalgan vaqtda darslar",
@@ -21,6 +22,7 @@ const Login = () => {
   const navigate = useNavigate();
   const form = useForm<LoginForm>();
   const { mutateAsync, isSuccess, data, isPending } = useLogin();
+  const setUser = useUserStore((state) => state.setUser);
   const [showPassword, setShowPassword] = useState("password");
   const {
     formState: { errors },
@@ -38,12 +40,20 @@ const Login = () => {
     if (isSuccess) {
       const token: string = data?.data.data.tokens?.accessToken;
       setItem(token);
+      
+      // Extract user info from response or use email
+      const userObj = data?.data.data.user || { 
+        name: emailValue.split('@')[0], 
+        email: emailValue 
+      };
+      setUser(userObj);
+
       toast.success("Tizimga muvaffaqiyatli kirdingiz");
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
     }
-  }, [isSuccess, navigate, data]);
+  }, [isSuccess, navigate, data, setUser, emailValue]);
 
   return (
     <div className="flex min-h-screen bg-white">

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { footerCourses, footerPages, socials } from "../../data/home.data";
 
@@ -27,10 +28,10 @@ const Footer = () => {
           </h4>
           <ul className="mt-4 space-y-2.5">
             {footerPages.map((page) => (
-              <li key={page}>
-                <a href="#" className="text-sm hover:text-white">
-                  {page}
-                </a>
+              <li key={page.label}>
+                <Link to={page.path} className="text-sm hover:text-white">
+                  {page.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -42,10 +43,10 @@ const Footer = () => {
           </h4>
           <ul className="mt-4 space-y-2.5">
             {footerCourses.map((course) => (
-              <li key={course}>
-                <a href="#" className="text-sm hover:text-white">
-                  {course}
-                </a>
+              <li key={course.label}>
+                <Link to={course.path} className="text-sm hover:text-white">
+                  {course.label}
+                </Link>
               </li>
             ))}
           </ul>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
 import { courses } from "../../data/home.data";
@@ -50,9 +51,12 @@ const Courses = () => {
                 </p>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-base font-bold">{course.price}</span>
-                  <button className="rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700">
+                  <Link
+                    to="/courses"
+                    className="rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+                  >
                     Batafsil
-                  </button>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -60,9 +64,12 @@ const Courses = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <button className="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
             Barcha kurslarni ko'rish <Icon.arrowRight />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

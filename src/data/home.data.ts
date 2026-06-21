@@ -10,9 +10,9 @@ import type {
 
 export const navLinks: NavLink[] = [
   { label: "Bosh sahifa", path: "/" },
-  { label: "Kurslar", path: "#" },
+  { label: "Kurslar", path: "/courses" },
   { label: "O'qituvchilar", path: "/teachers" },
-  { label: "Blog", path: "#" },
+  { label: "Blog", path: "/blog" },
   { label: "Aloqa", path: "/contact" },
 ];
 
@@ -278,20 +278,21 @@ export const faqs: Faq[] = [
   },
 ];
 
-export const footerPages: string[] = [
-  "Bo'sh sahifa",
-  "Kurslar",
-  "O'qituvchilar",
-  "Blog",
-  "Aloqa",
+export const footerPages: NavLink[] = [
+  { label: "Bosh sahifa", path: "/" },
+  { label: "Kurslar", path: "/courses" },
+  { label: "O'qituvchilar", path: "/teachers" },
+  { label: "Blog", path: "/blog" },
+  { label: "Biz haqimizda", path: "/about" },
+  { label: "Aloqa", path: "/contact" },
 ];
 
-export const footerCourses: string[] = [
-  "Frontend",
-  "Backend",
-  "UX/UI Dizayn",
-  "Mobil dasturlash",
-  "Marketing",
+export const footerCourses: NavLink[] = [
+  { label: "Frontend", path: "/courses" },
+  { label: "Backend", path: "/courses" },
+  { label: "UX/UI Dizayn", path: "/courses" },
+  { label: "Mobil dasturlash", path: "/courses" },
+  { label: "Marketing", path: "/courses" },
 ];
 
 export const socials: string[] = [

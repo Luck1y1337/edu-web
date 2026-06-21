@@ -26,12 +26,12 @@ const Hero = () => {
           >
             Ro'yxatdan o'tish
           </Link>
-          <a
-            href="#kurslar"
+          <Link
+            to="/courses"
             className="rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             Kurslarni ko'rish ↓
-          </a>
+          </Link>
         </div>
         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
           {heroFeatures.map((feature) => (

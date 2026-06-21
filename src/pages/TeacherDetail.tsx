@@ -1,15 +1,41 @@
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
+import { getTeacherDetail, getOtherTeachers } from "../data/teacherDetail.data";
+import TeacherHero from "../components/teacherDetail/TeacherHero";
+import TeacherTabs from "../components/teacherDetail/TeacherTabs";
+import TeacherSidebar from "../components/teacherDetail/TeacherSidebar";
+import OtherTeachers from "../components/teacherDetail/OtherTeachers";
 
 const TeacherDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+
+  if (!id) return <Navigate to="/teachers" replace />;
+
+  const teacher = getTeacherDetail(id);
+  if (!teacher) return <Navigate to="/teachers" replace />;
+
+  const others = getOtherTeachers(id);
 
   return (
-    <section className="py-24 container mx-auto px-4">
-      <div className="text-center text-gray-500">
-        <h1 className="text-3xl font-bold mb-4">Teacher Profile {id}</h1>
-        <p>Teacher Detail Content (To be implemented from Figma)</p>
+    <>
+      {/* Hero */}
+      <TeacherHero teacher={teacher} />
+
+      {/* Content */}
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
+          {/* Tabs */}
+          <div className="min-w-0 flex-1">
+            <TeacherTabs teacher={teacher} />
+          </div>
+
+          {/* Sidebar */}
+          <TeacherSidebar teacher={teacher} />
+        </div>
       </div>
-    </section>
+
+      {/* Other teachers */}
+      <OtherTeachers teachers={others} />
+    </>
   );
 };
 

@@ -1,8 +1,16 @@
+import { Link } from "react-router-dom";
 import type { Teacher } from "../../types/home.type";
 
+const toSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
+  const slug = toSlug(teacher.name);
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-md">
+    <Link
+      to={`/teachers/${slug}`}
+      className="block rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-md"
+    >
       <img
         src={teacher.photo}
         alt={teacher.name}
@@ -27,7 +35,7 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
           <p className="text-xs text-gray-400">Reyting</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -46,6 +46,7 @@ export const timeline = [
 ];
 
 export const teamMembers = [
+  // Row 1
   {
     id: 1,
     photo: "/images/about/team-1.png",
@@ -74,6 +75,7 @@ export const teamMembers = [
     role: "UX/UI dizayner",
     fallback: "https://i.pravatar.cc/331?img=45",
   },
+  // Row 2
   {
     id: 5,
     photo: "/images/about/team-5.png",
@@ -101,6 +103,35 @@ export const teamMembers = [
     name: "Otabek Salimov",
     role: "Flutter Developer",
     fallback: "https://i.pravatar.cc/331?img=14",
+  },
+  // Row 3
+  {
+    id: 9,
+    photo: "/images/about/team-9.png",
+    name: "Diloraxon Nazarova",
+    role: "Marketing",
+    fallback: "https://i.pravatar.cc/331?img=23",
+  },
+  {
+    id: 10,
+    photo: "/images/about/team-10.png",
+    name: "Jasur Mahmudov",
+    role: "DevOps muhandisi",
+    fallback: "https://i.pravatar.cc/331?img=68",
+  },
+  {
+    id: 11,
+    photo: "/images/about/team-11.png",
+    name: "Kamola Yusupova",
+    role: "Tahsil bo'yicha menejer",
+    fallback: "https://i.pravatar.cc/331?img=38",
+  },
+  {
+    id: 12,
+    photo: "/images/about/team-12.png",
+    name: "Bekzod Salimov",
+    role: "HR rahbari",
+    fallback: "https://i.pravatar.cc/331?img=52",
   },
 ];
 

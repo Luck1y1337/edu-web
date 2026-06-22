@@ -203,8 +203,19 @@ const CourseDetailStudent = () => {
             )}
             
             {activeTab === "oqituvchi" && (
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-gray-500 text-center">
-                O'qituvchi haqida ma'lumot...
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                    <img src={course.teacherAvatar} alt={course.teacher} className="h-full w-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="font-manrope text-2xl font-bold tracking-tight text-gray-900">{course.teacher}</h3>
+                    <p className="text-sm text-gray-500">{course.category} Lead · 8 yillik tajriba</p>
+                  </div>
+                </div>
+                <p className="text-gray-500 leading-relaxed">
+                  Frontend yo'nalishida 8 yillik amaliy tajriba. EPAM va Uzcard kompaniyalarida ishlagan. 540+ talabaga dars bergan, o'rtacha reytingi 4.9.
+                </p>
               </div>
             )}
           </div>

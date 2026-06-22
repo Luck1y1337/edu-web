@@ -1,17 +1,14 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import { dashboardNav } from "../../data/dashboard.data";
 import useUserStore from "../../store/user.store";
+import LogoutModal from "../LogoutModal";
 
 const DashboardSidebar = () => {
-  const navigate = useNavigate();
-  const { user, logout } = useUserStore();
+  const { user } = useUserStore();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    logout();
-    navigate("/login");
-  };
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
@@ -74,13 +71,14 @@ const DashboardSidebar = () => {
           <p className="text-xs text-gray-400">{user?.email || "Online talaba"}</p>
         </div>
         <button
-          onClick={handleLogout}
+          onClick={() => setIsLogoutModalOpen(true)}
           className="text-gray-400 transition-colors hover:text-gray-700"
           aria-label="Chiqish"
         >
           <Icon.logout />
         </button>
       </div>
+      <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} />
     </aside>
   );
 };

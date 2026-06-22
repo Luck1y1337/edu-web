@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import LogoutModal from "../components/LogoutModal";
 
 const LessonPage = () => {
   const [activeTab, setActiveTab] = useState("tavsif");
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -31,15 +33,15 @@ const LessonPage = () => {
               <div className="h-full w-[62%] rounded-full bg-blue-600"></div>
             </div>
           </div>
-          <Link
-            to="/dashboard"
+          <button
+            onClick={() => setIsLogoutModalOpen(true)}
             className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
             Chiqish
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -291,6 +293,8 @@ const LessonPage = () => {
         </aside>
 
       </main>
+
+      <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} />
     </div>
   );
 };

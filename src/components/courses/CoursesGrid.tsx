@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { allCourses } from "../../data/courses.data";
+import { allCourses, type Course } from "../../data/courses.data";
 import CourseCard from "./CourseCard";
 import CoursesFilter from "./CoursesFilter";
 
@@ -14,7 +14,11 @@ interface FilterState {
   durations: string[];
 }
 
-const CoursesGrid = () => {
+interface Props {
+  items?: Course[];
+}
+
+const CoursesGrid = ({ items = allCourses }: Props) => {
   const [sort, setSort] = useState("Eng mashhur");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -27,7 +31,7 @@ const CoursesGrid = () => {
   });
 
   const filtered = useMemo(() => {
-    let result = [...allCourses];
+    let result = [...items];
 
     if (search.trim()) {
       result = result.filter((c) =>
@@ -54,7 +58,7 @@ const CoursesGrid = () => {
     }
 
     return result;
-  }, [search, filters, sort]);
+  }, [search, filters, sort, items]);
 
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const visible = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);

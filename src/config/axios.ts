@@ -2,7 +2,7 @@ import axios from "axios";
 import { getItem } from "../utils/localstorage";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api/v1",
 });
 
 instance.interceptors.request.use(

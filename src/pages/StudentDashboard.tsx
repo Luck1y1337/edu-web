@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ContinueBanner from "../components/dashboard/ContinueBanner";
 import DashboardStats from "../components/dashboard/DashboardStats";
 import ActiveCourses from "../components/dashboard/ActiveCourses";
@@ -19,10 +20,13 @@ const StudentDashboard = () => {
             uchun ajoyib kun!
           </p>
         </div>
-        <button className="inline-flex shrink-0 items-center gap-x-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
+        <Link
+          to="/dashboard/catalog"
+          className="inline-flex shrink-0 items-center gap-x-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        >
           <Icon.search />
           Yangi kurs tanlash
-        </button>
+        </Link>
       </div>
 
       <ContinueBanner />

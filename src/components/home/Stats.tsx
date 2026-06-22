@@ -1,10 +1,15 @@
 import { stats } from "../../data/home.data";
+import type { Stat } from "../../types/home.type";
 
-const Stats = () => {
+interface Props {
+  items?: Stat[];
+}
+
+const Stats = ({ items = stats }: Props) => {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
       <div className="grid grid-cols-2 gap-6 rounded-2xl border border-gray-100 bg-white p-8 shadow-lg shadow-gray-100/80 lg:grid-cols-4">
-        {stats.map((stat) => (
+        {items.map((stat) => (
           <div key={stat.label} className="flex items-center gap-x-4">
             <span
               className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold ${stat.color}`}

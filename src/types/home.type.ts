@@ -28,6 +28,7 @@ export interface Advantage {
 }
 
 export interface Teacher {
+  id?: string;
   photo: string;
   name: string;
   role: string;

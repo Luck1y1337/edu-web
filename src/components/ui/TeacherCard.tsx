@@ -5,7 +5,7 @@ const toSlug = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
-  const slug = toSlug(teacher.name);
+  const slug = teacher.id || toSlug(teacher.name);
   return (
     <Link
       to={`/teachers/${slug}`}

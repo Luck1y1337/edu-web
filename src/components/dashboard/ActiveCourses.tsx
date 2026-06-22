@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { activeCourses } from "../../data/dashboard.data";
 
 const ActiveCourses = () => {
@@ -5,9 +6,9 @@ const ActiveCourses = () => {
     <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-gray-900">Faol online kurslarim</h2>
-        <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
+        <Link to="/dashboard/courses" className="text-sm font-medium text-blue-600 hover:text-blue-700">
           Hammasi →
-        </button>
+        </Link>
       </div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -59,9 +60,12 @@ const ActiveCourses = () => {
                 </div>
               </div>
 
-              <button className="mt-4 w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+              <Link
+                to="/dashboard/courses"
+                className="mt-4 w-full rounded-lg bg-blue-600 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
                 Davom ettirish
-              </button>
+              </Link>
             </div>
           </article>
         ))}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { continueLearning } from "../../data/dashboard.data";
 
@@ -35,10 +36,13 @@ const ContinueBanner = () => {
         </div>
 
         <div className="mt-5 flex flex-wrap items-center gap-4">
-          <button className="inline-flex items-center gap-x-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700">
+          <Link
+            to="/dashboard/lesson/1"
+            className="inline-flex items-center gap-x-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          >
             <Icon.play />
             Darsni davom ettirish
-          </button>
+          </Link>
           <span className="text-sm text-gray-500">
             {completedLessons} / {totalLessons} dars tugallandi
           </span>

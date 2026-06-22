@@ -1,16 +1,27 @@
+import { useQuery } from "@tanstack/react-query";
 import { useParams, Navigate } from "react-router-dom";
 import { getTeacherDetail, getOtherTeachers } from "../data/teacherDetail.data";
 import TeacherHero from "../components/teacherDetail/TeacherHero";
 import TeacherTabs from "../components/teacherDetail/TeacherTabs";
 import TeacherSidebar from "../components/teacherDetail/TeacherSidebar";
 import OtherTeachers from "../components/teacherDetail/OtherTeachers";
+import { publicApi } from "../services/api";
+import { mapApiTeacherToDetail } from "../services/mappers";
 
 const TeacherDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const teacherId = id || "";
+
+  const teacherQuery = useQuery({
+    queryKey: ["public", "teacher", teacherId],
+    queryFn: () => publicApi.getTeacher(teacherId),
+    enabled: Boolean(teacherId),
+    retry: false,
+  });
 
   if (!id) return <Navigate to="/teachers" replace />;
 
-  const teacher = getTeacherDetail(id);
+  const teacher = teacherQuery.data ? mapApiTeacherToDetail(teacherQuery.data) : getTeacherDetail(id);
   if (!teacher) return <Navigate to="/teachers" replace />;
 
   const others = getOtherTeachers(id);

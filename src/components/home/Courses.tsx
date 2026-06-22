@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
 import { courses } from "../../data/home.data";
+import type { Course } from "../../types/home.type";
 
-const Courses = () => {
+interface Props {
+  items?: Course[];
+}
+
+const Courses = ({ items = courses }: Props) => {
   return (
     <section id="kurslar" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -14,7 +19,7 @@ const Courses = () => {
         />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {courses.map((course) => (
+          {items.map((course) => (
             <article
               key={course.title}
               className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg"

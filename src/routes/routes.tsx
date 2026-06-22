@@ -9,6 +9,7 @@ import GlobalSpinner from "../components/ui/GlobalSpinner";
 const Login = React.lazy(() => import("../pages/Login"));
 const Contact = React.lazy(() => import("../pages/Contact"));
 const Register = React.lazy(() => import("../pages/Register"));
+const Enrollment = React.lazy(() => import("../pages/Enrollment"));
 const StudentDashboard = React.lazy(() => import("../pages/StudentDashboard"));
 const Teachers = React.lazy(() => import("../pages/Teachers"));
 const Home = React.lazy(() => import("../pages/Home"));
@@ -57,6 +58,7 @@ const routes = createBrowserRouter([
       { path: "/pricing", element: withSuspense(Pricing) },
       { path: "/faq", element: withSuspense(FaqPage) },
       { path: "/contact", element: withSuspense(Contact) },
+      { path: "/enroll", element: withSuspense(Enrollment) },
       { path: "*", element: withSuspense(NotFound) },
     ],
   },

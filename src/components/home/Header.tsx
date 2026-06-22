@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { navLinks } from "../../data/home.data";
+import useUserStore from "../../store/user.store";
 
 const Header = () => {
+  const { isAuthenticated } = useUserStore();
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -54,18 +56,30 @@ const Header = () => {
               />
             </svg>
           </button>
-          <Link
-            to="/login"
-            className="text-sm font-medium text-gray-600 hover:text-gray-900"
-          >
-            Kirish
-          </Link>
-          <Link
-            to="/register"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-          >
-            Ro'yxatdan o'tish
-          </Link>
+          
+          {isAuthenticated ? (
+            <Link
+              to="/dashboard"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
+                Kirish
+              </Link>
+              <Link
+                to="/register"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                Ro'yxatdan o'tish
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

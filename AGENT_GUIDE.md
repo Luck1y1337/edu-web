@@ -1,4 +1,4 @@
-﻿# 🤖 AGENT GUIDE — O''quv Markaz Frontend
+# 🤖 AGENT GUIDE — O'quv Markaz Frontend
 
 > Этот документ написан для любого ИИ-агента, который продолжает работу над проектом.
 > Здесь описано: **что мы делаем**, **как мы делаем**, **что уже готово**, и **что нужно сделать дальше**.
@@ -7,15 +7,15 @@
 
 ## 📌 Суть проекта
 
-**O''quv Markaz** — это образовательная платформа (EdTech) на узбекском языке.
+**O'quv Markaz** — это образовательная платформа (EdTech) на узбекском языке.
 Сайт — публичная часть платформы, включающая:
 - Главную страницу
 - Страницы курсов, преподавателей, блога
 - Личный кабинет студента (dashboard)
 - Регистрацию и вход
 
-**Стек:** React + TypeScript + TailwindCSS (через Vite)
-**Репозиторий:** `https://github.com/Luck1y1337/erp-frontend`
+**Стек:** React 19 + TypeScript + TailwindCSS v4 (через Vite 8)
+**Репозиторий:** `https://github.com/Luck1y1337/edu-web`
 **Папка проекта:** `C:\Users\Luck1y\Desktop\Project\frontend`
 
 ---
@@ -42,7 +42,7 @@ Figma Dev Mode
      ↓
 Создаёт .tsx компоненты + data файлы
      ↓
-Проверяет build (yarn build)
+Проверяет build (yarn build или npm run build)
      ↓
 git push → GitHub
 ```
@@ -50,7 +50,7 @@ git push → GitHub
 ### Порядок работы над страницей
 1. Пользователь присылает CSS из Figma + скриншот (опционально)
 2. Агент анализирует структуру и создаёт файлы
-3. Запускает `yarn run build` для проверки TypeScript ошибок
+3. Запускает `npm run build` для проверки TypeScript ошибок
 4. Исправляет все ошибки (особенно `TS6133` - unused variables)
 5. Пушит: `git add . && git commit -m "feat: ..." && git push`
 
@@ -63,47 +63,28 @@ frontend/
 ├── src/
 │   ├── components/
 │   │   ├── home/               ← компоненты главной страницы
-│   │   │   ├── Header.tsx      ← шапка (navLinks)
-│   │   │   ├── Footer.tsx      ← подвал (footerPages, footerCourses)
-│   │   │   ├── Hero.tsx        ← герой блок
-│   │   │   ├── Courses.tsx     ← секция курсов
-│   │   │   ├── Teachers.tsx    ← секция учителей
-│   │   │   ├── Faq.tsx         ← FAQ аккордеон
-│   │   │   └── Cta.tsx         ← призыв к действию
 │   │   ├── courses/            ← компоненты страницы /courses
-│   │   │   ├── CoursesHero.tsx
-│   │   │   ├── CoursesFilter.tsx  ← sidebar фильтр
-│   │   │   ├── CourseCard.tsx
-│   │   │   └── CoursesGrid.tsx    ← поиск + сортировка + пагинация
 │   │   ├── courseDetail/       ← компоненты /courses/:slug
-│   │   │   ├── CourseBanner.tsx   ← gradient hero + price card
-│   │   │   ├── CourseTabs.tsx     ← 4 вкладки
-│   │   │   ├── CourseSidebar.tsx
-│   │   │   └── CourseRelated.tsx
 │   │   ├── teacherDetail/      ← компоненты /teachers/:id
-│   │   │   ├── TeacherHero.tsx
-│   │   │   ├── TeacherTabs.tsx    ← 3 вкладки
-│   │   │   ├── TeacherSidebar.tsx
-│   │   │   └── OtherTeachers.tsx
 │   │   ├── layouts/
 │   │   │   ├── RootLayout.tsx  ← Header + Outlet + Footer
 │   │   │   └── DashboardLayout.tsx ← sidebar для /dashboard
 │   │   └── ui/
 │   │       ├── Icon.tsx        ← централизованные SVG иконки
-│   │       ├── SectionHeading.tsx
-│   │       ├── PageHero.tsx    ← стандартный hero для внутренних страниц
-│   │       └── TeacherCard.tsx
-│   ├── data/                   ← статические данные (вместо API)
-│   │   ├── home.data.ts        ← navLinks, footerPages, courses, teachers
-│   │   ├── courses.data.ts     ← allCourses (12 курсов с полными данными)
-│   │   ├── courseDetail.data.ts ← детальные данные курсов + getCourseDetail()
-│   │   ├── teacherDetail.data.ts ← 3 преподавателя + getTeacherDetail()
-│   │   └── blog.data.ts        ← статьи блога
+│   │       └── ...
+│   ├── config/                 ← конфигурация (axios, endpoints)
+│   ├── data/                   ← статические fallback-данные
+│   ├── hooks/
+│   │   └── api/                ← хуки React Query для работы с API
 │   ├── pages/                  ← страницы (маршруты)
+│   ├── providers/              ← провайдеры (QueryClientProvider и т.д.)
 │   ├── routes/
 │   │   └── routes.tsx          ← все маршруты React Router
-│   ├── types/
-│   │   └── home.type.ts        ← TypeScript типы
+│   ├── services/               ← API методы и mappers
+│   ├── store/
+│   │   └── user.store.ts       ← Zustand глобальный стейт
+│   ├── types/                  ← TypeScript типы
+│   ├── utils/                  ← утилиты
 │   └── main.tsx
 └── AGENT_GUIDE.md              ← этот файл
 ```
@@ -111,6 +92,8 @@ frontend/
 ---
 
 ## ✅ Статус страниц
+
+Все запланированные страницы успешно завершены.
 
 | Маршрут | Страница | Статус |
 |---------|----------|--------|
@@ -125,21 +108,34 @@ frontend/
 | `/teachers/:id` | Teacher Detail | ✅ Готова |
 | `/login` | Login | ✅ Готова |
 | `/register` | Register | ✅ Готова |
-| `/pricing` | Pricing Page | ❌ Скелет — СЛЕДУЮЩАЯ |
-| `/faq` | FAQ Page | ❌ Скелет |
+| `/pricing` | Pricing Page | ✅ Готова |
+| `/faq` | FAQ Page | ✅ Готова |
 | `/dashboard` | Student Dashboard | ✅ Готова |
-| `/dashboard/courses` | Student Courses | ❌ Скелет |
-| `/dashboard/courses/:id` | Course Detail Student | ❌ Скелет |
-| `/dashboard/lesson/:id` | Lesson Page | ❌ Скелет |
-| `/dashboard/results` | Student Results | ❌ Скелет |
-| `/dashboard/certificates` | Student Certificates | ❌ Скелет |
-| `/dashboard/profile` | Student Profile | ❌ Скелет |
-| `/dashboard/payments` | Student Payments | ❌ Скелет |
-| `/dashboard/settings` | Student Settings | ❌ Скелет |
-| `/dashboard/buy-course` | Buy Course | ❌ Скелет |
-| `/dashboard/catalog` | Dashboard Catalog | ❌ Скелет |
+| `/dashboard/courses` | Student Courses | ✅ Готова |
+| `/dashboard/courses/:id` | Course Detail Student | ✅ Готова |
+| `/dashboard/lesson/:id` | Lesson Page | ✅ Готова |
+| `/dashboard/results` | Student Results | ✅ Готова |
+| `/dashboard/certificates` | Student Certificates | ✅ Готова |
+| `/dashboard/profile` | Student Profile | ✅ Готова |
+| `/dashboard/payments` | Student Payments | ✅ Готова |
+| `/dashboard/settings` | Student Settings | ✅ Готова |
+| `/dashboard/buy-course` | Buy Course | ✅ Готова |
+| `/dashboard/catalog` | Dashboard Catalog | ✅ Готова |
 
-> **Итого:** 11 готово, 13 нужно сделать
+> **Итого:** 24 готово, 0 нужно сделать
+
+---
+
+## 🔌 API и Стейт-менеджмент (Как это работает)
+
+Проект использует современную и отказоустойчивую архитектуру для работы с данными:
+
+- **API Клиент:** Настроен в `src/config/axios.ts` (использует Axios). Автоматически подхватывает токен из `localStorage` и прикрепляет его к запросам.
+- **Хуки (React Query):** Вся работа с API инкапсулирована в кастомных хуках (папка `src/hooks/api/`), что обеспечивает кэширование, удобные состояния загрузки (`isLoading`, `isPending`) и автоматические перезапросы.
+- **Умные Мапперы (Fallback Logic):** В `src/services/api.ts` и `src/services/mappers.ts` реализована продвинутая логика — если реальный бэкенд недоступен или выдает ошибку (например, 404), приложение **автоматически подхватывает статические данные** из папки `src/data/`. Это гарантирует, что интерфейс всегда рендерится красиво и без падений, даже если API еще не готово.
+- **Глобальный Стейт (Zustand):** Файл `src/store/user.store.ts` отвечает за:
+  - Авторизацию (`user`, `isAuthenticated`, функции `setUser`, `logout`).
+  - Управление глобальными UI-элементами (например, модальное окно выхода `isLogoutModalOpen` управляется отсюда, что позволяет вызывать его из любой части Layout или Sidebar).
 
 ---
 
@@ -166,75 +162,16 @@ frontend/
 - **Manrope** — заголовки (ExtraBold 800, Bold 700, SemiBold 600)
 - **Inter** — текст (Regular 400, Medium 500, SemiBold 600)
 
-### Градиенты страниц
-- Course Detail banner: `linear-gradient(114.32deg, #1D4ED8 0%, #6D28D9 100%)`
-- Teacher Detail / Blog / Courses hero: `linear-gradient(104.43deg, #EFF6FF 0%, #F5F3FF 100%)`
-
----
-
-## 🔄 Навигация
-
-### Header navLinks (home.data.ts)
-```
-/ → Bosh sahifa
-/courses → Kurslar
-/teachers → O'qituvchilar
-/blog → Blog
-/contact → Aloqa
-```
-
-### Параметры маршрутов
-- `/courses/:slug` — из `allCourses[i].slug` в `courses.data.ts`
-- `/teachers/:id` — slug из имени: "Akmal Karimov" → "akmal-karimov"
-- `/blog/:slug` — из `blog.data.ts`
-
----
-
-## 📋 Паттерн создания новой страницы
-
-```
-1. src/data/pageName.data.ts         ← интерфейсы + статические данные
-2. src/components/pageName/
-     PageHero.tsx                    ← hero с breadcrumb
-     PageContent.tsx                 ← основной контент
-     PageSidebar.tsx                 ← sidebar (если есть)
-3. src/pages/PageName.tsx            ← сборка компонентов
-4. Проверить маршрут в routes.tsx
-5. yarn build → исправить ошибки → git push
-```
-
----
-
-## ⚡ Рабочие команды
-
-```bash
-yarn run build   # сборка + проверка TypeScript
-yarn run dev     # dev-сервер
-git add . && git commit -m "feat: ..." && git push
-```
-
----
-
-## 🚨 Частые ошибки TypeScript
-
-| Ошибка | Решение |
-|--------|---------|
-| `TS6133: 'X' declared but never read` | Удалить неиспользуемую переменную |
-| `TS2345: Type mismatch` | Проверить интерфейс в .data.ts |
-| `Cannot find module` | Проверить относительный путь импорта |
-
 ---
 
 ## 💡 Важные детали
 
-- **RootLayout** — Header + Footer для всех публичных страниц
-- **DashboardLayout** — sidebar для `/dashboard/*` (ProtectedRoute)
-- **PageHero** — переиспользуемый hero для Blog, Courses, Teachers, About, Contact
-- **allCourses** в `courses.data.ts` — главный источник данных курсов
-- Всегда использовать `Link` из `react-router-dom` вместо `<a href>`
-- Данные — в `src/data/*.data.ts`, НЕ в компонентах
-- Изображения-заглушки: `https://images.unsplash.com/` или `https://i.pravatar.cc/`
+- **RootLayout** — Header + Footer для всех публичных страниц.
+- **DashboardLayout** — Sidebar + Topbar для `/dashboard/*`.
+- **PageHero** — переиспользуемый hero для внутренних страниц (Blog, Courses, Teachers и т.д.).
+- Всегда использовать `Link` или `NavLink` из `react-router-dom` вместо обычных `<a href>`.
+- Изображения-заглушки берутся с `https://images.unsplash.com/` или `https://i.pravatar.cc/`.
 
 ---
 
-*Последнее обновление: 21 июня 2026 г.*
+*Последнее обновление: 22 июня 2026 г.*

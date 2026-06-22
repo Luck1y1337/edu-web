@@ -4,6 +4,8 @@ export interface IUserStore {
     email: string;
   } | null;
   isAuthenticated: boolean;
+  isLogoutModalOpen: boolean;
+  setLogoutModalOpen: (isOpen: boolean) => void;
   setUser: (user: { name: string; email: string }) => void;
   logout: () => void;
 }

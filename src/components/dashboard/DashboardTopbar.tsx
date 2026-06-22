@@ -4,7 +4,7 @@ import { dashboardNav } from "../../data/dashboard.data";
 import useUserStore from "../../store/user.store";
 
 const DashboardTopbar = () => {
-  const user = useUserStore((state) => state.user);
+  const { user, setLogoutModalOpen } = useUserStore();
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur">
@@ -35,10 +35,17 @@ const DashboardTopbar = () => {
             alt={user?.name || "Talaba"}
             className="h-9 w-9 rounded-full object-cover"
           />
-          <div className="hidden text-right sm:block">
-            <p className="text-sm font-semibold text-gray-900">{user?.name || "Talaba"}</p>
-            <p className="text-xs text-gray-400">{user?.email || "Online talaba"}</p>
+          <div className="hidden text-right sm:block min-w-0 max-w-[150px] lg:max-w-[200px]">
+            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "Talaba"}</p>
+            <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
           </div>
+          <button
+            onClick={() => setLogoutModalOpen(true)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 lg:hidden"
+            aria-label="Chiqish"
+          >
+            <Icon.logout />
+          </button>
         </div>
       </div>
 

@@ -7,11 +7,13 @@ const useUserStore = create<IUserStore>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
+      isLogoutModalOpen: false,
+      setLogoutModalOpen: (isOpen: boolean) => set({ isLogoutModalOpen: isOpen }),
       setUser: (user: { name: string; email: string }) => {
         set({ user, isAuthenticated: true });
       },
       logout: () => {
-        set({ user: null, isAuthenticated: false });
+        set({ user: null, isAuthenticated: false, isLogoutModalOpen: false });
       },
     }),
     {

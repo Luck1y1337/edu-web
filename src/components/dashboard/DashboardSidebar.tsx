@@ -1,14 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import { dashboardNav } from "../../data/dashboard.data";
 import useUserStore from "../../store/user.store";
-import LogoutModal from "../LogoutModal";
 
 const DashboardSidebar = () => {
-  const { user } = useUserStore();
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
+  const { user, setLogoutModalOpen } = useUserStore();
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
@@ -66,19 +62,18 @@ const DashboardSidebar = () => {
           alt={user?.name || "Talaba"}
           className="h-9 w-9 rounded-full object-cover"
         />
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-gray-900">{user?.name || "Talaba"}</p>
-          <p className="text-xs text-gray-400">{user?.email || "Online talaba"}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "Talaba"}</p>
+          <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
         </div>
         <button
-          onClick={() => setIsLogoutModalOpen(true)}
-          className="text-gray-400 transition-colors hover:text-gray-700"
+          onClick={() => setLogoutModalOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
           aria-label="Chiqish"
         >
           <Icon.logout />
         </button>
       </div>
-      <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} />
     </aside>
   );
 };

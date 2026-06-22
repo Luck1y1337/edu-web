@@ -1,6 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import useUserStore from "../store/user.store";
+import { useLogout } from "../hooks/api/useLogout";
 
 interface LogoutModalProps {
   isOpen: boolean;
@@ -8,16 +7,12 @@ interface LogoutModalProps {
 }
 
 const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
-  const { logout } = useUserStore();
+  const { mutateAsync, isPending } = useLogout(onClose);
 
   if (!isOpen) return null;
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    logout();
-    onClose();
-    navigate("/login");
+  const handleLogout = async () => {
+    await mutateAsync();
   };
 
   return (
@@ -57,9 +52,12 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
           </button>
           <button
             onClick={handleLogout}
-            className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition"
+            disabled={isPending}
+            className={`rounded-lg px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition ${
+              isPending ? "bg-red-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
+            }`}
           >
-            Ha, chiqish
+            {isPending ? "Chiqilmoqda..." : "Ha, chiqish"}
           </button>
         </div>
       </div>

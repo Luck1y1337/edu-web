@@ -1,8 +1,12 @@
 import { Outlet } from "react-router-dom";
 import DashboardSidebar from "../dashboard/DashboardSidebar";
 import DashboardTopbar from "../dashboard/DashboardTopbar";
+import LogoutModal from "../LogoutModal";
+import useUserStore from "../../store/user.store";
 
 const DashboardLayout = () => {
+  const { isLogoutModalOpen, setLogoutModalOpen } = useUserStore();
+
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <DashboardSidebar />
@@ -16,6 +20,7 @@ const DashboardLayout = () => {
           </div>
         </main>
       </div>
+      <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setLogoutModalOpen(false)} />
     </div>
   );
 };

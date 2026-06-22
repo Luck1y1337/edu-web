@@ -71,7 +71,6 @@ const routes = createBrowserRouter([
           { index: true, element: withSuspense(StudentDashboard) },
           { path: "courses", element: withSuspense(StudentCourses) },
           { path: "courses/:id", element: withSuspense(CourseDetailStudent) },
-          { path: "lesson/:id", element: withSuspense(LessonPage) },
           { path: "results", element: withSuspense(StudentResults) },
           { path: "certificates", element: withSuspense(StudentCertificates) },
           { path: "profile", element: withSuspense(StudentProfile) },
@@ -80,6 +79,10 @@ const routes = createBrowserRouter([
           { path: "buy-course", element: withSuspense(BuyCourse) },
           { path: "catalog", element: withSuspense(DashboardCatalog) },
         ],
+      },
+      {
+        path: "/dashboard/lesson/:id",
+        element: withSuspense(LessonPage),
       },
     ],
   },

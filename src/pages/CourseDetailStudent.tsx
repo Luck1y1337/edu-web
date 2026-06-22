@@ -160,8 +160,45 @@ const CourseDetailStudent = () => {
             )}
             
             {activeTab === "dastur" && (
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-gray-500 text-center">
-                Dastur mazmuni bu yerda bo'ladi...
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 className="mb-6 font-manrope text-3xl font-bold tracking-tight text-gray-900">
+                  Kurs dasturi — 6 modul · 28 dars
+                </h3>
+
+                <div className="flex flex-col gap-2">
+                  {/* Module 1 - Expanded */}
+                  <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+                    <button className="flex w-full items-center justify-between p-4 text-left transition hover:bg-gray-50">
+                      <span className="font-semibold text-gray-900">Modul 1: Kirish va asoslar</span>
+                      <svg className="h-5 w-5 text-gray-500 transform rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <div className="border-t border-gray-100 p-4 text-gray-500">
+                      <p>Kursga kirish, muhitni sozlash, o'zgaruvchilar va ma'lumot turlari. (5 dars · 48 daq)</p>
+                    </div>
+                  </div>
+
+                  {/* Module 2 - Collapsed */}
+                  <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+                    <button className="flex w-full items-center justify-between p-4 text-left transition hover:bg-gray-50">
+                      <span className="font-semibold text-gray-900">Modul 2: Funksiyalar va massivlar</span>
+                      <svg className="h-5 w-5 text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Module 3 - Collapsed */}
+                  <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+                    <button className="flex w-full items-center justify-between p-4 text-left transition hover:bg-gray-50">
+                      <span className="font-semibold text-gray-900">Modul 3: DOM va hodisalar</span>
+                      <svg className="h-5 w-5 text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
             

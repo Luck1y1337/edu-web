@@ -215,16 +215,16 @@ const Register = () => {
               rules={{
                 required: "Parol kiritilishi shart",
                 pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                  message: "Parol mos emas",
+                  value: /^(?=.*[A-Z])(?=.*\d).+$/,
+                  message: "Kamida 1 ta katta harf va 1 ta raqam bo'lishi kerak",
                 },
                 minLength: {
-                  value: 6,
-                  message: "Password kamida 3 ta harfdan iborat bo'lishi kerak",
+                  value: 8,
+                  message: "Parol kamida 8 ta belgidan iborat bo'lishi kerak",
                 },
                 maxLength: {
                   value: 30,
-                  message: "Password 30 ta harfdan oshmasligi kerak",
+                  message: "Parol 30 ta belgidan oshmasligi kerak",
                 },
               }}
               rightIcon={

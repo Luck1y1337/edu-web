@@ -39,7 +39,12 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       const token: string = data?.data.data.tokens?.accessToken;
-      setItem(token);
+      const refreshToken: string = data?.data.data.tokens?.refreshToken;
+      
+      if (token) setItem(token);
+      if (refreshToken) {
+        import("../utils/localstorage").then((m) => m.setRefreshToken(refreshToken));
+      }
       
       // Extract user info from response or use email
       const userObj = data?.data.data.user || { 
@@ -177,12 +182,12 @@ const Login = () => {
                 />
                 Meni eslab qol
               </label>
-              <a
-                href="#"
+              <Link
+                to="/forgot-password"
                 className="text-sm font-medium text-blue-600 hover:underline"
               >
                 Parolni unutdingizmi?
-              </a>
+              </Link>
             </div>
 
             <Button

@@ -132,7 +132,7 @@ const StudentCourses = () => {
 
                 {/* CTA */}
                 <Link
-                  to={`/dashboard/courses/${course.id}`}
+                  to={`/dashboard/lesson/${course.id}`}
                   className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                 >
                   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">

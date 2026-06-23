@@ -1,7 +1,32 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useChangePassword } from "../hooks/api/useChangePassword";
+import { useSessions, useDeleteSession } from "../hooks/api/useSessions";
+import { toast } from "react-toastify";
+import GlobalSpinner from "../components/ui/GlobalSpinner";
+import useUserStore from "../store/user.store";
 
 const StudentSettings = () => {
   const [activeTab, setActiveTab] = useState("profil");
+  const user = useUserStore((state) => state.user);
+
+  // Password Form
+  const { register: registerPwd, handleSubmit: handlePwdSubmit, reset: resetPwd, formState: { errors: errorsPwd } } = useForm();
+  const { mutate: changePassword, isPending: isPwdPending } = useChangePassword();
+
+  const onPasswordSubmit = (data: any) => {
+    if (data.newPassword !== data.confirmPassword) {
+      toast.error("Yangi parollar mos kelmadi");
+      return;
+    }
+    changePassword({ currentPassword: data.currentPassword, newPassword: data.newPassword }, {
+      onSuccess: () => resetPwd()
+    });
+  };
+
+  // Sessions
+  const { data: sessions, isLoading: sessionsLoading } = useSessions();
+  const { mutate: deleteSession } = useDeleteSession();
 
   return (
     <div className="space-y-6">
@@ -123,7 +148,7 @@ const StudentSettings = () => {
                   <input
                     type="text"
                     id="firstName"
-                    defaultValue="Bobur"
+                    defaultValue={user?.name?.split(' ')[0] || "Bobur"}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -132,7 +157,7 @@ const StudentSettings = () => {
                   <input
                     type="text"
                     id="lastName"
-                    defaultValue="Tojiev"
+                    defaultValue={user?.name?.split(' ')[1] || "Tojiev"}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -141,7 +166,7 @@ const StudentSettings = () => {
                   <input
                     type="email"
                     id="email"
-                    defaultValue="bobur@example.uz"
+                    defaultValue={user?.email || "bobur@example.uz"}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -150,7 +175,7 @@ const StudentSettings = () => {
                   <input
                     type="tel"
                     id="phone"
-                    defaultValue="+998 90 123 45 67"
+                    defaultValue={(user as any)?.phone || "+998 90 123 45 67"}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -257,15 +282,16 @@ const StudentSettings = () => {
               <p className="text-xs text-gray-500 mt-1">Hisobingiz xavfsizligi uchun maxfiy parol bering.</p>
             </div>
             
-            <form className="flex flex-col gap-5">
+            <form onSubmit={handlePwdSubmit(onPasswordSubmit)} className="flex flex-col gap-5">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="currentPassword" className="text-sm font-medium text-gray-700">Joriy parol</label>
                 <input
                   type="password"
                   id="currentPassword"
-                  defaultValue="*********"
+                  {...registerPwd("currentPassword", { required: "Joriy parol kiritilishi shart" })}
                   className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
+                {errorsPwd.currentPassword && <span className="text-xs text-red-500">{errorsPwd.currentPassword.message as string}</span>}
               </div>
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
@@ -273,23 +299,34 @@ const StudentSettings = () => {
                   <input
                     type="password"
                     id="newPassword"
-                    placeholder="Kamida 8 ta belgi"
+                    {...registerPwd("newPassword", { 
+                      required: "Yangi parol kiritilishi shart", 
+                      minLength: { value: 8, message: "Parol kamida 8ta belgi bo'lishi kerak" },
+                      pattern: {
+                        value: /^(?=.*[A-Z])(?=.*\d).+$/,
+                        message: "Kamida 1 ta katta harf va 1 ta raqam bo'lishi kerak"
+                      }
+                    })}
+                    placeholder="Kamida 8 ta belgi, 1ta katta harf va raqam"
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
+                  {errorsPwd.newPassword && <span className="text-xs text-red-500">{errorsPwd.newPassword.message as string}</span>}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">Tasdiqlash</label>
                   <input
                     type="password"
                     id="confirmPassword"
+                    {...registerPwd("confirmPassword", { required: "Parolni tasdiqlash shart" })}
                     placeholder="Yangi parolni qaytadan"
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
+                  {errorsPwd.confirmPassword && <span className="text-xs text-red-500">{errorsPwd.confirmPassword.message as string}</span>}
                 </div>
               </div>
               <div className="mt-2 flex justify-end">
-                <button type="button" className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-sm transition">
-                  Parolni yangilash
+                <button disabled={isPwdPending} type="submit" className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-sm transition disabled:opacity-50">
+                  {isPwdPending ? "Yuklanmoqda..." : "Parolni yangilash"}
                 </button>
               </div>
             </form>
@@ -308,41 +345,35 @@ const StudentSettings = () => {
             </div>
             
             <div className="flex flex-col gap-3">
-              {/* Session 1 (Current) */}
-              <div className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-5 py-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm border border-gray-200 text-gray-500">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-gray-900">Redmi Note 13 - Chrome</span>
-                      <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">Joriy</span>
+              {sessionsLoading ? (
+                <div className="py-4 text-center text-sm text-gray-500"><GlobalSpinner /></div>
+              ) : sessions && sessions.length > 0 ? (
+                sessions.map((session) => (
+                  <div key={session.id} className={`flex items-center justify-between rounded-xl border px-5 py-4 ${session.isCurrent ? "border-blue-100 bg-blue-50/50" : "border-gray-100 bg-white"}`}>
+                    <div className="flex items-center gap-4">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg shadow-sm border ${session.isCurrent ? "bg-white border-blue-200 text-blue-600" : "bg-gray-50 border-gray-100 text-gray-500"}`}>
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={session.device?.toLowerCase().includes("mobile") ? "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" : "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"} />
+                        </svg>
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-gray-900">{session.device || session.os} - {session.browser}</span>
+                          {session.isCurrent && <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">Joriy</span>}
+                        </div>
+                        <span className="text-xs text-gray-500">{session.location || "Noma'lum hudud"} · {session.isCurrent ? "Hozir" : (session.lastActive || (session as any).createdAt ? new Date(session.lastActive || (session as any).createdAt).toLocaleString() : "Yaqinda")}</span>
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-500">Toshkent · Bugun 08:45</span>
+                    {!session.isCurrent && (
+                      <button onClick={() => deleteSession(session.id)} className="text-xs font-semibold text-gray-500 hover:text-red-600">
+                        Chiqish
+                      </button>
+                    )}
                   </div>
-                </div>
-              </div>
-
-              {/* Session 2 */}
-              <div className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-5 py-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 border border-gray-100 text-gray-500">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-sm font-bold text-gray-900">Acer Aspire - Firefox</span>
-                    <span className="text-xs text-gray-500">Toshkent · Kecha 18:12</span>
-                  </div>
-                </div>
-                <button className="text-xs font-semibold text-gray-500 hover:text-gray-900">
-                  Chiqish
-                </button>
-              </div>
+                ))
+              ) : (
+                <div className="py-4 text-center text-sm text-gray-500">Boshqa aktiv sessiyalar yo'q</div>
+              )}
             </div>
           </section>
 

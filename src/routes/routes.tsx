@@ -98,5 +98,20 @@ const routes = createBrowserRouter([
     element: withSuspense(Register),
     errorElement: <GlobalError />,
   },
+  {
+    path: "/forgot-password",
+    element: withSuspense(React.lazy(() => import("../pages/ForgotPassword"))),
+    errorElement: <GlobalError />,
+  },
+  {
+    path: "/reset-password",
+    element: withSuspense(React.lazy(() => import("../pages/ResetPassword"))),
+    errorElement: <GlobalError />,
+  },
+  {
+    path: "/verify-email",
+    element: withSuspense(React.lazy(() => import("../pages/VerifyEmail"))),
+    errorElement: <GlobalError />,
+  },
 ]);
 export default routes;

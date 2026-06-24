@@ -32,11 +32,11 @@ const DashboardTopbar = () => {
         <div className="ml-auto flex items-center gap-x-3 border-l border-gray-100 pl-4">
           <img
             src="https://i.pravatar.cc/80?img=11"
-            alt={user?.name || "Talaba"}
+            alt={[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}
             className="h-9 w-9 rounded-full object-cover"
           />
           <div className="hidden text-right sm:block min-w-0 max-w-[150px] lg:max-w-[200px]">
-            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "Talaba"}</p>
+            <p className="text-sm font-semibold text-gray-900 truncate">{[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}</p>
             <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
           </div>
           <button

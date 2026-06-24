@@ -1,19 +1,57 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { allCourses } from "../data/courses.data";
+import { useQuery } from "@tanstack/react-query";
+import GlobalSpinner from "../components/ui/GlobalSpinner";
+import { publicApi } from "../services/api";
+import { formatPrice } from "../services/mappers";
+import { useEnrollments } from "../hooks/api/useEnrollments";
+import type { PublicCourseDto } from "../types/api.type";
+
+const PAGE_SIZE = 9;
+
+const fallbackImage =
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
 
 const DashboardCatalog = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("Barcha kategoriyalar");
-  const [level, setLevel] = useState("barchasi");
-  const [sort, setSort] = useState("mashhur");
+  const [category, setCategory] = useState("");
+  const [level, setLevel] = useState("");
+  const [sort, setSort] = useState("popular");
+  const [page, setPage] = useState(1);
 
-  // Basic pagination state (UI only for now)
-  const [currentPage, setCurrentPage] = useState(1);
+  const sortMap: Record<string, { sortBy?: string; order?: "asc" | "desc" }> = {
+    popular: {},
+    newest: { sortBy: "createdAt", order: "desc" },
+    price_asc: { sortBy: "price", order: "asc" },
+    price_desc: { sortBy: "price", order: "desc" },
+  };
+
+  const coursesQuery = useQuery({
+    queryKey: ["public", "courses", "catalog", { searchTerm, category, level, sort, page }],
+    queryFn: () =>
+      publicApi.getCourses({
+        page,
+        limit: PAGE_SIZE,
+        ...(searchTerm ? { search: searchTerm } : {}),
+        ...(category ? { category } : {}),
+        ...(level ? { level } : {}),
+        ...sortMap[sort],
+      }),
+  });
+  const enrollmentsQuery = useEnrollments();
+
+  const enrolledIds = useMemo(
+    () => new Set((enrollmentsQuery.data ?? []).map((e) => e.course.id)),
+    [enrollmentsQuery.data]
+  );
+
+  const data = coursesQuery.data;
+  const courses = data?.items ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = data?.totalPages ?? 1;
 
   return (
     <div className="space-y-6 pb-12">
-      {/* ── Header ── */}
       <header className="flex flex-col gap-2">
         <h2 className="font-manrope text-3xl font-bold tracking-tight text-gray-900">
           Kurslar katalogi
@@ -23,159 +61,165 @@ const DashboardCatalog = () => {
         </p>
       </header>
 
-      {/* ── Filters ── */}
       <div className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="relative flex-1 min-w-[240px]">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
           <input
             type="text"
             placeholder="Kurs nomi bo'yicha qidiring..."
-            className="block w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-gray-300 py-2.5 pl-4 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setPage(1);
+              setSearchTerm(e.target.value);
+            }}
           />
         </div>
 
         <select
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          onChange={(e) => {
+            setPage(1);
+            setCategory(e.target.value);
+          }}
+          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500"
         >
-          <option value="Barcha kategoriyalar">Barcha kategoriyalar</option>
-          <option value="Frontend">Frontend</option>
-          <option value="Backend">Backend</option>
-          <option value="Dizayn">Dizayn</option>
-          <option value="Mobil">Mobil</option>
-          <option value="Data Science">Data Science</option>
+          <option value="">Barcha kategoriyalar</option>
+          <option value="frontend">Frontend</option>
+          <option value="backend">Backend</option>
+          <option value="design">Dizayn</option>
+          <option value="mobile">Mobil</option>
+          <option value="data">Data Science</option>
         </select>
 
         <select
           value={level}
-          onChange={(e) => setLevel(e.target.value)}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          onChange={(e) => {
+            setPage(1);
+            setLevel(e.target.value);
+          }}
+          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500"
         >
-          <option value="barchasi">Daraja: barchasi</option>
-          <option value="boshlovchi">Boshlovchi</option>
-          <option value="ortacha">O'rtacha</option>
-          <option value="mutaxassis">Mutaxassis</option>
+          <option value="">Daraja: barchasi</option>
+          <option value="beginner">Boshlovchi</option>
+          <option value="intermediate">O'rtacha</option>
+          <option value="advanced">Mutaxassis</option>
         </select>
 
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500"
         >
-          <option value="mashhur">Saralash: mashhur</option>
-          <option value="yangi">Eng yangi</option>
-          <option value="arzon">Arzonroq</option>
-          <option value="qimmat">Qimmatroq</option>
+          <option value="popular">Saralash: mashhur</option>
+          <option value="newest">Eng yangi</option>
+          <option value="price_asc">Arzonroq</option>
+          <option value="price_desc">Qimmatroq</option>
         </select>
       </div>
 
-      {/* ── Course Grid ── */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {allCourses.slice(0, 9).map((course) => (
-          <article
-            key={course.id}
-            className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
-          >
-            {/* Image & Badge */}
-            <div className="relative h-40 shrink-0 bg-gray-100">
-              <img
-                src={course.image}
-                alt={course.title}
-                className="h-full w-full object-cover"
-              />
-              <span className={`absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${course.badgeBg} ${course.badgeText}`}>
-                {course.category}
-              </span>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-1 flex-col p-4">
-              <h4 className="font-manrope text-lg font-bold text-gray-900 line-clamp-1">
-                {course.title}
-              </h4>
-              <p className="mt-1 text-sm text-gray-500">
-                {course.teacher} · {course.lessons}
-              </p>
-
-              {/* Rating */}
-              <div className="mt-2 flex items-center gap-1">
-                <svg className="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <span className="text-sm font-semibold text-gray-900">{course.rating}</span>
-                <span className="text-xs text-gray-400">(312)</span>
-              </div>
-
-              {/* Prices */}
-              <div className="mt-auto pt-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-extrabold text-gray-900">
-                    {course.price}
-                  </span>
-                  <span className="text-sm text-gray-400 line-through">
-                    690 000
-                  </span>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="mt-4 flex items-center gap-2">
-                <Link
-                  to={`/courses/${course.slug}`}
-                  className="flex-1 rounded-lg border border-gray-300 py-2 text-center text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
-                >
-                  Batafsil
-                </Link>
-                <Link
-                  to={`/courses/${course.slug}/buy`}
-                  className="flex-1 rounded-lg bg-blue-600 py-2 text-center text-xs font-semibold text-white hover:bg-blue-700 transition"
-                >
-                  Sotib olish
-                </Link>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {/* ── Pagination ── */}
-      <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-        <p className="text-sm text-gray-500">
-          Ko'rsatilmoqda <span className="font-semibold text-gray-900">1-9</span> / 35 kurs
+      {coursesQuery.isLoading ? (
+        <GlobalSpinner />
+      ) : coursesQuery.isError ? (
+        <p className="py-20 text-center text-sm text-red-600">Kurslarni yuklab bo'lmadi.</p>
+      ) : courses.length === 0 ? (
+        <p className="py-20 text-center text-sm text-gray-500">
+          Berilgan filtr bo'yicha kurslar topilmadi.
         </p>
-        <div className="flex items-center gap-1">
-          <button className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          {[1, 2, 3, 4].map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`inline-flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition ${
-                currentPage === page
-                  ? "bg-blue-600 text-white"
-                  : "border border-gray-200 text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <button className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {courses.map((course: PublicCourseDto) => {
+            const isEnrolled = enrolledIds.has(course.id);
+            return (
+              <article
+                key={course.id}
+                className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+              >
+                <div className="relative h-40 shrink-0 bg-gray-100">
+                  <img
+                    src={course.imageUrl || fallbackImage}
+                    alt={course.name}
+                    className="h-full w-full object-cover"
+                  />
+                  {course.category && (
+                    <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                      {course.category}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col p-4">
+                  <h4 className="font-manrope text-lg font-bold text-gray-900 line-clamp-1">
+                    {course.name}
+                  </h4>
+                  <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                    {course.description}
+                  </p>
+
+                  <div className="mt-auto pt-3">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg font-extrabold text-gray-900">
+                        {formatPrice(course.price)}
+                      </span>
+                      {course.oldPrice && course.oldPrice > course.price && (
+                        <span className="text-sm text-gray-400 line-through">
+                          {formatPrice(course.oldPrice)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center gap-2">
+                    <Link
+                      to={`/courses/${course.slug}`}
+                      className="flex-1 rounded-lg border border-gray-300 py-2 text-center text-xs font-semibold text-gray-700 hover:bg-gray-50"
+                    >
+                      Batafsil
+                    </Link>
+                    {isEnrolled ? (
+                      <Link
+                        to={`/dashboard/courses/${course.id}`}
+                        className="flex-1 rounded-lg bg-emerald-600 py-2 text-center text-xs font-semibold text-white hover:bg-emerald-700"
+                      >
+                        Davom etish
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/dashboard/buy-course?slug=${course.slug}`}
+                        className="flex-1 rounded-lg bg-blue-600 py-2 text-center text-xs font-semibold text-white hover:bg-blue-700"
+                      >
+                        Sotib olish
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
-      </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between border-t border-gray-200 pt-6">
+          <p className="text-sm text-gray-500">
+            Jami{" "}
+            <span className="font-semibold text-gray-900">{total}</span> kurs
+          </p>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPage(p)}
+                className={`inline-flex h-8 w-8 items-center justify-center rounded text-sm font-medium ${
+                  page === p
+                    ? "bg-blue-600 text-white"
+                    : "border border-gray-200 text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

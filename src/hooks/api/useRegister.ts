@@ -1,31 +1,26 @@
-import axios from "../../config/axios";
 import { useMutation } from "@tanstack/react-query";
-import Endpoints from "../../config/endpoints";
-import type { RegisterForm } from "../../types/register.type";
 import { toast } from "react-toastify";
-
 import type { AxiosError } from "axios";
+import { authApi } from "../../services/api";
+import { setItem, setRefreshToken } from "../../utils/localstorage";
+import useUserStore from "../../store/user.store";
+import type { RegisterDto } from "../../types/api.type";
 
 export const useRegister = () => {
-  const onRegister = async (payload: RegisterForm) => {
-    try {
-      const url = Endpoints.auth.register;
-      const response = await axios.post(url, payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response.data;
-    } catch (err: unknown) {
-      const error = err as AxiosError<{ message?: string }>;
-      toast.error(error.response?.data?.message || "Ro'yxatdan o'tishda xatolik yuz berdi");
-      throw error;
-    }
-  };
+  const setUser = useUserStore((state) => state.setUser);
 
   const { mutateAsync, isSuccess, data, isPending } = useMutation({
     mutationKey: ["register"],
-    mutationFn: async (data: RegisterForm) => await onRegister(data),
+    mutationFn: async (payload: RegisterDto) => authApi.register(payload),
+    onSuccess: (result) => {
+      if (result?.tokens?.accessToken) setItem(result.tokens.accessToken);
+      if (result?.tokens?.refreshToken) setRefreshToken(result.tokens.refreshToken);
+      if (result?.user) setUser(result.user);
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.error(error.response?.data?.message || "Ro'yxatdan o'tishda xatolik yuz berdi");
+    },
   });
+
   return { mutateAsync, isSuccess, data, isPending };
 };

@@ -30,7 +30,7 @@ const ResetPassword = () => {
     try {
       await mutateAsync({ token, newPassword: values.newPassword });
       setTimeout(() => navigate("/login"), 2000);
-    } catch (e) {
+    } catch {
       // Error handled by hook
     }
   };

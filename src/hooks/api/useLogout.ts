@@ -1,35 +1,33 @@
-import axios from "../../config/axios";
-import { useMutation } from "@tanstack/react-query";
-import Endpoints from "../../config/endpoints";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import useUserStore from "../../store/user.store";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../../services/api";
+import useUserStore from "../../store/user.store";
 import { clearTokens } from "../../utils/localstorage";
 
 export const useLogout = (onClose?: () => void) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { logout: storeLogout } = useUserStore();
 
-  const onLogout = async () => {
-    return axios.post(Endpoints.auth.logout);
+  const finalize = () => {
+    clearTokens();
+    storeLogout();
+    queryClient.clear();
+    if (onClose) onClose();
+    navigate("/login");
   };
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ["logout"],
-    mutationFn: onLogout,
+    mutationFn: async () => authApi.logout(),
     onSuccess: () => {
-      clearTokens();
-      storeLogout();
-      if (onClose) onClose();
-      navigate("/login");
+      finalize();
       toast.success("Tizimdan muvaffaqiyatli chiqdingiz");
     },
     onError: () => {
-      // Even if API fails (e.g. token expired), we still want to clean up local state
-      clearTokens();
-      storeLogout();
-      if (onClose) onClose();
-      navigate("/login");
+      // Even if API fails (e.g. token expired), still clean up local state
+      finalize();
     },
   });
 

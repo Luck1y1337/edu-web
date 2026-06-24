@@ -1,8 +1,14 @@
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
-import { testimonials } from "../../data/home.data";
+import type { Testimonial } from "../../types/home.type";
 
-const Testimonials = () => {
+interface Props {
+  items: Testimonial[];
+}
+
+const Testimonials = ({ items }: Props) => {
+  if (!items.length) return null;
+
   return (
     <section className="bg-gray-50/70 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -13,9 +19,9 @@ const Testimonials = () => {
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {testimonials.map((item) => (
+          {items.map((item, idx) => (
             <figure
-              key={item.name}
+              key={`${item.name}-${idx}`}
               className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
             >
               <span className="text-4xl leading-none text-blue-200">"</span>
@@ -40,20 +46,6 @@ const Testimonials = () => {
               </figcaption>
             </figure>
           ))}
-        </div>
-
-        <div className="mt-10 flex items-center justify-center gap-x-3">
-          <button className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 hover:text-gray-700">
-            <Icon.arrowLeft />
-          </button>
-          <span className="flex items-center gap-x-1.5">
-            <span className="h-2 w-5 rounded-full bg-blue-600" />
-            <span className="h-2 w-2 rounded-full bg-gray-300" />
-            <span className="h-2 w-2 rounded-full bg-gray-300" />
-          </span>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 hover:text-gray-700">
-            <Icon.arrowRight />
-          </button>
         </div>
       </div>
     </section>

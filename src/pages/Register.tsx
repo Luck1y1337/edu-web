@@ -6,9 +6,7 @@ import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import type { RegisterForm } from "../types/register.type";
 import { useRegister } from "../hooks/api/useRegister";
-import { setItem } from "../utils/localstorage";
 import { toast } from "react-toastify";
-import useUserStore from "../store/user.store";
 
 const features = [
   "Birinchi darslar bepul",
@@ -19,41 +17,29 @@ const features = [
 const Register = () => {
   const navigate = useNavigate();
   const form = useForm<RegisterForm>();
-  const { mutateAsync, isSuccess, data, isPending } = useRegister();
-  const setUser = useUserStore((state) => state.setUser);
+  const { mutateAsync, isSuccess, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
   const [showConfirm, setShowConfirm] = useState("password");
   const {
     formState: { errors },
-    watch,
   } = form;
 
-  const firstNameValue = watch("firstName");
-  const emailValue = watch("email");
-
-  const onSubmit = (data: RegisterForm) => {
-    delete data.confirmPassword;
-    delete data.terms;
-    mutateAsync(data);
+  const onSubmit = (values: RegisterForm) => {
+    mutateAsync({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      phone: values.phone,
+      password: values.password,
+    });
   };
 
   useEffect(() => {
     if (isSuccess) {
-      const token: string = data?.data.data.tokens?.accessToken;
-      setItem(token);
-
-      const userObj = data?.data.data.user || {
-        name: firstNameValue,
-        email: emailValue
-      };
-      setUser(userObj);
-
       toast.success("Ro'yxatdan o'tish yakunlandi");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
+      navigate("/dashboard", { replace: true });
     }
-  }, [isSuccess, navigate, data, setUser, firstNameValue, emailValue]);
+  }, [isSuccess, navigate]);
 
   return (
     <div className="flex min-h-screen bg-white">

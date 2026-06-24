@@ -148,7 +148,7 @@ const StudentSettings = () => {
                   <input
                     type="text"
                     id="firstName"
-                    defaultValue={user?.name?.split(' ')[0] || "Bobur"}
+                    defaultValue={user?.firstName || ""}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -157,7 +157,7 @@ const StudentSettings = () => {
                   <input
                     type="text"
                     id="lastName"
-                    defaultValue={user?.name?.split(' ')[1] || "Tojiev"}
+                    defaultValue={user?.lastName || ""}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>

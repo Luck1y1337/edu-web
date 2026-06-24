@@ -1,50 +1,32 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import type { BlogCommentDto, CreateBlogCommentDto } from "../../types/api.type";
+import { useCreateBlogComment } from "../../hooks/api/useBlog";
 
-interface Comment {
-  id: number;
-  name: string;
-  avatar: string;
-  date: string;
-  text: string;
+interface Props {
+  slug: string;
+  comments: BlogCommentDto[];
 }
 
-const initialComments: Comment[] = [
-  {
-    id: 1,
-    name: "Jasur Toshmatov",
-    avatar: "https://i.pravatar.cc/40?img=11",
-    date: "16-may, 2026",
-    text: "Juda foydali maqola! Frontend yo'nalishini tanlash bo'yicha aniq fikr berdingiz. Rahmat!",
-  },
-  {
-    id: 2,
-    name: "Malika Xasanova",
-    avatar: "https://i.pravatar.cc/40?img=44",
-    date: "16-may, 2026",
-    text: "4-bosqich haqida ko'proq ma'lumot bersangiz yaxshi bo'lardi. Portfolio loyihalari nima bo'lishi kerak?",
-  },
-];
+const formatCommentDate = (iso: string) => {
+  try {
+    return new Intl.DateTimeFormat("uz-UZ", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(iso));
+  } catch {
+    return "";
+  }
+};
 
-const ArticleComments = () => {
-  const [comments, setComments] = useState(initialComments);
-  const [text, setText] = useState("");
-  const [name, setName] = useState("");
+const ArticleComments = ({ slug, comments }: Props) => {
+  const form = useForm<CreateBlogCommentDto>();
+  const { mutateAsync, isPending } = useCreateBlogComment(slug);
+  const { register, handleSubmit, reset, formState: { errors } } = form;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!text.trim() || !name.trim()) return;
-    setComments((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        name,
-        avatar: `https://i.pravatar.cc/40?u=${Date.now()}`,
-        date: new Date().toLocaleDateString("uz-UZ"),
-        text,
-      },
-    ]);
-    setText("");
-    setName("");
+  const onSubmit = async (values: CreateBlogCommentDto) => {
+    await mutateAsync(values);
+    reset();
   };
 
   return (
@@ -53,25 +35,29 @@ const ArticleComments = () => {
         Izohlar ({comments.length})
       </h2>
 
-      {/* Comment list */}
       <div className="flex flex-col gap-4">
-        {comments.map((c) => (
-          <div key={c.id} className="flex gap-3 rounded-xl border border-gray-100 bg-white p-4">
-            <img src={c.avatar} alt={c.name} className="h-9 w-9 rounded-full object-cover" />
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-900">{c.name}</span>
-                <span className="text-xs text-gray-400">{c.date}</span>
+        {comments.length === 0 ? (
+          <p className="text-sm text-gray-500">Birinchi bo'lib izoh qoldiring.</p>
+        ) : (
+          comments.map((c) => (
+            <div key={c.id} className="flex gap-3 rounded-xl border border-gray-100 bg-white p-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-blue-600">
+                {c.authorName.charAt(0).toUpperCase()}
               </div>
-              <p className="mt-1 text-sm leading-relaxed text-gray-600">{c.text}</p>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-gray-900">{c.authorName}</span>
+                  <span className="text-xs text-gray-400">{formatCommentDate(c.createdAt)}</span>
+                </div>
+                <p className="mt-1 text-sm leading-relaxed text-gray-600">{c.content}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
-      {/* Write comment */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-5"
       >
         <h3 className="font-manrope text-base font-bold text-gray-900">
@@ -80,23 +66,33 @@ const ArticleComments = () => {
         <input
           type="text"
           placeholder="Ismingiz"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
           className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+          {...register("authorName", { required: "Ism kiritilishi shart", minLength: { value: 2, message: "Kamida 2 ta harf" } })}
         />
+        {errors.authorName && <span className="text-xs text-red-500">{errors.authorName.message}</span>}
+
+        <input
+          type="email"
+          placeholder="Email (ixtiyoriy)"
+          className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+          {...register("authorEmail")}
+        />
+
         <textarea
           rows={3}
           placeholder="Fikringizni yozing..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
           className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+          {...register("content", { required: "Izoh matnini kiriting", minLength: { value: 3, message: "Kamida 3 ta belgi" } })}
         />
+        {errors.content && <span className="text-xs text-red-500">{errors.content.message}</span>}
+
         <div className="flex justify-end">
           <button
             type="submit"
-            className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+            disabled={isPending}
+            className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
           >
-            Yuborish
+            {isPending ? "Yuborilmoqda..." : "Yuborish"}
           </button>
         </div>
       </form>

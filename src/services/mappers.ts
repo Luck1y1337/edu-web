@@ -1,8 +1,15 @@
-import type { Course as HomeCourse, Stat, Teacher } from "../types/home.type";
+import type { Course as HomeCourse, Stat, Teacher, Testimonial } from "../types/home.type";
 import type { Course } from "../data/courses.data";
 import type { CourseDetailData } from "../data/courseDetail.data";
 import type { TeacherDetailData } from "../data/teacherDetail.data";
-import type { PublicCourseDto, PublicStatsDto, PublicTeacherDto } from "../types/api.type";
+import type { BlogPost } from "../data/blog.data";
+import type {
+  BlogPostListItemDto,
+  PublicCourseDto,
+  PublicStatsDto,
+  PublicTeacherDto,
+  PublicTestimonialDto,
+} from "../types/api.type";
 
 const levelLabels: Record<PublicCourseDto["level"], Course["level"]> = {
   beginner: "Boshlovchi",
@@ -159,7 +166,82 @@ export const mapApiStats = (stats: PublicStatsDto, fallback: Stat[]): Stat[] =>
       return { ...stat, value: `${stats.courses}+` };
     }
     if (stat.label.includes("o'qituvchi")) {
-      return { ...stat, value: `${stats.teachers}+` };
+      return { ...stat, value: `${stats.teachers || stats.instructors || 0}+` };
     }
     return stat;
   });
+
+/* ───────── Testimonials ───────── */
+
+const formatNumber = (n: number) => new Intl.NumberFormat("uz-UZ").format(n);
+
+export const mapApiTestimonial = (t: PublicTestimonialDto): Testimonial => {
+  const firstName = t.student?.firstName || "";
+  const lastName = t.student?.lastName || "";
+  const fullName = [firstName, lastName].filter(Boolean).join(" ") || "Talaba";
+  return {
+    text: t.comment,
+    photo: t.student?.avatarUrl || defaultTeacherPhoto,
+    name: fullName,
+    role: t.course?.name || "O'quv markaz talabasi",
+  };
+};
+
+/* ───────── Blog ───────── */
+
+const blogBadgeByCategory: Record<string, BlogPost["badgeColor"]> = {
+  frontend: "blue",
+  backend: "green",
+  fullstack: "purple",
+  design: "purple",
+  dizayn: "purple",
+  mobile: "yellow",
+  mobil: "yellow",
+  marketing: "red",
+  karyera: "blue",
+  devops: "green",
+};
+
+const defaultBlogImage =
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80";
+
+const formatBlogDate = (iso?: string | null) => {
+  if (!iso) return "";
+  try {
+    return new Intl.DateTimeFormat("uz-UZ", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(iso));
+  } catch {
+    return "";
+  }
+};
+
+export const mapApiBlogPost = (post: BlogPostListItemDto, index = 0): BlogPost => {
+  const categoryName = post.category?.name || "Blog";
+  const categoryKey = (post.category?.slug || categoryName).toLowerCase();
+  const author = post.author;
+  const authorName = author
+    ? [author.firstName, author.lastName].filter(Boolean).join(" ") || "Muallif"
+    : "Muallif";
+
+  return {
+    id: index + 1,
+    slug: post.slug,
+    category: categoryName,
+    badgeColor: blogBadgeByCategory[categoryKey] || "blue",
+    date: formatBlogDate(post.publishedAt),
+    readTime: post.readMinutes ? `${post.readMinutes} daqiqalik o'qish` : "5 daqiqalik o'qish",
+    title: post.title,
+    excerpt: post.excerpt || "",
+    image: post.coverImageUrl || defaultBlogImage,
+    authorName,
+    authorAvatar: author?.avatarUrl || defaultTeacherPhoto,
+    featured: post.isFeatured,
+    featuredLabel: post.isFeatured ? "TANLANGAN" : undefined,
+  };
+};
+
+/* Counts how many published items map to a particular display unit — used in Home counter widget. */
+export const formatCount = formatNumber;

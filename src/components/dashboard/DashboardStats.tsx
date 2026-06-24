@@ -1,10 +1,20 @@
 import { Icon } from "../ui/Icon";
-import { dashboardStats } from "../../data/dashboard.data";
 
-const DashboardStats = () => {
+interface StatTile {
+  icon: keyof typeof Icon;
+  color: string;
+  label: string;
+  value: string;
+}
+
+interface Props {
+  items: StatTile[];
+}
+
+const DashboardStats = ({ items }: Props) => {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {dashboardStats.map((stat) => {
+      {items.map((stat) => {
         const IconComponent = Icon[stat.icon];
         return (
           <div
@@ -17,12 +27,6 @@ const DashboardStats = () => {
               >
                 <IconComponent />
               </span>
-              {stat.trend && (
-                <span className="inline-flex items-center gap-x-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-600">
-                  <Icon.trendingUp />
-                  {stat.trend}
-                </span>
-              )}
             </div>
             <p className="mt-4 text-3xl font-bold text-gray-900">{stat.value}</p>
             <p className="mt-1 text-sm text-gray-500">{stat.label}</p>

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import type { LoginForm } from "../types/login.type";
 import { useLogin } from "../hooks/api/useLogin";
-import { setItem } from "../utils/localstorage";
 import { toast } from "react-toastify";
-import useUserStore from "../store/user.store";
 
 const features = [
   "Onlayn platforma — istalgan vaqtda darslar",
@@ -20,9 +18,9 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const form = useForm<LoginForm>();
-  const { mutateAsync, isSuccess, data, isPending } = useLogin();
-  const setUser = useUserStore((state) => state.setUser);
+  const { mutateAsync, isSuccess, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState("password");
   const {
     formState: { errors },
@@ -32,33 +30,19 @@ const Login = () => {
   const emailValue = watch("identifier");
   const emailValid = emailPattern.test(emailValue ?? "");
 
+  const nextParam = new URLSearchParams(location.search).get("next");
+  const redirectTo = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard";
+
   const onSubmit = (values: LoginForm) => {
-    mutateAsync(values);
+    mutateAsync({ identifier: values.identifier, password: values.password });
   };
 
   useEffect(() => {
     if (isSuccess) {
-      const token: string = data?.data.data.tokens?.accessToken;
-      const refreshToken: string = data?.data.data.tokens?.refreshToken;
-      
-      if (token) setItem(token);
-      if (refreshToken) {
-        import("../utils/localstorage").then((m) => m.setRefreshToken(refreshToken));
-      }
-      
-      // Extract user info from response or use email
-      const userObj = data?.data.data.user || { 
-        name: emailValue.split('@')[0], 
-        email: emailValue 
-      };
-      setUser(userObj);
-
       toast.success("Tizimga muvaffaqiyatli kirdingiz");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
+      navigate(redirectTo, { replace: true });
     }
-  }, [isSuccess, navigate, data, setUser, emailValue]);
+  }, [isSuccess, navigate, redirectTo]);
 
   return (
     <div className="flex min-h-screen bg-white">

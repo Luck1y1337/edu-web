@@ -1,11 +1,10 @@
+import type { CurrentUserDto } from "./api.type";
+
 export interface IUserStore {
-  user: {
-    name: string;
-    email: string;
-  } | null;
+  user: CurrentUserDto | null;
   isAuthenticated: boolean;
   isLogoutModalOpen: boolean;
   setLogoutModalOpen: (isOpen: boolean) => void;
-  setUser: (user: { name: string; email: string }) => void;
+  setUser: (user: CurrentUserDto) => void;
   logout: () => void;
 }

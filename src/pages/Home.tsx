@@ -7,9 +7,14 @@ import Hero from "../components/home/Hero";
 import Stats from "../components/home/Stats";
 import Teachers from "../components/home/Teachers";
 import Testimonials from "../components/home/Testimonials";
-import { courses, stats } from "../data/home.data";
+import { stats as statsFallback } from "../data/home.data";
 import { publicApi } from "../services/api";
-import { mapApiCourseToHomeCourse, mapApiStats } from "../services/mappers";
+import {
+  mapApiCourseToHomeCourse,
+  mapApiStats,
+  mapApiTeacherToTeacher,
+  mapApiTestimonial,
+} from "../services/mappers";
 
 const Home = () => {
   const statsQuery = useQuery({
@@ -20,11 +25,19 @@ const Home = () => {
     queryKey: ["public", "courses", "featured"],
     queryFn: () => publicApi.getCourses({ featured: true, limit: 8 }),
   });
+  const instructorsQuery = useQuery({
+    queryKey: ["public", "instructors", "home"],
+    queryFn: () => publicApi.getInstructors({ limit: 6 }),
+  });
+  const testimonialsQuery = useQuery({
+    queryKey: ["public", "testimonials"],
+    queryFn: publicApi.getTestimonials,
+  });
 
-  const visibleStats = statsQuery.data ? mapApiStats(statsQuery.data, stats) : stats;
-  const visibleCourses = coursesQuery.data?.items.length
-    ? coursesQuery.data.items.map(mapApiCourseToHomeCourse)
-    : courses;
+  const visibleStats = statsQuery.data ? mapApiStats(statsQuery.data, statsFallback) : statsFallback;
+  const visibleCourses = (coursesQuery.data?.items ?? []).map(mapApiCourseToHomeCourse);
+  const visibleTeachers = (instructorsQuery.data?.items ?? []).map(mapApiTeacherToTeacher);
+  const visibleTestimonials = (testimonialsQuery.data ?? []).map(mapApiTestimonial);
 
   return (
     <>
@@ -34,8 +47,8 @@ const Home = () => {
       </section>
       <Courses items={visibleCourses} />
       <Advantages />
-      <Teachers />
-      <Testimonials />
+      <Teachers items={visibleTeachers} />
+      <Testimonials items={visibleTestimonials} />
       <Faq />
       <Cta />
     </>

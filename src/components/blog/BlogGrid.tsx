@@ -1,28 +1,38 @@
 import { useState } from "react";
-import { blogPosts } from "../../data/blog.data";
+import type { BlogPost } from "../../data/blog.data";
+import type { BlogCategoryDto } from "../../types/api.type";
 import BlogCard from "./BlogCard";
 import BlogSidebar from "./BlogSidebar";
 
 const POSTS_PER_PAGE = 8;
 
-const BlogGrid = () => {
+interface Props {
+  posts: BlogPost[];
+  categories: BlogCategoryDto[];
+}
+
+const BlogGrid = ({ posts, categories }: Props) => {
   const [page, setPage] = useState(1);
-  const posts = blogPosts.filter((p) => !p.featured);
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE) || 1;
   const visible = posts.slice(0, page * POSTS_PER_PAGE);
+  const recentPosts = posts.slice(0, 3);
 
   return (
     <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-      {/* Main grid */}
       <div className="flex-1">
-        <div className="grid gap-6 sm:grid-cols-2">
-          {visible.map((post) => (
-            <BlogCard key={post.id} post={post} />
-          ))}
-        </div>
+        {visible.length === 0 ? (
+          <p className="py-12 text-center text-sm text-gray-500">
+            Hozircha maqolalar yo'q.
+          </p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2">
+            {visible.map((post) => (
+              <BlogCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
+        {totalPages > 1 && visible.length < posts.length && (
           <div className="mt-10 flex items-center justify-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <button
@@ -37,20 +47,11 @@ const BlogGrid = () => {
                 {p}
               </button>
             ))}
-            {page < totalPages && (
-              <button
-                onClick={() => setPage((p) => p + 1)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
-              >
-                →
-              </button>
-            )}
           </div>
         )}
       </div>
 
-      {/* Sidebar */}
-      <BlogSidebar />
+      <BlogSidebar categories={categories} recentPosts={recentPosts} />
     </div>
   );
 };

@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
-import { blogPosts } from "../../data/blog.data";
+import type { BlogPost } from "../../data/blog.data";
 import { badgeStyles } from "../../data/blog.data";
 
 interface Props {
-  currentSlug: string;
+  posts: BlogPost[];
 }
 
-const ArticleRelated = ({ currentSlug }: Props) => {
-  const related = blogPosts
-    .filter((p) => !p.featured && p.slug !== currentSlug)
-    .slice(0, 3);
+const ArticleRelated = ({ posts }: Props) => {
+  if (!posts.length) return null;
 
   return (
     <section className="border-t border-gray-100 pt-10">
@@ -17,7 +15,7 @@ const ArticleRelated = ({ currentSlug }: Props) => {
         O'xshash maqolalar
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {related.map((post) => {
+        {posts.map((post) => {
           const badge = badgeStyles[post.badgeColor];
           return (
             <article

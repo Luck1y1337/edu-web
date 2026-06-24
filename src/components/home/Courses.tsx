@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
-import { courses } from "../../data/home.data";
 import type { Course } from "../../types/home.type";
 
 interface Props {
-  items?: Course[];
+  items: Course[];
 }
 
-const Courses = ({ items = courses }: Props) => {
+const Courses = ({ items }: Props) => {
+  if (!items.length) return null;
   return (
     <section id="kurslar" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

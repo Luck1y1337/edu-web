@@ -59,11 +59,11 @@ const DashboardSidebar = () => {
       <div className="flex items-center gap-x-3 border-t border-gray-100 px-4 py-4">
         <img
           src="https://i.pravatar.cc/80?img=11"
-          alt={user?.name || "Talaba"}
+          alt={[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}
           className="h-9 w-9 rounded-full object-cover"
         />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "Talaba"}</p>
+          <p className="text-sm font-semibold text-gray-900 truncate">{[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}</p>
           <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
         </div>
         <button

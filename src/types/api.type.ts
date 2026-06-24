@@ -13,11 +13,80 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+/* ───────── Auth / User ───────── */
+
+export type UserRole = "super_admin" | "admin" | "instructor" | "student";
+export type UserStatus = "active" | "inactive" | "banned";
+
+export interface CurrentUserDto {
+  id: string;
+  email: string;
+  phone: string;
+  role: UserRole;
+  status: UserStatus;
+  firstName: string;
+  lastName: string;
+  middleName?: string | null;
+  avatarUrl?: string | null;
+  emailVerifiedAt?: string | null;
+}
+
+export interface AuthTokensDto {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  tokenType: string;
+}
+
+export interface AuthResponseDto {
+  user: CurrentUserDto;
+  tokens: AuthTokensDto;
+}
+
+export interface RegisterDto {
+  email: string;
+  phone: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  birthDate?: string;
+  gender?: "male" | "female";
+}
+
+export interface LoginDto {
+  identifier: string;
+  password: string;
+}
+
+export interface ResetPasswordDto {
+  token: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface SessionDto {
+  id: string;
+  device?: string | null;
+  ip?: string | null;
+  userAgent?: string | null;
+  createdAt: string;
+  current?: boolean;
+}
+
+/* ───────── Public ───────── */
+
 export interface PublicStatsDto {
   students: number;
   teachers: number;
   courses: number;
   graduates: number;
+  certificates?: number;
+  instructors?: number;
 }
 
 export interface PublicCourseDto {
@@ -66,4 +135,177 @@ export interface PublicTeacherDto {
   bio?: string | null;
   rating?: number | string | null;
   socialLinks?: Record<string, string> | null;
+}
+
+export type PublicInstructorDto = PublicTeacherDto;
+
+export interface PublicTestimonialDto {
+  id: string;
+  rating: number;
+  comment: string;
+  createdAt?: string;
+  student?: {
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string | null;
+  } | null;
+  course?: {
+    name?: string;
+    slug?: string;
+  } | null;
+}
+
+/* ───────── Blog ───────── */
+
+export interface BlogCategoryDto {
+  id: string;
+  name: string;
+  slug: string;
+  postCount?: number;
+}
+
+export interface BlogPostListItemDto {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  coverImageUrl?: string | null;
+  category?: BlogCategoryDto | null;
+  publishedAt?: string | null;
+  readMinutes?: number;
+  isFeatured?: boolean;
+  author?: {
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string | null;
+  } | null;
+}
+
+export interface BlogCommentDto {
+  id: string;
+  authorName: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface BlogPostDetailDto extends BlogPostListItemDto {
+  content: string;
+  comments?: BlogCommentDto[];
+}
+
+export interface CreateBlogCommentDto {
+  authorName: string;
+  authorEmail?: string;
+  content: string;
+}
+
+/* ───────── Contact ───────── */
+
+export interface ContactFormDto {
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+}
+
+/* ───────── Student ───────── */
+
+export type EnrollmentStatus = "active" | "completed" | "cancelled" | "pending";
+
+export interface LessonProgressDto {
+  lessonId: string;
+  status: "not_started" | "in_progress" | "completed";
+  watchedSeconds?: number;
+  completedAt?: string | null;
+}
+
+export interface EnrollmentLessonDto {
+  id: string;
+  title: string;
+  order?: number;
+  durationMinutes?: number;
+  videoUrl?: string | null;
+  content?: string | null;
+  isFree?: boolean;
+  progress?: LessonProgressDto | null;
+}
+
+export interface EnrollmentModuleDto {
+  id: string;
+  title: string;
+  order?: number;
+  lessons: EnrollmentLessonDto[];
+}
+
+export interface StudentEnrollmentListItemDto {
+  id: string;
+  status: EnrollmentStatus;
+  enrolledAt: string;
+  completedAt?: string | null;
+  progressPercent: number;
+  course: {
+    id: string;
+    name: string;
+    slug: string;
+    imageUrl?: string | null;
+    category?: string;
+    durationMonths?: number;
+    lessonsCount?: number;
+  };
+}
+
+export interface StudentEnrollmentDetailDto extends StudentEnrollmentListItemDto {
+  course: StudentEnrollmentListItemDto["course"] & {
+    description?: string;
+    longDescription?: string;
+  };
+  modules: EnrollmentModuleDto[];
+}
+
+export interface CheckoutDto {
+  courseId: string;
+  paymentMethod: "card" | "click" | "payme" | "cash";
+  promoCode?: string;
+}
+
+export interface CheckoutResponseDto {
+  enrollmentId: string;
+  paymentId?: string;
+  status: EnrollmentStatus;
+}
+
+/* ───────── Certificates ───────── */
+
+export interface CertificateDto {
+  id: string;
+  serialNumber: string;
+  issuedAt: string;
+  revokedAt?: string | null;
+  pdfUrl?: string | null;
+  course: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+}
+
+/* ───────── Reviews ───────── */
+
+export interface CreateReviewDto {
+  courseId: string;
+  rating: number;
+  comment: string;
+}
+
+export interface StudentReviewDto {
+  id: string;
+  rating: number;
+  comment: string;
+  status: "pending" | "approved" | "rejected";
+  createdAt: string;
+  course?: {
+    name: string;
+    slug: string;
+  };
 }

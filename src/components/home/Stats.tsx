@@ -1,11 +1,10 @@
-import { stats } from "../../data/home.data";
 import type { Stat } from "../../types/home.type";
 
 interface Props {
-  items?: Stat[];
+  items: Stat[];
 }
 
-const Stats = ({ items = stats }: Props) => {
+const Stats = ({ items }: Props) => {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
       <div className="grid grid-cols-2 gap-6 rounded-2xl border border-gray-100 bg-white p-8 shadow-lg shadow-gray-100/80 lg:grid-cols-4">

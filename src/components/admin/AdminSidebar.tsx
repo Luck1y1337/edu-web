@@ -35,6 +35,8 @@ const adminNav: NavGroup[] = [
     items: [
       { label: "Sertifikatlar", path: "/admin/certificates", icon: "award" },
       { label: "Sharhlar", path: "/admin/reviews", icon: "star" },
+      { label: "Blog", path: "/admin/blog", icon: "book" },
+      { label: "Xabarlar", path: "/admin/contact", icon: "mail" },
     ],
   },
   {

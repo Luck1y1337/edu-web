@@ -40,6 +40,21 @@ import type {
   AdminCourseDetailDto,
   CreateCourseDto,
   UpdateCourseDto,
+  AdminEnrollmentListItemDto,
+  UpdatePaymentStatusDto,
+  RefundPaymentDto,
+  AdminCertificateListItemDto,
+  AdminReviewListItemDto,
+  ModerateReviewDto,
+  AdminBlogPostListItemDto,
+  BlogPostDetailDto as AdminBlogPostDetailDto,
+  CreateBlogPostDto,
+  UpdateBlogPostDto,
+  AdminBlogCommentListItemDto,
+  ModerateCommentDto,
+  CreateBlogCategoryDto,
+  AdminContactMessageDto,
+  UpdateContactStatusDto,
 } from "../types/api.type";
 
 export const unwrapApiData = <T>(response: { data: ApiResponse<T> | T }) => {
@@ -374,5 +389,111 @@ export const adminApi = {
       Endpoints.admin.course(id)
     );
     return unwrapApiData<{ success: boolean }>(response);
+  },
+
+  // Enrollments
+  getEnrollments: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminEnrollmentListItemDto>>>(
+      Endpoints.admin.enrollments, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminEnrollmentListItemDto>>(response);
+  },
+
+  // Payments
+  getPayments: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminPaymentListItemDto>>>(
+      Endpoints.admin.payments, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminPaymentListItemDto>>(response);
+  },
+  getPayment: async (id: string) => {
+    const response = await axios.get<ApiResponse<AdminPaymentListItemDto>>(Endpoints.admin.payment(id));
+    return unwrapApiData<AdminPaymentListItemDto>(response);
+  },
+  updatePaymentStatus: async (id: string, body: UpdatePaymentStatusDto) => {
+    const response = await axios.patch<ApiResponse<AdminPaymentListItemDto>>(Endpoints.admin.paymentStatus(id), body);
+    return unwrapApiData<AdminPaymentListItemDto>(response);
+  },
+  refundPayment: async (id: string, body: RefundPaymentDto) => {
+    const response = await axios.post<ApiResponse<{ success: boolean }>>(Endpoints.admin.paymentRefund(id), body);
+    return unwrapApiData<{ success: boolean }>(response);
+  },
+
+  // Certificates
+  getCertificates: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminCertificateListItemDto>>>(
+      Endpoints.admin.certificates, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminCertificateListItemDto>>(response);
+  },
+  revokeCertificate: async (id: string) => {
+    const response = await axios.patch<ApiResponse<{ success: boolean }>>(Endpoints.admin.revokeCertificate(id));
+    return unwrapApiData<{ success: boolean }>(response);
+  },
+
+  // Reviews
+  getReviews: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminReviewListItemDto>>>(
+      Endpoints.admin.reviews, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminReviewListItemDto>>(response);
+  },
+  moderateReview: async (id: string, body: ModerateReviewDto) => {
+    const response = await axios.patch<ApiResponse<AdminReviewListItemDto>>(Endpoints.admin.moderateReview(id), body);
+    return unwrapApiData<AdminReviewListItemDto>(response);
+  },
+
+  // Blog
+  getBlogPosts: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminBlogPostListItemDto>>>(
+      Endpoints.admin.blogPosts, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminBlogPostListItemDto>>(response);
+  },
+  getBlogPost: async (id: string) => {
+    const response = await axios.get<ApiResponse<AdminBlogPostDetailDto>>(Endpoints.admin.blogPost(id));
+    return unwrapApiData<AdminBlogPostDetailDto>(response);
+  },
+  createBlogPost: async (body: CreateBlogPostDto) => {
+    const response = await axios.post<ApiResponse<AdminBlogPostListItemDto>>(Endpoints.admin.blogPosts, body);
+    return unwrapApiData<AdminBlogPostListItemDto>(response);
+  },
+  updateBlogPost: async (id: string, body: UpdateBlogPostDto) => {
+    const response = await axios.patch<ApiResponse<AdminBlogPostListItemDto>>(Endpoints.admin.blogPost(id), body);
+    return unwrapApiData<AdminBlogPostListItemDto>(response);
+  },
+  deleteBlogPost: async (id: string) => {
+    const response = await axios.delete<ApiResponse<{ success: boolean }>>(Endpoints.admin.blogPost(id));
+    return unwrapApiData<{ success: boolean }>(response);
+  },
+  publishBlogPost: async (id: string) => {
+    const response = await axios.patch<ApiResponse<AdminBlogPostListItemDto>>(Endpoints.admin.publishBlogPost(id));
+    return unwrapApiData<AdminBlogPostListItemDto>(response);
+  },
+  createBlogCategory: async (body: CreateBlogCategoryDto) => {
+    const response = await axios.post<ApiResponse<BlogCategoryDto>>(Endpoints.admin.blogCategories, body);
+    return unwrapApiData<BlogCategoryDto>(response);
+  },
+  getBlogComments: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminBlogCommentListItemDto>>>(
+      Endpoints.admin.blogComments, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminBlogCommentListItemDto>>(response);
+  },
+  moderateBlogComment: async (id: string, body: ModerateCommentDto) => {
+    const response = await axios.patch<ApiResponse<AdminBlogCommentListItemDto>>(Endpoints.admin.moderateBlogComment(id), body);
+    return unwrapApiData<AdminBlogCommentListItemDto>(response);
+  },
+
+  // Contact
+  getContactMessages: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminContactMessageDto>>>(
+      Endpoints.admin.contact, { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminContactMessageDto>>(response);
+  },
+  updateContactStatus: async (id: string, body: UpdateContactStatusDto) => {
+    const response = await axios.patch<ApiResponse<AdminContactMessageDto>>(Endpoints.admin.contactStatus(id), body);
+    return unwrapApiData<AdminContactMessageDto>(response);
   },
 };

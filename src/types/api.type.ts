@@ -561,3 +561,149 @@ export interface UpdateCourseDto {
   status?: AdminCourseStatus;
   modules?: CreateCourseModuleDto[];
 }
+
+/* ───────── Admin · Enrollments ───────── */
+
+export interface AdminEnrollmentListItemDto {
+  id: string;
+  status: EnrollmentStatus;
+  enrolledAt: string;
+  completedAt?: string | null;
+  progressPercent: number;
+  student: { id: string; firstName: string; lastName: string; email?: string };
+  course: { id: string; name: string; slug?: string };
+}
+
+/* ───────── Admin · Payments (extended) ───────── */
+
+export interface CreatePaymentDto {
+  studentId: string;
+  courseId: string;
+  amount: number;
+  method: AdminPaymentMethod;
+  status?: AdminPaymentStatus;
+  paidAt?: string;
+  transactionId?: string;
+  notes?: string;
+}
+
+export interface UpdatePaymentStatusDto {
+  status: AdminPaymentStatus;
+  transactionId?: string;
+  notes?: string;
+}
+
+export interface RefundPaymentDto {
+  reason?: string;
+}
+
+/* ───────── Admin · Certificates (extended) ───────── */
+
+export interface AdminCertificateListItemDto {
+  id: string;
+  serialNumber: string;
+  issuedAt: string;
+  revokedAt?: string | null;
+  pdfUrl?: string | null;
+  student: { id: string; firstName: string; lastName: string };
+  course: { id: string; name: string };
+}
+
+/* ───────── Admin · Reviews ───────── */
+
+export type ReviewModerationStatus = "pending" | "approved" | "rejected";
+
+export interface AdminReviewListItemDto {
+  id: string;
+  rating: number;
+  comment: string;
+  status: ReviewModerationStatus;
+  createdAt: string;
+  student?: { id: string; firstName: string; lastName: string; avatarUrl?: string | null };
+  course?: { id: string; name: string };
+}
+
+export interface ModerateReviewDto {
+  status: ReviewModerationStatus;
+}
+
+/* ───────── Admin · Blog ───────── */
+
+export type BlogPostStatus = "draft" | "published";
+
+export interface AdminBlogPostListItemDto {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  coverImageUrl?: string | null;
+  status: BlogPostStatus;
+  publishedAt?: string | null;
+  readMinutes?: number;
+  isFeatured?: boolean;
+  category?: BlogCategoryDto | null;
+  author?: { firstName?: string; lastName?: string } | null;
+  createdAt?: string;
+}
+
+export interface CreateBlogPostDto {
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  imageUrl?: string;
+  categoryId?: string;
+  readMinutes?: number;
+  isFeatured?: boolean;
+  status?: BlogPostStatus;
+}
+
+export interface UpdateBlogPostDto {
+  title?: string;
+  slug?: string;
+  excerpt?: string;
+  content?: string;
+  imageUrl?: string;
+  categoryId?: string;
+  readMinutes?: number;
+  isFeatured?: boolean;
+  status?: BlogPostStatus;
+}
+
+export interface CreateBlogCategoryDto {
+  name: string;
+  slug: string;
+}
+
+export interface AdminBlogCommentListItemDto {
+  id: string;
+  authorName: string;
+  authorEmail?: string;
+  content: string;
+  status: ReviewModerationStatus;
+  createdAt: string;
+  post?: { id: string; title: string; slug: string };
+}
+
+export interface ModerateCommentDto {
+  status: ReviewModerationStatus;
+}
+
+/* ───────── Admin · Contact ───────── */
+
+export type ContactMessageStatus = "new" | "read" | "replied" | "closed";
+
+export interface AdminContactMessageDto {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject?: string | null;
+  message: string;
+  status: ContactMessageStatus;
+  createdAt: string;
+}
+
+export interface UpdateContactStatusDto {
+  status: ContactMessageStatus;
+}

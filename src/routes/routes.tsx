@@ -45,6 +45,11 @@ const AdminInstructors = React.lazy(() => import("../pages/AdminInstructors"));
 const AdminInstructorNew = React.lazy(() => import("../pages/AdminInstructorNew"));
 const AdminCourses = React.lazy(() => import("../pages/AdminCourses"));
 const AdminCourseNew = React.lazy(() => import("../pages/AdminCourseNew"));
+const AdminPayments = React.lazy(() => import("../pages/AdminPayments"));
+const AdminCertificates = React.lazy(() => import("../pages/AdminCertificates"));
+const AdminReviews = React.lazy(() => import("../pages/AdminReviews"));
+const AdminBlogPosts = React.lazy(() => import("../pages/AdminBlogPosts"));
+const AdminContactMessages = React.lazy(() => import("../pages/AdminContactMessages"));
 
 const withSuspense = (Component: React.ComponentType) => (
   <Suspense fallback={<GlobalSpinner />}>
@@ -113,6 +118,11 @@ const routes = createBrowserRouter([
           { path: "instructors/new", element: withSuspense(AdminInstructorNew) },
           { path: "courses", element: withSuspense(AdminCourses) },
           { path: "courses/new", element: withSuspense(AdminCourseNew) },
+          { path: "payments", element: withSuspense(AdminPayments) },
+          { path: "certificates", element: withSuspense(AdminCertificates) },
+          { path: "reviews", element: withSuspense(AdminReviews) },
+          { path: "blog", element: withSuspense(AdminBlogPosts) },
+          { path: "contact", element: withSuspense(AdminContactMessages) },
         ],
       },
     ],

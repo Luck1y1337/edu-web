@@ -1,157 +1,250 @@
 <p align="center">
-  <img src="public/favicon.svg" width="64" height="64" alt="O'quv Markaz" />
+  <img src="public/favicon.svg" width="80" height="80" alt="EduCenter" />
 </p>
 
-<h1 align="center">O'quv Markaz — Frontend</h1>
+<h1 align="center">EduCenter</h1>
 
 <p align="center">
-  <strong>Modern ta'lim platformasi uchun to'liq SPA frontend</strong><br/>
-  React 19 · TypeScript · Tailwind CSS · Vite
+  <strong>Enterprise Learning Management System — Frontend</strong><br/>
+  A full-featured single-page application for managing online education platforms.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/TypeScript-6.0-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" />
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#project-structure">Project Structure</a> •
+  <a href="#route-map">Route Map</a> •
+  <a href="#api-integration">API Integration</a> •
+  <a href="#deployment">Deployment</a> •
+  <a href="#license">License</a>
 </p>
 
 ---
 
-## Haqida
+## Overview
 
-O'quv Markaz — Toshkent shahridagi IT va dizayn ta'lim markazi uchun yaratilgan zamonaviy veb-platforma. Platforma 3 ta asosiy bo'limdan iborat:
+EduCenter is a modern, production-ready frontend for an online education platform. Built with React 19 and TypeScript, it provides a seamless experience across three user roles — **public visitors**, **enrolled students**, and **administrators** — with 40+ fully implemented pages, real-time data from a REST API, and a responsive design system.
 
-- **Ommaviy sahifalar** — Bosh sahifa, Kurslar katalogi, O'qituvchilar, Blog, FAQ, Aloqa
-- **Talaba paneli** — Dashboard, Mening kurslarim, Dars ko'rish, Sertifikatlar, To'lovlar
-- **Admin panel** — Talabalar, O'qituvchilar, Kurslar CRUD, Kurs builder (modullar + darslar)
+## Features
 
-## Texnologiyalar
+### Public Portal
+- **Landing page** with hero section, course catalog preview, instructor showcase, testimonials, and FAQ
+- **Course catalog** with filtering by category, level, and price — full-text search and pagination
+- **Course detail** pages with curriculum breakdown, instructor profiles, and student reviews
+- **Blog** with featured posts, category sidebar, tag cloud, and commenting
+- **Contact form** with validation and submission to backend
 
-| Kategoriya | Texnologiya |
+### Student Dashboard
+- **Personalized dashboard** with continue-learning banner, weekly goals, and progress tracking
+- **Enrolled courses** with module-by-module progress bars and completion status
+- **Lesson player** with video playback, curriculum sidebar, and navigation between lessons
+- **Certificate management** — view earned certificates and track progress toward new ones
+- **Payment history** with transaction details and downloadable receipts
+
+### Admin Panel
+- **KPI dashboard** with real-time statistics, recent registrations, and quick actions
+- **Student management** — CRUD operations, profile pages with enrollment and payment tabs
+- **Instructor management** — full CRUD with specialty, experience, and social links
+- **Course builder** — create courses with nested modules and lessons via drag-free inline editor
+- **Payment management** — status tracking, inline status changes, and refund processing
+- **Certificate administration** — issuance tracking and revocation
+- **Review moderation** — approve or reject student reviews with rating display
+- **Blog management** — post CRUD with draft/publish workflow
+- **Contact messages** — expandable message rows with status workflow (new → read → replied → closed)
+
+### Platform-Wide
+- **JWT authentication** with automatic token refresh and role-based routing
+- **Profile dropdown** in header with quick navigation and logout
+- **Search debounce** (300ms) across all admin list pages
+- **Global 403 handler** — user-friendly forbidden access notifications
+- **Reusable UI components** — Breadcrumb, Pagination, StatTile extracted for consistency
+- **Responsive design** — optimized for desktop, tablet, and mobile viewports
+
+## Tech Stack
+
+| Layer | Technology |
 |---|---|
-| **Framework** | React 19 + React Compiler |
-| **Til** | TypeScript 6 (strict) |
-| **Build** | Vite 8 |
+| **UI Framework** | React 19 with React Compiler |
+| **Language** | TypeScript 6 (strict mode) |
+| **Build Tool** | Vite 8 |
 | **Styling** | Tailwind CSS 4 |
 | **Routing** | React Router DOM 7 (`createBrowserRouter`) |
-| **Server state** | TanStack React Query 5 |
-| **Client state** | Zustand + persist middleware |
-| **HTTP** | Axios (JWT interceptors, auto-refresh) |
-| **Formalar** | React Hook Form 7 |
-| **Bildirishnomalar** | React Toastify |
-| **Shriftlar** | Inter (body) + Manrope (headings) |
+| **Server State** | TanStack React Query 5 |
+| **Client State** | Zustand with persist middleware |
+| **HTTP Client** | Axios with JWT interceptors |
+| **Forms** | React Hook Form 7 |
+| **Notifications** | React Toastify |
+| **Typography** | Inter (body) + Manrope (headings) |
 
-## Loyiha tuzilmasi
+## Architecture
 
 ```
 src/
-├── config/          # Axios instance, API endpoints map
-├── types/           # TypeScript DTO types (Swagger-based)
-├── services/        # API call functions + DTO→UI mappers
-├── store/           # Zustand auth/user store
-├── hooks/api/       # React Query hooks (useAdminStudents, useAdminCourses, etc.)
+├── config/              # Axios instance, API endpoint registry
+├── types/               # TypeScript interfaces (Swagger-derived DTOs)
+├── services/
+│   ├── api.ts           # API call functions (auth, public, student, admin)
+│   └── mappers.ts       # DTO → UI model transformers
+├── store/               # Zustand stores (auth/user state)
+├── hooks/
+│   ├── api/             # React Query hooks (useAdminStudents, useAdminCourses, etc.)
+│   └── useDebounce.ts   # Generic debounce hook
 ├── components/
-│   ├── ui/          # Shared UI: Button, Input, Icon, SectionHeading, etc.
-│   ├── layouts/     # RootLayout, DashboardLayout, AdminLayout
-│   ├── auth/        # ProtectedRoute, AdminRoute
-│   ├── admin/       # AdminSidebar, AdminTopbar
-│   ├── home/        # Header, Footer, Hero, Stats, FAQ, etc.
-│   ├── courses/     # CourseCard, CoursesGrid, CoursesFilter
-│   ├── dashboard/   # ActiveCourses, WeeklyGoal, ContinueBanner
-│   └── ...          # blog, contact, teachers, courseDetail
-├── pages/           # All pages (lazy-loaded)
-├── routes/          # createBrowserRouter configuration
-└── data/            # Static UI data (nav links, FAQ, advantages)
+│   ├── ui/              # Design system: Button, Input, Icon, Breadcrumb, Pagination, StatTile
+│   ├── layouts/         # RootLayout, DashboardLayout, AdminLayout
+│   ├── auth/            # ProtectedRoute, AdminRoute (role guards)
+│   ├── admin/           # AdminSidebar (sectioned nav), AdminTopbar
+│   ├── home/            # Header, Footer, Hero, Stats, FAQ, CTA
+│   └── ...              # Domain-specific: courses, blog, dashboard, teachers, contact
+├── pages/               # All route pages (lazy-loaded via React.lazy)
+├── routes/              # Router configuration (createBrowserRouter)
+└── data/                # Static UI data (navigation links, FAQ entries)
 ```
 
-## O'rnatish
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ and **npm** (or Yarn)
+- A running backend API instance
+
+### Installation
 
 ```bash
-# Repozitoriyani klonlash
+# Clone the repository
 git clone https://github.com/Luck1y1337/edu-web.git
 cd edu-web
 
-# Bog'liqliklarni o'rnatish
+# Install dependencies
 npm install
 
-# .env faylini yaratish
-echo "VITE_BACKEND_URL=http://your-api-url/api/v1" > .env
+# Configure environment
+cp .env.example .env
+# Edit .env and set VITE_BACKEND_URL to your API endpoint
 
-# Dev serverni ishga tushurish
+# Start development server
 npm run dev
 ```
 
-Brauzerda ochiladi: **http://localhost:5173**
+The application will be available at `http://localhost:5173`.
 
-## Skriptlar
+### Environment Variables
 
-| Buyruq | Tavsif |
+| Variable | Description | Example |
+|---|---|---|
+| `VITE_BACKEND_URL` | Backend API base URL | `/api/v1` or `http://localhost:3000/api/v1` |
+
+### Scripts
+
+| Command | Description |
 |---|---|
-| `npm run dev` | Development server (HMR) |
-| `npm run build` | Production build (`tsc -b && vite build`) |
-| `npm run preview` | Production build preview |
-| `npm run lint` | ESLint tekshiruvi |
+| `npm run dev` | Start development server with HMR |
+| `npm run build` | Production build (TypeScript check + Vite build) |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint checks |
 
-## Sahifalar xaritasi
+## Route Map
 
-### Ommaviy sahifalar
-| Marshrut | Sahifa |
+### Public Pages
+
+| Route | Description |
 |---|---|
-| `/` | Bosh sahifa (Hero, Kurslar, O'qituvchilar, FAQ) |
-| `/courses` | Kurslar katalogi (filter, qidiruv, pagination) |
-| `/courses/:slug` | Kurs tafsilotlari (dastur, o'qituvchi, sharhlar) |
-| `/teachers` | O'qituvchilar ro'yxati |
-| `/teachers/:id` | O'qituvchi profili |
-| `/blog` | Blog (featured, kategoriyalar, teglar) |
-| `/blog/:slug` | Maqola tafsilotlari |
-| `/contact` | Aloqa formasi |
-| `/about` | Biz haqimizda |
+| `/` | Landing page — hero, courses, instructors, testimonials, FAQ |
+| `/courses` | Course catalog with filters, search, and pagination |
+| `/courses/:slug` | Course detail — curriculum, instructor, reviews |
+| `/teachers` | Instructor directory with specialty filters |
+| `/teachers/:id` | Instructor profile |
+| `/blog` | Blog with featured posts and category sidebar |
+| `/blog/:slug` | Article detail with comments |
+| `/contact` | Contact form with info sidebar |
+| `/about` | About page — timeline, team, mission |
 
-### Autentifikatsiya
-| Marshrut | Sahifa |
+### Authentication
+
+| Route | Description |
 |---|---|
-| `/login` | Kirish |
-| `/register` | Ro'yxatdan o'tish |
-| `/forgot-password` | Parolni tiklash |
-| `/reset-password` | Yangi parol o'rnatish |
-| `/verify-email` | Email tasdiqlash |
+| `/login` | Sign in (supports `?next=` redirect) |
+| `/register` | Sign up |
+| `/forgot-password` | Password recovery |
+| `/reset-password` | Password reset |
+| `/verify-email` | Email verification |
 
-### Talaba paneli (`/dashboard`)
-| Marshrut | Sahifa |
+### Student Dashboard (`/dashboard`)
+
+| Route | Description |
 |---|---|
-| `/dashboard` | Dashboard (davom ettirish, statistika, haftalik maqsad) |
-| `/dashboard/courses` | Mening kurslarim |
-| `/dashboard/courses/:id` | Kurs tafsilotlari (enrolled) |
-| `/dashboard/lesson/:id` | Dars ko'rish (video player, navigatsiya) |
-| `/dashboard/certificates` | Sertifikatlarim |
-| `/dashboard/payments` | To'lovlar tarixi |
-| `/dashboard/profile` | Profil |
-| `/dashboard/catalog` | Kurslar katalogi |
+| `/dashboard` | Overview — continue learning, stats, weekly goal |
+| `/dashboard/courses` | Enrolled courses with progress |
+| `/dashboard/courses/:id` | Course detail (enrolled view) |
+| `/dashboard/lesson/:id` | Lesson player with curriculum sidebar |
+| `/dashboard/certificates` | Certificate gallery (earned + locked) |
+| `/dashboard/payments` | Payment history and methods |
+| `/dashboard/profile` | User profile |
+| `/dashboard/catalog` | Browse available courses |
 
-### Admin panel (`/admin`)
-| Marshrut | Sahifa |
+### Admin Panel (`/admin`)
+
+| Route | Description |
 |---|---|
-| `/admin` | Dashboard (KPI tiles, oxirgi talabalar) |
-| `/admin/students` | Talabalar ro'yxati |
-| `/admin/students/new` | Yangi talaba qo'shish |
-| `/admin/students/:id` | Talaba profili (kurslar, to'lovlar) |
-| `/admin/instructors` | O'qituvchilar ro'yxati |
-| `/admin/instructors/new` | Yangi o'qituvchi qo'shish |
-| `/admin/courses` | Kurslar ro'yxati |
-| `/admin/courses/new` | Yangi kurs yaratish (course builder) |
+| `/admin` | Dashboard — KPI tiles, recent activity |
+| `/admin/students` | Student list — search, filter, pagination |
+| `/admin/students/new` | Create student |
+| `/admin/students/:id` | Student profile — enrollments, payments |
+| `/admin/instructors` | Instructor list |
+| `/admin/instructors/new` | Create instructor |
+| `/admin/courses` | Course list — status and category filters |
+| `/admin/courses/new` | Course builder — modules and lessons |
+| `/admin/payments` | Payment management — status changes, refunds |
+| `/admin/certificates` | Certificate administration |
+| `/admin/reviews` | Review moderation |
+| `/admin/blog` | Blog post management |
+| `/admin/contact` | Contact message inbox |
 
-## API integratsiya
+## API Integration
 
-Backend bilan ishlash:
-- **JWT autentifikatsiya** — access + refresh token flow
-- **Automatic token refresh** — 401 da avtomatik yangilash
-- **73 ta endpoint** — auth, public, student, admin guruhlari
-- **Strict validation** — backend query parametrlarini qattiq tekshiradi
+The frontend communicates with a NestJS REST API featuring:
 
-## Litsenziya
+- **JWT Authentication** — access + refresh token flow with automatic renewal on 401
+- **Role-based Access** — `student`, `instructor`, `admin`, `super_admin`
+- **Strict Validation** — backend enforces query parameter whitelist (no unknown params)
+- **73 Endpoints** across 5 namespaces: `auth`, `user`, `public`, `student`, `admin`
+- **Paginated Responses** — standardized `{ items, total, page, limit, totalPages }` format
 
-MIT
+All API calls are centralized in `services/api.ts` with typed request/response interfaces derived from the Swagger specification.
 
----
+## Deployment
 
+### Vercel (Recommended)
+
+The project includes a `vercel.json` with:
+- **API proxy** — rewrites `/api/*` to the backend, solving HTTPS mixed-content issues
+- **SPA fallback** — all routes serve `index.html` for client-side routing
+
+```bash
+# Deploy via Vercel CLI
+npx vercel --prod
+```
+
+Set the `VITE_BACKEND_URL` environment variable to `/api/v1` in your Vercel project settings.
+
+### Static Export
+
+```bash
+npm run build
+# Serve the `dist/` directory with any static file server
+# Ensure all routes fallback to index.html
+```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

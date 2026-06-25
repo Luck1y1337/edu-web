@@ -5,7 +5,7 @@ interface Props {
   items: Stat[];
 }
 
-const colorIconMap: Record<string, () => JSX.Element> = {
+const colorIconMap: Record<string, () => React.JSX.Element> = {
   blue: Icon.graduationCap,
   purple: Icon.book,
   emerald: Icon.user,

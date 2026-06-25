@@ -11,7 +11,7 @@ import {
   useAdminStudentPayments,
   useUpdateAdminStudent,
 } from "../hooks/api/useAdminStudents";
-import type { UpdateAdminStudentDto, AdminStudentStatus } from "../types/api.type";
+import type { UpdateAdminStudentDto } from "../types/api.type";
 
 type Tab = "info" | "courses" | "payments";
 

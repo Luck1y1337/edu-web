@@ -86,8 +86,6 @@ const AdminCourseNew = () => {
     name: "modules",
   });
 
-  // Auto-generate slug from name
-  const watchName = watch("name");
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     form.setValue("name", name);

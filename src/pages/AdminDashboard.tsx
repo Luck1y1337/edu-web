@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { publicApi } from "../services/api";
 import { useAdminStudents } from "../hooks/api/useAdminStudents";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
-import useUserStore from "../store/user.store";
+
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return "—";
@@ -104,8 +104,6 @@ const statusBadge = (status?: string) => {
 };
 
 const AdminDashboard = () => {
-  const user = useUserStore((s) => s.user);
-
   const studentsQuery = useAdminStudents({ page: 1, limit: 5 });
   const statsQuery = useQuery({
     queryKey: ["public", "stats"],
@@ -360,7 +358,7 @@ const AdminDashboard = () => {
                   <span className="text-xs text-gray-500">Jami sharhlar soni</span>
                 </div>
                 <span className="text-sm font-bold text-gray-900 shrink-0">
-                  {stats?.testimonials ?? "—"}
+                  {"—"}
                 </span>
               </li>
             </ol>

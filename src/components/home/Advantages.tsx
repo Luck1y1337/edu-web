@@ -2,7 +2,7 @@ import SectionHeading from "../ui/SectionHeading";
 import { advantages } from "../../data/home.data";
 import { Icon } from "../ui/Icon";
 
-const iconMap: Record<string, () => JSX.Element> = {
+const iconMap: Record<string, () => React.JSX.Element> = {
   "✓": Icon.checkSquare,
   "▦": Icon.book,
   "✆": Icon.phone,

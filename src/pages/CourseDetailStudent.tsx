@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useEnrollment } from "../hooks/api/useEnrollments";
-import type { EnrollmentLessonDto, EnrollmentModuleDto } from "../types/api.type";
+import type { EnrollmentModuleDto } from "../types/api.type";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";

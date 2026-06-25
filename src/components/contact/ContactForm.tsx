@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { Icon } from "../ui/Icon";
 import { messageSubjects } from "../../data/contact.data";
 import { useSendContact } from "../../hooks/api/useContact";
 import type { ContactFormDto } from "../../types/api.type";

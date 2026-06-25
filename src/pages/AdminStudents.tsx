@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
+import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useAdminStudents, useDeleteAdminStudent } from "../hooks/api/useAdminStudents";
 import type { AdminStudentStatus } from "../types/api.type";
@@ -37,12 +38,13 @@ const getInitials = (firstName?: string, lastName?: string) => {
 const AdminStudents = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [status, setStatus] = useState<"" | AdminStudentStatus>("");
 
   const studentsQuery = useAdminStudents({
     page,
     limit: PAGE_SIZE,
-    ...(search ? { search } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(status ? { status } : {}),
   });
   const deleteStudent = useDeleteAdminStudent();

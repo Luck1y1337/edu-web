@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
+import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useAdminCourses, useDeleteAdminCourse } from "../hooks/api/useAdminCourses";
 import type { AdminCourseStatus } from "../types/api.type";
@@ -42,13 +43,14 @@ const formatPrice = (price: number) => {
 const AdminCourses = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [status, setStatus] = useState<"" | AdminCourseStatus>("");
   const [category, setCategory] = useState("");
 
   const coursesQuery = useAdminCourses({
     page,
     limit: PAGE_SIZE,
-    ...(search ? { search } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(status ? { status } : {}),
     ...(category ? { category } : {}),
   });

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
+import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useAdminBlogPosts, useDeleteBlogPost, usePublishBlogPost } from "../hooks/api/useAdminBlog";
 import type { BlogPostStatus } from "../types/api.type";
@@ -29,12 +30,13 @@ const statusLabel = (status: BlogPostStatus) => {
 const AdminBlogPosts = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [status, setStatus] = useState<"" | BlogPostStatus>("");
 
   const postsQuery = useAdminBlogPosts({
     page,
     limit: PAGE_SIZE,
-    ...(search ? { search } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(status ? { status } : {}),
   });
   const deletePost = useDeleteBlogPost();

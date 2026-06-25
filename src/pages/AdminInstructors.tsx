@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
+import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useAdminInstructors, useDeleteAdminInstructor } from "../hooks/api/useAdminInstructors";
 import type { AdminInstructorStatus } from "../types/api.type";
@@ -26,12 +27,13 @@ const getInitials = (firstName?: string, lastName?: string) => {
 const AdminInstructors = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [status, setStatus] = useState<"" | AdminInstructorStatus>("");
 
   const instructorsQuery = useAdminInstructors({
     page,
     limit: PAGE_SIZE,
-    ...(search ? { search } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(status ? { status } : {}),
   });
   const deleteInstructor = useDeleteAdminInstructor();

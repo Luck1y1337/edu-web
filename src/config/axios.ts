@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { getItem, getRefreshToken, setItem, clearTokens } from "../utils/localstorage";
 import useUserStore from "../store/user.store";
 import Endpoints from "./endpoints";
@@ -22,6 +23,11 @@ instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (error.response?.status === 403) {
+      toast.error("Ruxsat yo'q — sizda bu amalni bajarish huquqi mavjud emas");
+      return Promise.reject(error);
+    }
 
     // If 401 and not already retrying
     if (error.response?.status === 401 && !originalRequest._retry) {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Icon } from "../components/ui/Icon";
+import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useAdminPayments, useUpdatePaymentStatus, useRefundPayment } from "../hooks/api/useAdminPayments";
 import type { AdminPaymentStatus, AdminPaymentMethod } from "../types/api.type";
@@ -65,6 +66,7 @@ const getInitials = (firstName?: string, lastName?: string) => {
 const AdminPayments = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [statusFilter, setStatusFilter] = useState<"" | AdminPaymentStatus>("");
   const [methodFilter, setMethodFilter] = useState<"" | AdminPaymentMethod>("");
   const [editingStatusId, setEditingStatusId] = useState<string | null>(null);
@@ -72,7 +74,7 @@ const AdminPayments = () => {
   const paymentsQuery = useAdminPayments({
     page,
     limit: PAGE_SIZE,
-    ...(search ? { search } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(statusFilter ? { status: statusFilter } : {}),
     ...(methodFilter ? { method: methodFilter } : {}),
   });

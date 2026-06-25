@@ -61,7 +61,7 @@ const AdminCourseNew = () => {
       modules: [],
     },
   });
-  const { formState: { errors }, watch, setValue } = form;
+  const { formState: { errors }, setValue } = form;
   const createCourse = useCreateAdminCourse();
 
   const instructorsQuery = useAdminInstructors({ limit: 100 });

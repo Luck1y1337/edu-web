@@ -28,19 +28,19 @@ const Pagination = ({ page, totalPages, total, pageSize, onPageChange, label = "
   const rangeEnd = Math.min(page * pageSize, total);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 dark:border-slate-700 pt-6">
-      <p className="text-sm text-gray-500 dark:text-slate-400">
+    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
+      <p className="text-sm text-gray-500">
         Ko'rsatilmoqda{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">{rangeStart}-{rangeEnd}</span>
+        <span className="font-semibold text-gray-900">{rangeStart}-{rangeEnd}</span>
         {" / "}
-        <span className="font-semibold text-gray-900 dark:text-white">{total.toLocaleString("uz-UZ")}</span>
+        <span className="font-semibold text-gray-900">{total.toLocaleString("uz-UZ")}</span>
         {" "}{label}
       </p>
       <nav aria-label="Sahifa" className="flex items-center gap-1">
         <button
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page === 1}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
           aria-label="Oldingi sahifa"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -60,7 +60,7 @@ const Pagination = ({ page, totalPages, total, pageSize, onPageChange, label = "
               className={`inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                 page === p
                   ? "bg-blue-600 text-white shadow-sm"
-                  : "border border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+                  : "border border-gray-200 text-gray-700 hover:bg-gray-50"
               }`}
             >
               {p}
@@ -71,7 +71,7 @@ const Pagination = ({ page, totalPages, total, pageSize, onPageChange, label = "
         <button
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page === totalPages}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
           aria-label="Keyingi sahifa"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

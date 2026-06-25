@@ -17,7 +17,7 @@ const StatTileGrid = ({ items, columns = 4 }: StatTileGridProps) => (
     {items.map((stat) => (
       <article
         key={stat.label}
-        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:bg-slate-800 dark:border-slate-700"
+        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
       >
         <div className="flex items-center justify-between gap-3">
           <span
@@ -45,8 +45,8 @@ const StatTileGrid = ({ items, columns = 4 }: StatTileGridProps) => (
             </span>
           )}
         </div>
-        <p className="text-3xl font-extrabold text-gray-900 dark:text-white">{stat.value}</p>
-        <p className="text-sm text-gray-500 dark:text-slate-400">{stat.label}</p>
+        <p className="text-3xl font-extrabold text-gray-900">{stat.value}</p>
+        <p className="text-sm text-gray-500">{stat.label}</p>
       </article>
     ))}
   </section>

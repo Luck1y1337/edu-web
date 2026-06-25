@@ -32,9 +32,9 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => (
           <li key={item.label} className="flex items-center gap-1.5">
             {i > 0 && <ChevronRight />}
             {isLast || !item.to ? (
-              <span className="text-sm font-medium text-gray-900 dark:text-white">{item.label}</span>
+              <span className="text-sm font-medium text-gray-900">{item.label}</span>
             ) : (
-              <Link to={item.to} className="text-sm text-gray-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">
+              <Link to={item.to} className="text-sm text-gray-500 transition-colors hover:text-blue-600">
                 {item.label}
               </Link>
             )}

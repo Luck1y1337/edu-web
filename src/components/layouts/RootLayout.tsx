@@ -8,7 +8,7 @@ const RootLayout = () => {
   const { isLogoutModalOpen, setLogoutModalOpen } = useUserStore();
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col">
       <Header />
       <main className="flex-1">
         <Outlet />

@@ -8,7 +8,7 @@ const AdminLayout = () => {
   const { isLogoutModalOpen, setLogoutModalOpen } = useUserStore();
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <AdminSidebar />
 
       <div className="flex min-w-0 flex-1 flex-col">

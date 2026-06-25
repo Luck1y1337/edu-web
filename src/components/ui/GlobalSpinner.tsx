@@ -2,7 +2,7 @@
 
 const GlobalSpinner = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white dark:bg-slate-900">
+    <div className="flex min-h-screen items-center justify-center bg-white">
       <div className="flex flex-col items-center gap-y-4">
         <svg
           className="h-10 w-10 animate-spin text-blue-600"

@@ -1,49 +1,13 @@
 import { Link } from "react-router-dom";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
+import StatTileGrid from "../components/ui/StatTile";
+import type { StatTileItem } from "../components/ui/StatTile";
 import { useEnrollments } from "../hooks/api/useEnrollments";
 import { useCertificates } from "../hooks/api/useCertificates";
 import type { StudentEnrollmentListItemDto } from "../types/api.type";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
-
-/* ───────── Stat tile ───────── */
-const StatTile = ({
-  label,
-  value,
-  iconBg,
-  iconColor,
-  svgPath,
-}: {
-  label: string;
-  value: number;
-  iconBg: string;
-  iconColor: string;
-  svgPath: React.ReactNode;
-}) => (
-  <article className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5">
-    <div className="flex items-center justify-between gap-3">
-      <span
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
-        style={{ backgroundColor: iconBg, color: iconColor }}
-      >
-        <svg
-          className="h-5.5 w-5.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {svgPath}
-        </svg>
-      </span>
-    </div>
-    <p className="text-3xl font-extrabold text-gray-900">{value}</p>
-    <p className="text-sm text-gray-500">{label}</p>
-  </article>
-);
 
 /* ───────── Active course card ───────── */
 const ActiveCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => {
@@ -196,56 +160,61 @@ const StudentCourses = () => {
       </header>
 
       {/* Stats */}
-      <section className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-        <StatTile
-          label="Davom etayotgan"
-          value={inProgressCount || activeCourses.length}
-          iconBg="#EFF6FF"
-          iconColor="#2563EB"
-          svgPath={
-            <>
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-            </>
-          }
-        />
-        <StatTile
-          label="Tugallangan"
-          value={completedCourses.length}
-          iconBg="#ECFDF5"
-          iconColor="#059669"
-          svgPath={
-            <>
-              <path d="M9 11l3 3L22 4" />
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-            </>
-          }
-        />
-        <StatTile
-          label="Sertifikatlar"
-          value={certificatesCount}
-          iconBg="#F5F3FF"
-          iconColor="#8B5CF6"
-          svgPath={
-            <>
-              <circle cx="12" cy="8" r="6" />
-              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
-            </>
-          }
-        />
-        <StatTile
-          label="O'rganilgan soat"
-          value={enrollments.length}
-          iconBg="#FEF3C7"
-          iconColor="#F59E0B"
-          svgPath={
-            <>
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </>
-          }
-        />
-      </section>
+      <StatTileGrid
+        columns={4}
+        items={
+          [
+            {
+              iconBg: "#EFF6FF",
+              iconColor: "#2563EB",
+              svgPath: (
+                <>
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </>
+              ),
+              value: String(inProgressCount || activeCourses.length),
+              label: "Davom etayotgan",
+            },
+            {
+              iconBg: "#ECFDF5",
+              iconColor: "#059669",
+              svgPath: (
+                <>
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </>
+              ),
+              value: String(completedCourses.length),
+              label: "Tugallangan",
+            },
+            {
+              iconBg: "#F5F3FF",
+              iconColor: "#8B5CF6",
+              svgPath: (
+                <>
+                  <circle cx="12" cy="8" r="6" />
+                  <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+                </>
+              ),
+              value: String(certificatesCount),
+              label: "Sertifikatlar",
+            },
+            {
+              iconBg: "#FEF3C7",
+              iconColor: "#F59E0B",
+              svgPath: (
+                <>
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </>
+              ),
+              value: String(enrollments.length),
+              label: "O'rganilgan soat",
+            },
+          ] satisfies StatTileItem[]
+        }
+      />
 
       {/* In-progress courses */}
       <section>

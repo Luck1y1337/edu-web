@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { publicApi } from "../services/api";
 import { useAdminStudents } from "../hooks/api/useAdminStudents";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
+import StatTileGrid from "../components/ui/StatTile";
+import type { StatTileItem } from "../components/ui/StatTile";
 
 
 const formatDate = (iso?: string | null) => {
@@ -24,43 +26,6 @@ const todayFormatted = () => {
   return `${day}-${months[d.getMonth()]}, ${d.getFullYear()}`;
 };
 
-/* --- Inline SVG icons for stat tiles --- */
-const UsersIcon = () => (
-  <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-    <circle cx="9" cy="7" r="4" />
-    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-  </svg>
-);
-
-const BookIcon = () => (
-  <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-  </svg>
-);
-
-const InstructorIcon = () => (
-  <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
-const GraduateIcon = () => (
-  <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-    <polyline points="22 4 12 14.01 9 11.01" />
-  </svg>
-);
-
-const TrendUpIcon = () => (
-  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-  </svg>
-);
-
 const DownloadIcon = () => (
   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -81,16 +46,6 @@ const ArrowLineIcon = () => (
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 );
-
-/* --- Tile color variants --- */
-type TileVariant = "default" | "success" | "accent" | "warning";
-
-const tileIconBoxColors: Record<TileVariant, string> = {
-  default: "bg-blue-50 text-blue-600",
-  success: "bg-emerald-50 text-emerald-600",
-  accent: "bg-violet-50 text-violet-600",
-  warning: "bg-amber-50 text-amber-600",
-};
 
 const statusBadge = (status?: string) => {
   switch (status) {
@@ -116,37 +71,56 @@ const AdminDashboard = () => {
   const recentStudents = studentsQuery.data?.items ?? [];
   const stats = statsQuery.data;
 
-  const tiles: {
-    label: string;
-    value: string;
-    variant: TileVariant;
-    icon: React.ReactNode;
-    trend?: string;
-    trendDir?: "up" | "down";
-  }[] = [
+  const tiles: StatTileItem[] = [
     {
-      label: "Talabalar",
+      iconBg: "#EFF6FF",
+      iconColor: "#2563EB",
+      svgPath: (
+        <>
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </>
+      ),
       value: String(studentsTotal),
-      variant: "default",
-      icon: <UsersIcon />,
+      label: "Talabalar",
     },
     {
-      label: "Kurslar",
+      iconBg: "#ECFDF5",
+      iconColor: "#059669",
+      svgPath: (
+        <>
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </>
+      ),
       value: String(stats?.courses ?? "—"),
-      variant: "success",
-      icon: <BookIcon />,
+      label: "Kurslar",
     },
     {
-      label: "O‘qituvchilar",
+      iconBg: "#F5F3FF",
+      iconColor: "#8B5CF6",
+      svgPath: (
+        <>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </>
+      ),
       value: String(stats?.instructors ?? stats?.teachers ?? "—"),
-      variant: "accent",
-      icon: <InstructorIcon />,
+      label: "O’qituvchilar",
     },
     {
-      label: "Bitiruvchilar",
+      iconBg: "#FFFBEB",
+      iconColor: "#D97706",
+      svgPath: (
+        <>
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </>
+      ),
       value: String(stats?.graduates ?? "—"),
-      variant: "warning",
-      icon: <GraduateIcon />,
+      label: "Bitiruvchilar",
     },
   ];
 
@@ -181,36 +155,7 @@ const AdminDashboard = () => {
       </header>
 
       {/* ── Stat tiles ── */}
-      <section className="grid grid-cols-2 gap-5 lg:grid-cols-4" aria-label="Asosiy ko'rsatkichlar">
-        {tiles.map((t) => (
-          <article
-            key={t.label}
-            className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <span
-                className={`inline-flex h-11 w-11 items-center justify-center rounded-lg ${tileIconBoxColors[t.variant]}`}
-              >
-                {t.icon}
-              </span>
-              {t.trend && (
-                <span
-                  className={`inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-semibold ${
-                    t.trendDir === "down"
-                      ? "bg-red-50 text-red-700"
-                      : "bg-emerald-50 text-emerald-700"
-                  }`}
-                >
-                  <TrendUpIcon />
-                  {t.trend}
-                </span>
-              )}
-            </div>
-            <p className="text-3xl font-extrabold leading-none text-gray-900">{t.value}</p>
-            <p className="text-sm text-gray-500">{t.label}</p>
-          </article>
-        ))}
-      </section>
+      <StatTileGrid items={tiles} columns={4} />
 
       {/* ── Two-column grid ── */}
       <section className="grid items-start gap-5" style={{ gridTemplateColumns: "1.6fr 1fr" }}>

@@ -3,22 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
+import Breadcrumb from "../components/ui/Breadcrumb";
 import { useCreateAdminStudent } from "../hooks/api/useAdminStudents";
 import type { CreateAdminStudentDto } from "../types/api.type";
-
-const ChevronRight = () => (
-  <svg
-    className="h-4 w-4 text-gray-400"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="9 18 15 12 9 6" />
-  </svg>
-);
 
 const AdminStudentNew = () => {
   const navigate = useNavigate();
@@ -47,25 +34,11 @@ const AdminStudentNew = () => {
   return (
     <div className="space-y-6">
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb">
-        <ol className="flex items-center gap-1.5">
-          <li className="flex items-center">
-            <Link to="/admin" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
-              Dashboard
-            </Link>
-          </li>
-          <li className="flex items-center gap-1.5">
-            <ChevronRight />
-            <Link to="/admin/students" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
-              Talabalar
-            </Link>
-          </li>
-          <li className="flex items-center gap-1.5">
-            <ChevronRight />
-            <span className="text-sm text-gray-900 font-medium">Yangi talaba</span>
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumb items={[
+        { label: "Dashboard", to: "/admin" },
+        { label: "Talabalar", to: "/admin/students" },
+        { label: "Yangi talaba" },
+      ]} />
 
       {/* Page header */}
       <div>

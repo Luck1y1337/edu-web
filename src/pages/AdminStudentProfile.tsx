@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
+import Breadcrumb from "../components/ui/Breadcrumb";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import {
   useAdminStudent,
@@ -126,15 +127,11 @@ const AdminStudentProfile = () => {
   return (
     <div className="space-y-6">
       {/* Breadcrumb */}
-      <nav>
-        <ol className="flex items-center gap-1.5 text-sm">
-          <li><Link to="/admin" className="text-gray-500 hover:text-blue-600">Dashboard</Link></li>
-          <li className="text-gray-300">/</li>
-          <li><Link to="/admin/students" className="text-gray-500 hover:text-blue-600">Talabalar</Link></li>
-          <li className="text-gray-300">/</li>
-          <li className="font-medium text-gray-900">{fullName}</li>
-        </ol>
-      </nav>
+      <Breadcrumb items={[
+        { label: "Dashboard", to: "/admin" },
+        { label: "Talabalar", to: "/admin/students" },
+        { label: fullName },
+      ]} />
 
       {/* Profile header */}
       <header className="flex flex-wrap items-center gap-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">

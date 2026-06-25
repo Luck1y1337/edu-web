@@ -12,6 +12,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark theme base */
+.dark body {
+  background-color: #0F172A;
+  color: #F1F5F9;
+}
+
+.dark .article-body h2,
+.dark .article-body h3,
+.dark .article-body p,
+.dark .article-body li {
+  color: #F1F5F9;
+}
+
+.dark .article-body blockquote {
+  background: #1E293B;
+}
+
 .font-manrope {
   font-family: 'Manrope', sans-serif;
 }

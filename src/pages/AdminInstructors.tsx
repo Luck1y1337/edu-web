@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
 import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
+import Pagination from "../components/ui/Pagination";
 import { useAdminInstructors, useDeleteAdminInstructor } from "../hooks/api/useAdminInstructors";
 import type { AdminInstructorStatus } from "../types/api.type";
 
@@ -47,24 +48,6 @@ const AdminInstructors = () => {
     if (!window.confirm(`"${name}" o'qituvchini o'chirishni tasdiqlaysizmi?`)) return;
     deleteInstructor.mutate(id);
   };
-
-  /* Pagination range: show first, last, current +/- 1, with ellipsis */
-  const buildPageRange = () => {
-    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
-    const pages: (number | "ellipsis")[] = [];
-    const near = new Set([1, 2, page - 1, page, page + 1, totalPages - 1, totalPages]);
-    let prev = 0;
-    for (const p of Array.from(near).sort((a, b) => a - b)) {
-      if (p < 1 || p > totalPages) continue;
-      if (prev && p - prev > 1) pages.push("ellipsis");
-      pages.push(p);
-      prev = p;
-    }
-    return pages;
-  };
-
-  const rangeStart = (page - 1) * PAGE_SIZE + 1;
-  const rangeEnd = Math.min(page * PAGE_SIZE, total);
 
   return (
     <div className="space-y-6">
@@ -234,62 +217,14 @@ const AdminInstructors = () => {
       )}
 
       {/* ─── Pagination ─── */}
-      {totalPages > 1 && (
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
-          <p className="text-sm text-gray-500">
-            Ko'rsatilmoqda{" "}
-            <span className="font-semibold text-gray-900">{rangeStart}-{rangeEnd}</span>
-            {" / "}
-            <span className="font-semibold text-gray-900">{total.toLocaleString("uz-UZ")}</span>
-            {" "}o'qituvchi
-          </p>
-          <nav aria-label="Sahifa" className="flex items-center gap-1">
-            {/* Prev button */}
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Oldingi sahifa"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-
-            {buildPageRange().map((p, idx) =>
-              p === "ellipsis" ? (
-                <span key={`e-${idx}`} className="inline-flex h-9 w-9 items-center justify-center text-sm text-gray-400">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  className={`inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                    page === p
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "border border-gray-200 text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {p}
-                </button>
-              )
-            )}
-
-            {/* Next button */}
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Keyingi sahifa"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </nav>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={PAGE_SIZE}
+        onPageChange={setPage}
+        label="o'qituvchi"
+      />
     </div>
   );
 };

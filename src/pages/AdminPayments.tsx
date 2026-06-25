@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Icon } from "../components/ui/Icon";
 import { useDebounce } from "../hooks/useDebounce";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
+import Pagination from "../components/ui/Pagination";
 import { useAdminPayments, useUpdatePaymentStatus, useRefundPayment } from "../hooks/api/useAdminPayments";
 import type { AdminPaymentStatus, AdminPaymentMethod } from "../types/api.type";
 
@@ -84,24 +85,6 @@ const AdminPayments = () => {
   const items = data?.items ?? [];
   const totalPages = data?.totalPages ?? 1;
   const total = data?.total ?? 0;
-
-  /* Pagination range */
-  const buildPageRange = () => {
-    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
-    const pages: (number | "ellipsis")[] = [];
-    const near = new Set([1, 2, page - 1, page, page + 1, totalPages - 1, totalPages]);
-    let prev = 0;
-    for (const p of Array.from(near).sort((a, b) => a - b)) {
-      if (p < 1 || p > totalPages) continue;
-      if (prev && p - prev > 1) pages.push("ellipsis");
-      pages.push(p);
-      prev = p;
-    }
-    return pages;
-  };
-
-  const rangeStart = (page - 1) * PAGE_SIZE + 1;
-  const rangeEnd = Math.min(page * PAGE_SIZE, total);
 
   const handleRefund = (id: string) => {
     if (!window.confirm("Bu to'lovni qaytarishni tasdiqlaysizmi?")) return;
@@ -301,60 +284,14 @@ const AdminPayments = () => {
       )}
 
       {/* ─── Pagination ─── */}
-      {totalPages > 1 && (
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
-          <p className="text-sm text-gray-500">
-            Ko'rsatilmoqda{" "}
-            <span className="font-semibold text-gray-900">{rangeStart}-{rangeEnd}</span>
-            {" / "}
-            <span className="font-semibold text-gray-900">{total.toLocaleString("uz-UZ")}</span>
-            {" "}to'lov
-          </p>
-          <nav aria-label="Sahifa" className="flex items-center gap-1">
-            <button
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-              disabled={page === 1}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Oldingi sahifa"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-
-            {buildPageRange().map((pg, idx) =>
-              pg === "ellipsis" ? (
-                <span key={`e-${idx}`} className="inline-flex h-9 w-9 items-center justify-center text-sm text-gray-400">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={pg}
-                  onClick={() => setPage(pg)}
-                  className={`inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                    page === pg
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "border border-gray-200 text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {pg}
-                </button>
-              )
-            )}
-
-            <button
-              onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-              disabled={page === totalPages}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Keyingi sahifa"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </nav>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={PAGE_SIZE}
+        onPageChange={setPage}
+        label="to'lov"
+      />
     </div>
   );
 };

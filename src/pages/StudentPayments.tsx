@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
+import StatTileGrid from "../components/ui/StatTile";
+import type { StatTileItem } from "../components/ui/StatTile";
 import { useEnrollments } from "../hooks/api/useEnrollments";
 
 const formatDate = (iso: string) => {
@@ -15,28 +17,6 @@ const PlusIcon = () => (
   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="12" y1="5" x2="12" y2="19" />
     <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
-
-const DollarIcon = () => (
-  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="1" x2="12" y2="23" />
-    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-  </svg>
-);
-
-const BookIcon = () => (
-  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-  </svg>
-);
-
-const CalendarIcon = () => (
-  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
   </svg>
 );
 
@@ -108,40 +88,50 @@ const StudentPayments = () => {
       </div>
 
       {/* ── Stats tiles ── */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-        {/* Jami sarflangan */}
-        <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="mb-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-              <DollarIcon />
-            </span>
-          </div>
-          <p className="text-2xl font-extrabold text-gray-900">{totalCourses}</p>
-          <p className="text-sm text-gray-500">Jami to'lovlar</p>
-        </article>
-
-        {/* Sotib olingan kurslar */}
-        <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="mb-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-              <BookIcon />
-            </span>
-          </div>
-          <p className="text-2xl font-extrabold text-gray-900">{totalCourses}</p>
-          <p className="text-sm text-gray-500">Sotib olingan kurslar</p>
-        </article>
-
-        {/* Bu yil / Tugatilgan */}
-        <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="mb-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
-              <CalendarIcon />
-            </span>
-          </div>
-          <p className="text-2xl font-extrabold text-gray-900">{completedCount}</p>
-          <p className="text-sm text-gray-500">Tugatilgan kurslar</p>
-        </article>
-      </div>
+      <StatTileGrid
+        columns={3}
+        items={
+          [
+            {
+              iconBg: "#ECFDF5",
+              iconColor: "#059669",
+              svgPath: (
+                <>
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </>
+              ),
+              value: String(totalCourses),
+              label: "Jami to'lovlar",
+            },
+            {
+              iconBg: "#EFF6FF",
+              iconColor: "#2563EB",
+              svgPath: (
+                <>
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </>
+              ),
+              value: String(totalCourses),
+              label: "Sotib olingan kurslar",
+            },
+            {
+              iconBg: "#F5F3FF",
+              iconColor: "#8B5CF6",
+              svgPath: (
+                <>
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                </>
+              ),
+              value: String(completedCount),
+              label: "Tugatilgan kurslar",
+            },
+          ] satisfies StatTileItem[]
+        }
+      />
 
       {/* ── Two-column: Table + Payment method ── */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[2fr_1fr]">

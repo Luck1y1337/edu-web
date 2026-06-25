@@ -140,14 +140,16 @@ const AdminInstructors = () => {
               </thead>
               <tbody>
                 {items.map((inst) => {
-                  const name = [inst.user.firstName, inst.user.lastName].filter(Boolean).join(" ");
+                  const u = inst.user;
+                  if (!u) return null;
+                  const name = [u.firstName, u.lastName].filter(Boolean).join(" ");
                   return (
                     <tr key={inst.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                       {/* Name cell with avatar */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
                           <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">
-                            {getInitials(inst.user.firstName, inst.user.lastName)}
+                            {getInitials(u.firstName, u.lastName)}
                           </span>
                           <div className="min-w-0">
                             <Link
@@ -157,7 +159,7 @@ const AdminInstructors = () => {
                               {name}
                             </Link>
                             <div className="text-xs text-gray-500 truncate">
-                              {inst.user.email}
+                              {u.email}
                             </div>
                           </div>
                         </div>

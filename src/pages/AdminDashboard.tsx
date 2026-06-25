@@ -188,8 +188,9 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {recentStudents.map((s) => {
-                    const fullName = [s.user.firstName, s.user.lastName].filter(Boolean).join(" ");
-                    const initials = [s.user.firstName?.[0], s.user.lastName?.[0]]
+                    const u = s.user ?? {};
+                    const fullName = [u.firstName, u.lastName].filter(Boolean).join(" ");
+                    const initials = [u.firstName?.[0], u.lastName?.[0]]
                       .filter(Boolean)
                       .join("")
                       .toUpperCase();
@@ -210,10 +211,10 @@ const AdminDashboard = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="px-5 py-4 text-gray-600">{s.user.email}</td>
-                        <td className="px-5 py-4 text-gray-600">{s.user.phone}</td>
+                        <td className="px-5 py-4 text-gray-600">{u.email}</td>
+                        <td className="px-5 py-4 text-gray-600">{u.phone}</td>
                         <td className="px-5 py-4 text-gray-600">
-                          {formatDate(s.enrolledAt || s.user.createdAt)}
+                          {formatDate(s.enrolledAt || u.createdAt)}
                         </td>
                         <td className="px-5 py-4">
                           <span

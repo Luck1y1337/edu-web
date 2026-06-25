@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import Pagination from "../components/ui/Pagination";
 import { useAdminContactMessages, useUpdateContactStatus } from "../hooks/api/useAdminContact";
@@ -125,9 +125,8 @@ const AdminContactMessages = () => {
               </thead>
               <tbody>
                 {items.map((msg) => (
-                  <>
+                  <Fragment key={msg.id}>
                     <tr
-                      key={msg.id}
                       onClick={() => toggleExpand(msg.id)}
                       className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
@@ -228,7 +227,7 @@ const AdminContactMessages = () => {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>

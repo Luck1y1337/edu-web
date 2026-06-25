@@ -324,11 +324,15 @@ const AdminCourseNew = () => {
                   className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">Tanlanmagan</option>
-                  {instructors.map((ins) => (
-                    <option key={ins.id} value={ins.id}>
-                      {[ins.user.firstName, ins.user.lastName].filter(Boolean).join(" ")} — {ins.specialty}
-                    </option>
-                  ))}
+                  {instructors.map((ins) => {
+                    const u = ins.user;
+                    const label = u ? [u.firstName, u.lastName].filter(Boolean).join(" ") : ins.id;
+                    return (
+                      <option key={ins.id} value={ins.id}>
+                        {label} — {ins.specialty}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="flex flex-col gap-y-1.5">

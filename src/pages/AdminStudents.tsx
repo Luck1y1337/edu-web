@@ -149,14 +149,16 @@ const AdminStudents = () => {
               </thead>
               <tbody>
                 {items.map((s) => {
-                  const name = [s.user.firstName, s.user.lastName].filter(Boolean).join(" ");
+                  const u = s.user;
+                  if (!u) return null;
+                  const name = [u.firstName, u.lastName].filter(Boolean).join(" ");
                   return (
                     <tr key={s.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                       {/* Name cell with avatar */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
                           <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
-                            {getInitials(s.user.firstName, s.user.lastName)}
+                            {getInitials(u.firstName, u.lastName)}
                           </span>
                           <div className="min-w-0">
                             <Link
@@ -166,14 +168,14 @@ const AdminStudents = () => {
                               {name}
                             </Link>
                             <div className="text-xs text-gray-500 truncate">
-                              {s.user.email}
+                              {u.email}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-4 text-gray-600">{s.user.phone}</td>
+                      <td className="px-5 py-4 text-gray-600">{u.phone}</td>
                       <td className="px-5 py-4 text-gray-600">
-                        {formatDate(s.enrolledAt || s.user.createdAt)}
+                        {formatDate(s.enrolledAt || u.createdAt)}
                       </td>
                       <td className="px-5 py-4">
                         <span

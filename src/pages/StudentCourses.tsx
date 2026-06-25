@@ -7,78 +7,145 @@ import type { StudentEnrollmentListItemDto } from "../types/api.type";
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
 
-const StatTile = ({ label, value, iconColor, iconBg, path }: {
+/* ───────── Stat tile ───────── */
+const StatTile = ({
+  label,
+  value,
+  iconBg,
+  iconColor,
+  svgPath,
+}: {
   label: string;
   value: number;
-  iconColor: string;
   iconBg: string;
-  path: string;
+  iconColor: string;
+  svgPath: React.ReactNode;
 }) => (
   <article className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5">
-    <span
-      className="flex h-11 w-11 items-center justify-center rounded-lg"
-      style={{ background: iconBg }}
-    >
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={iconColor} strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d={path} />
-      </svg>
-    </span>
+    <div className="flex items-center justify-between gap-3">
+      <span
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+        style={{ backgroundColor: iconBg, color: iconColor }}
+      >
+        <svg
+          className="h-5.5 w-5.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {svgPath}
+        </svg>
+      </span>
+    </div>
     <p className="text-3xl font-extrabold text-gray-900">{value}</p>
     <p className="text-sm text-gray-500">{label}</p>
   </article>
 );
 
-const ActiveCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => (
-  <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
-    <div className="relative h-36 bg-gray-100">
-      <img src={e.course.imageUrl || fallbackImage} alt={e.course.name} className="h-full w-full object-cover" />
-      {e.course.category && (
-        <span className="absolute left-2 top-2 rounded-full bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-700">
-          {e.course.category}
-        </span>
-      )}
-    </div>
-    <div className="flex flex-1 flex-col gap-2 p-4">
-      <h4 className="font-manrope font-bold text-gray-900 leading-tight">{e.course.name}</h4>
-      <div className="mt-1">
-        <div className="flex items-center justify-between text-xs mb-1">
-          <span className="text-gray-400">{e.course.lessonsCount || 0} dars</span>
-          <span className="font-bold text-blue-700">{e.progressPercent}%</span>
+/* ───────── Active course card ───────── */
+const ActiveCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => {
+  const completedLessons = e.course.lessonsCount
+    ? Math.round((e.progressPercent / 100) * e.course.lessonsCount)
+    : 0;
+
+  return (
+    <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
+      {/* Image */}
+      <div className="relative h-36 bg-gray-100">
+        {e.course.category && (
+          <span className="absolute left-2 top-2 rounded-full bg-blue-600 px-3 py-0.5 text-xs font-semibold text-white">
+            {e.course.category}
+          </span>
+        )}
+        <img
+          src={e.course.imageUrl || fallbackImage}
+          alt={e.course.name}
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <h4 className="font-manrope font-bold leading-tight text-gray-900">
+          {e.course.name}
+        </h4>
+
+        {/* Progress */}
+        <div className="mt-1 flex flex-col gap-1">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>{completedLessons} / {e.course.lessonsCount || 0} dars</span>
+            <span className="font-bold text-blue-700">{e.progressPercent}%</span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-gray-100">
+            <div
+              className="h-2 rounded-full bg-blue-600 transition-all"
+              style={{ width: `${e.progressPercent}%` }}
+            />
+          </div>
         </div>
-        <div className="h-2 w-full rounded-full bg-gray-100">
-          <div className="h-2 rounded-full bg-blue-600 transition-all" style={{ width: `${e.progressPercent}%` }} />
+
+        {/* Button */}
+        <div className="mt-auto pt-3">
+          <Link
+            to={`/dashboard/courses/${e.course.id}`}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          >
+            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+            Davom ettirish
+          </Link>
         </div>
       </div>
-      <Link
-        to={`/dashboard/courses/${e.course.id}`}
-        className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 py-2 text-xs font-semibold text-white hover:bg-blue-700"
-      >
-        Davom ettirish
-      </Link>
-    </div>
-  </article>
-);
+    </article>
+  );
+};
 
+/* ───────── Completed course card ───────── */
 const CompletedCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => (
-  <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
+  <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white opacity-95 transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
+    {/* Image */}
     <div className="relative h-36 bg-gray-100">
-      <img src={e.course.imageUrl || fallbackImage} alt={e.course.name} className="h-full w-full object-cover" />
-      <span className="absolute left-2 top-2 rounded-full bg-emerald-50 px-3 py-0.5 text-xs font-semibold text-emerald-700">
+      <span className="absolute left-2 top-2 rounded-full bg-gray-500 px-3 py-0.5 text-xs font-semibold text-white">
         Tugallangan
       </span>
+      <img
+        src={e.course.imageUrl || fallbackImage}
+        alt={e.course.name}
+        className="h-full w-full object-cover opacity-85"
+      />
     </div>
+
+    {/* Body */}
     <div className="flex flex-1 flex-col gap-2 p-4">
-      <h4 className="font-manrope font-bold text-gray-900 leading-tight">{e.course.name}</h4>
-      <Link
-        to="/dashboard/certificates"
-        className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
-      >
-        Sertifikatni yuklash
-      </Link>
+      <h4 className="font-manrope font-bold leading-tight text-gray-900">
+        {e.course.name}
+      </h4>
+      <p className="text-sm text-gray-500">
+        Yakuniy natija: <strong className="text-emerald-700">100% (A'lo)</strong>
+      </p>
+
+      {/* Button */}
+      <div className="mt-auto pt-3">
+        <Link
+          to="/dashboard/certificates"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-emerald-600 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="8" r="6" />
+            <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+          </svg>
+          Sertifikatni yuklash
+        </Link>
+      </div>
     </div>
   </article>
 );
 
+/* ───────── Page ───────── */
 const StudentCourses = () => {
   const enrollmentsQuery = useEnrollments();
   const certificatesQuery = useCertificates();
@@ -93,73 +160,144 @@ const StudentCourses = () => {
   }
 
   const enrollments = enrollmentsQuery.data ?? [];
-  const activeCourses = enrollments.filter((e) => e.status !== "completed" && e.status !== "cancelled");
+  const activeCourses = enrollments.filter(
+    (e) => e.status !== "completed" && e.status !== "cancelled"
+  );
   const completedCourses = enrollments.filter((e) => e.status === "completed");
-  const inProgressCount = enrollments.filter((e) => e.progressPercent > 0 && e.progressPercent < 100).length;
+  const inProgressCount = enrollments.filter(
+    (e) => e.progressPercent > 0 && e.progressPercent < 100
+  ).length;
   const certificatesCount = certificatesQuery.data?.length ?? 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h2 className="font-manrope text-3xl font-bold tracking-tight text-gray-900">
+    <div className="space-y-7">
+      {/* Page header */}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <h2 className="font-manrope text-2xl font-bold tracking-tight text-gray-900">
             Mening online kurslarim
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="text-sm text-gray-500">
             Yozilgan barcha online kurslaringiz, progress va sertifikatlaringiz.
           </p>
         </div>
-        <Link
-          to="/dashboard/catalog"
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-        >
-          + Yangi kurs olish
-        </Link>
-      </div>
+        <div>
+          <Link
+            to="/dashboard/catalog"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Yangi kurs olish
+          </Link>
+        </div>
+      </header>
 
-      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-        <StatTile label="Faol kurslar" value={activeCourses.length} iconColor="#2563EB" iconBg="#EFF6FF" path="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253" />
-        <StatTile label="Davom etayotgan" value={inProgressCount} iconColor="#F59E0B" iconBg="#FEF3C7" path="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        <StatTile label="Tugatilgan" value={completedCourses.length} iconColor="#059669" iconBg="#ECFDF5" path="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        <StatTile label="Sertifikatlar" value={certificatesCount} iconColor="#8B5CF6" iconBg="#F5F3FF" path="M9 12l2 2 4-4" />
-      </div>
+      {/* Stats */}
+      <section className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+        <StatTile
+          label="Davom etayotgan"
+          value={inProgressCount || activeCourses.length}
+          iconBg="#EFF6FF"
+          iconColor="#2563EB"
+          svgPath={
+            <>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </>
+          }
+        />
+        <StatTile
+          label="Tugallangan"
+          value={completedCourses.length}
+          iconBg="#ECFDF5"
+          iconColor="#059669"
+          svgPath={
+            <>
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </>
+          }
+        />
+        <StatTile
+          label="Sertifikatlar"
+          value={certificatesCount}
+          iconBg="#F5F3FF"
+          iconColor="#8B5CF6"
+          svgPath={
+            <>
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </>
+          }
+        />
+        <StatTile
+          label="O'rganilgan soat"
+          value={enrollments.length}
+          iconBg="#FEF3C7"
+          iconColor="#F59E0B"
+          svgPath={
+            <>
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </>
+          }
+        />
+      </section>
 
+      {/* In-progress courses */}
       <section>
-        <h3 className="font-manrope mb-4 text-lg font-bold text-gray-900">
+        <h3 className="font-manrope mb-4 text-base font-bold text-gray-900">
           Davom etayotgan kurslar ({activeCourses.length})
         </h3>
         {activeCourses.length === 0 ? (
           <p className="text-sm text-gray-500">
             Hozircha faol kurslar yo'q.{" "}
-            <Link to="/dashboard/catalog" className="font-medium text-blue-600 hover:underline">
-              Katalogdan tanlash →
+            <Link
+              to="/dashboard/catalog"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Katalogdan tanlash
             </Link>
           </p>
         ) : (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {activeCourses.map((e) => <ActiveCourseCard key={e.id} e={e} />)}
+            {activeCourses.map((e) => (
+              <ActiveCourseCard key={e.id} e={e} />
+            ))}
           </div>
         )}
       </section>
 
+      {/* Completed courses */}
       <section>
-        <h3 className="font-manrope mb-4 text-lg font-bold text-gray-900">
+        <h3 className="font-manrope mb-4 text-base font-bold text-gray-900">
           Tugallangan kurslar ({completedCourses.length})
         </h3>
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {completedCourses.map((e) => <CompletedCourseCard key={e.id} e={e} />)}
+          {completedCourses.map((e) => (
+            <CompletedCourseCard key={e.id} e={e} />
+          ))}
 
+          {/* Add course CTA card */}
           <Link
             to="/dashboard/catalog"
-            className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-200 bg-white p-8 text-center transition-colors hover:border-blue-300 hover:bg-blue-50"
+            className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-6 text-center text-gray-500 transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-blue-200 text-blue-500 text-2xl">+</span>
-            <div>
-              <p className="font-manrope font-bold text-gray-900">Yangi online kurs olish</p>
-              <p className="mt-1 text-xs text-gray-500">
-                Katalogdan kurs tanlang va darrov o'qishni boshlang.
-              </p>
-            </div>
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </span>
+            <span className="font-manrope font-bold text-gray-900">
+              Yangi online kurs olish
+            </span>
+            <span className="text-sm">
+              Katalogdan kurs tanlang va darrov o'qishni boshlang.
+            </span>
           </Link>
         </div>
       </section>

@@ -2,7 +2,9 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../components/layouts/RootLayout";
 import DashboardLayout from "../components/layouts/DashboardLayout";
+import AdminLayout from "../components/layouts/AdminLayout";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import AdminRoute from "../components/auth/AdminRoute";
 import GlobalError from "../components/ui/GlobalError";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 
@@ -34,6 +36,11 @@ const StudentPayments = React.lazy(() => import("../pages/StudentPayments"));
 const StudentSettings = React.lazy(() => import("../pages/StudentSettings"));
 const BuyCourse = React.lazy(() => import("../pages/BuyCourse"));
 const DashboardCatalog = React.lazy(() => import("../pages/DashboardCatalog"));
+
+const AdminDashboard = React.lazy(() => import("../pages/AdminDashboard"));
+const AdminStudents = React.lazy(() => import("../pages/AdminStudents"));
+const AdminStudentNew = React.lazy(() => import("../pages/AdminStudentNew"));
+const AdminStudentProfile = React.lazy(() => import("../pages/AdminStudentProfile"));
 
 const withSuspense = (Component: React.ComponentType) => (
   <Suspense fallback={<GlobalSpinner />}>
@@ -83,6 +90,22 @@ const routes = createBrowserRouter([
       {
         path: "/dashboard/lesson/:id",
         element: withSuspense(LessonPage),
+      },
+    ],
+  },
+  {
+    element: <AdminRoute />,
+    errorElement: <GlobalError />,
+    children: [
+      {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: withSuspense(AdminDashboard) },
+          { path: "students", element: withSuspense(AdminStudents) },
+          { path: "students/new", element: withSuspense(AdminStudentNew) },
+          { path: "students/:id", element: withSuspense(AdminStudentProfile) },
+        ],
       },
     ],
   },

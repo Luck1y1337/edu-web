@@ -26,8 +26,8 @@ const Teachers = () => {
             : "Tajribali mutaxassislar jamoamiz bilan tanishing."
         }
       />
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-12 md:py-14">
+        <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
           <TeachersToolbar />
           {teachersQuery.isLoading ? (
             <GlobalSpinner />

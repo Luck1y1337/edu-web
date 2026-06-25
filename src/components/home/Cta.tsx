@@ -4,9 +4,9 @@ const Cta = () => {
   return (
     <section className="pb-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-linear-to-br from-blue-600 to-indigo-700 p-10 text-white lg:grid-cols-2 lg:p-14">
+        <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-linear-to-br from-blue-600 to-violet-700 p-10 text-white lg:grid-cols-2 lg:p-14">
           <div>
-            <h2 className="text-3xl font-bold leading-tight sm:text-4xl">
+            <h2 className="font-manrope text-3xl font-bold leading-tight sm:text-4xl">
               Hoziroq o'z kelajagingizni boshlang
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-blue-100">
@@ -20,7 +20,7 @@ const Cta = () => {
               >
                 Bepul ro'yxatdan o'tish
               </Link>
-              <button className="rounded-lg border border-white/40 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10">
+              <button className="rounded-lg border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10">
                 Konsultatsiya olish
               </button>
             </div>

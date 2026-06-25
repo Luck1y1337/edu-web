@@ -4,17 +4,17 @@ import { heroFeatures } from "../../data/home.data";
 
 const Hero = () => {
   return (
-    <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-12 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
+    <div className="mx-auto grid max-w-360 items-center gap-12 px-4 pb-12 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
       <div>
         <span className="inline-flex items-center gap-x-2 rounded-full border border-blue-200 bg-white px-3.5 py-1.5 text-xs font-medium text-blue-600">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
           Yangi guruhlar — 1 iyuldan
         </span>
-        <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl">
+        <h1 className="mt-6 font-manrope text-5xl font-extrabold leading-tight tracking-tight">
           Kelajak kasbingizni{" "}
           <span className="text-blue-600">bugun boshlang.</span>
         </h1>
-        <p className="mt-5 max-w-lg text-base leading-relaxed text-gray-500">
+        <p className="mt-5 max-w-lg text-lg leading-relaxed text-gray-500">
           Toshkentdagi yetakchi IT va dizayn ta'lim markazi. Tajribali
           o'qituvchilar, zamonaviy dasturlar va kafolatlangan natija. 5000+
           bitiruvchimiz IT sohada ishlamoqda.
@@ -22,13 +22,14 @@ const Hero = () => {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link
             to="/register"
-            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
           >
             Ro'yxatdan o'tish
+            <Icon.arrowRight />
           </Link>
           <Link
             to="/courses"
-            className="rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            className="rounded-lg border border-gray-300 bg-white px-6 py-3.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
           >
             Kurslarni ko'rish ↓
           </Link>
@@ -39,7 +40,7 @@ const Hero = () => {
               key={feature}
               className="flex items-center gap-x-2 text-sm text-gray-600"
             >
-              <span className="text-emerald-500">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-500">
                 <Icon.check />
               </span>
               {feature}

@@ -1,7 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../home/Footer";
 import Header from "../home/Header";
+import LogoutModal from "../LogoutModal";
+import useUserStore from "../../store/user.store";
+
 const RootLayout = () => {
+  const { isLogoutModalOpen, setLogoutModalOpen } = useUserStore();
+
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col">
       <Header />
@@ -9,6 +14,7 @@ const RootLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <LogoutModal isOpen={isLogoutModalOpen} onClose={() => setLogoutModalOpen(false)} />
     </div>
   );
 };

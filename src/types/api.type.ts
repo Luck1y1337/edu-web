@@ -309,3 +309,86 @@ export interface StudentReviewDto {
     slug: string;
   };
 }
+
+/* ───────── Admin · Students ───────── */
+
+export type AdminStudentStatus = "active" | "inactive" | "graduated";
+
+export interface AdminStudentListItemDto {
+  id: string;
+  status: AdminStudentStatus;
+  enrolledAt?: string | null;
+  address?: string | null;
+  birthDate?: string | null;
+  gender?: "male" | "female" | null;
+  enrollmentsCount?: number;
+  totalPaid?: number;
+  user: {
+    id: string;
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+    middleName?: string | null;
+    avatarUrl?: string | null;
+    status: UserStatus;
+    createdAt?: string;
+  };
+}
+
+export interface AdminStudentDetailDto extends AdminStudentListItemDto {
+  enrollments?: StudentEnrollmentListItemDto[];
+  totalPaidAmount?: number;
+}
+
+export interface CreateAdminStudentDto {
+  email: string;
+  phone: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  birthDate?: string;
+  gender?: "male" | "female";
+  address?: string;
+  enrolledAt?: string;
+  status?: AdminStudentStatus;
+}
+
+export interface UpdateAdminStudentDto {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  birthDate?: string;
+  gender?: "male" | "female";
+  address?: string;
+  enrolledAt?: string;
+  status?: AdminStudentStatus;
+  userStatus?: UserStatus;
+}
+
+/* ───────── Admin · Payments (used on profile page) ───────── */
+
+export type AdminPaymentStatus = "pending" | "paid" | "partial" | "refunded" | "cancelled";
+export type AdminPaymentMethod = "card" | "click" | "payme" | "cash";
+
+export interface AdminPaymentListItemDto {
+  id: string;
+  amount: number;
+  status: AdminPaymentStatus;
+  method: AdminPaymentMethod;
+  paidAt?: string | null;
+  createdAt: string;
+  course?: {
+    id: string;
+    name: string;
+    slug?: string;
+  } | null;
+  student?: {
+    id: string;
+    firstName?: string;
+    lastName?: string;
+  } | null;
+}

@@ -1,6 +1,9 @@
 import axios from "../config/axios";
 import Endpoints from "../config/endpoints";
 import type {
+  AdminPaymentListItemDto,
+  AdminStudentDetailDto,
+  AdminStudentListItemDto,
   ApiResponse,
   AuthResponseDto,
   BlogCategoryDto,
@@ -11,6 +14,7 @@ import type {
   CheckoutDto,
   CheckoutResponseDto,
   ContactFormDto,
+  CreateAdminStudentDto,
   CreateBlogCommentDto,
   CreateReviewDto,
   CurrentUserDto,
@@ -27,6 +31,7 @@ import type {
   StudentEnrollmentDetailDto,
   StudentEnrollmentListItemDto,
   StudentReviewDto,
+  UpdateAdminStudentDto,
 } from "../types/api.type";
 
 export const unwrapApiData = <T>(response: { data: ApiResponse<T> | T }) => {
@@ -241,5 +246,55 @@ export const studentApi = {
       Endpoints.student.myReviews
     );
     return unwrapApiData<StudentReviewDto[]>(response);
+  },
+};
+
+/* ───────── Admin ───────── */
+
+export const adminApi = {
+  getStudents: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminStudentListItemDto>>>(
+      Endpoints.admin.students,
+      { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminStudentListItemDto>>(response);
+  },
+  getStudent: async (id: string) => {
+    const response = await axios.get<ApiResponse<AdminStudentDetailDto>>(
+      Endpoints.admin.student(id)
+    );
+    return unwrapApiData<AdminStudentDetailDto>(response);
+  },
+  createStudent: async (body: CreateAdminStudentDto) => {
+    const response = await axios.post<ApiResponse<AdminStudentDetailDto>>(
+      Endpoints.admin.students,
+      body
+    );
+    return unwrapApiData<AdminStudentDetailDto>(response);
+  },
+  updateStudent: async (id: string, body: UpdateAdminStudentDto) => {
+    const response = await axios.patch<ApiResponse<AdminStudentDetailDto>>(
+      Endpoints.admin.student(id),
+      body
+    );
+    return unwrapApiData<AdminStudentDetailDto>(response);
+  },
+  deleteStudent: async (id: string) => {
+    const response = await axios.delete<ApiResponse<{ success: boolean }>>(
+      Endpoints.admin.student(id)
+    );
+    return unwrapApiData<{ success: boolean }>(response);
+  },
+  getStudentEnrollments: async (id: string) => {
+    const response = await axios.get<ApiResponse<StudentEnrollmentListItemDto[]>>(
+      Endpoints.admin.studentEnrollments(id)
+    );
+    return unwrapApiData<StudentEnrollmentListItemDto[]>(response);
+  },
+  getStudentPayments: async (id: string) => {
+    const response = await axios.get<ApiResponse<{ items: AdminPaymentListItemDto[]; totalPaid: number }>>(
+      Endpoints.admin.studentPayments(id)
+    );
+    return unwrapApiData<{ items: AdminPaymentListItemDto[]; totalPaid: number }>(response);
   },
 };

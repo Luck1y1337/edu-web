@@ -19,7 +19,6 @@ const Register = () => {
   const form = useForm<RegisterForm>();
   const { mutateAsync, isSuccess, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState("password");
-  const [showConfirm, setShowConfirm] = useState("password");
   const {
     formState: { errors },
   } = form;
@@ -42,29 +41,29 @@ const Register = () => {
   }, [isSuccess, navigate]);
 
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Chap panel */}
-      <aside className="relative hidden w-1/2 flex-col justify-between bg-linear-to-br from-blue-600 via-blue-600 to-indigo-700 p-12 text-white lg:flex">
-        <div className="flex items-center gap-x-3">
+    <div className="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">
+      {/* Chap panel — brend */}
+      <aside className="hidden flex-col justify-between bg-gradient-to-br from-blue-600 to-violet-700 px-10 py-12 text-white lg:flex">
+        <Link to="/" className="inline-flex items-center gap-3 self-start">
           <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
             <Icon.graduationCap />
           </span>
-          <span className="text-lg font-semibold">O'quv Markaz</span>
-        </div>
+          <span className="font-manrope text-xl font-bold">O'quv Markaz</span>
+        </Link>
 
-        <div className="max-w-md">
-          <h1 className="text-4xl font-bold leading-tight">
+        <div className="flex max-w-[480px] flex-col gap-5">
+          <h1 className="font-manrope text-[40px] font-extrabold leading-tight">
             Bizning oilamizga qo'shiling.
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-blue-100">
+          <p className="text-lg leading-relaxed text-white/85">
             Ro'yxatdan o'ting va bepul birinchi darsga taklif oling. 5000+
-            talaba bilan birga o'rgning va karyera yo'lingizni boshlang.
+            talaba bilan birga o'rganing va karyera yo'lingizni boshlang.
           </p>
 
-          <ul className="mt-8 flex flex-col gap-y-4">
+          <ul className="mt-6 flex flex-col gap-3">
             {features.map((item) => (
-              <li key={item} className="flex items-center gap-x-3 text-sm">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white">
+              <li key={item} className="flex items-center gap-3 text-sm text-white/90">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/15">
                   <Icon.check />
                 </span>
                 {item}
@@ -73,35 +72,45 @@ const Register = () => {
           </ul>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-blue-100">
+        <div className="flex items-center justify-between text-sm text-white/70">
           <span>© 2026 O'quv Markaz</span>
-          <span>Yordam kerakmi?</span>
+          <Link to="/contact" className="font-medium text-white/90 transition-colors hover:text-white">
+            Yordam kerakmi?
+          </Link>
         </div>
       </aside>
 
-      {/* O'ng panel */}
-      <main className="flex w-full flex-col px-6 py-8 sm:px-12 lg:w-1/2">
-        <div className="flex justify-end">
+      {/* O'ng panel — forma */}
+      <section className="flex flex-col overflow-y-auto px-6 py-8 sm:px-10 lg:px-10">
+        <div className="flex items-center justify-between gap-4 mb-10">
+          <Link to="/" className="inline-flex items-center gap-3 lg:hidden">
+            <svg className="h-9 w-9" viewBox="0 0 36 36" fill="none">
+              <rect width="36" height="36" rx="9" fill="#2563EB" />
+              <path d="M10 13L18 8L26 13L18 18L10 13Z" fill="white" />
+              <path d="M13 16V21C13 21 15.5 23 18 23C20.5 23 23 21 23 21V16" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <span className="font-manrope text-lg font-bold text-gray-900">O'quv Markaz</span>
+          </Link>
           <Link
             to="/"
-            className="flex items-center gap-x-1.5 text-sm font-medium text-slate-500 transition hover:text-slate-800"
+            className="ml-auto flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-blue-600"
           >
             <Icon.arrowLeft />
             Bosh sahifaga
           </Link>
         </div>
 
-        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-6">
-          <h2 className="text-3xl font-bold text-slate-900">
+        <main className="mx-auto flex w-full max-w-[480px] flex-1 flex-col justify-center">
+          <h2 className="font-manrope text-[32px] font-bold tracking-tight text-gray-900">
             Yangi hisob yarating
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-base text-gray-500">
             Ma'lumotlaringizni kiriting va bepul ro'yxatdan o'ting.
           </p>
 
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="mt-7 flex flex-col gap-y-4"
+            className="mt-6 flex flex-col gap-4"
             noValidate
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -197,7 +206,7 @@ const Register = () => {
               label="Parol"
               required
               error={errors.password?.message}
-              leftIcon={<Icon.passwordIcon />}
+              leftIcon={<Icon.lock />}
               rules={{
                 required: "Parol kiritilishi shart",
                 pattern: {
@@ -227,38 +236,11 @@ const Register = () => {
                 </button>
               }
             />
-            <Input
-              name="confirmPassword"
-              type={showConfirm}
-              form={form}
-              placeholder="Kamida 8 ta belgi"
-              label="Paroldi tasdiqlang"
-              required
-              error={errors.confirmPassword?.message}
-              rules={{
-                required: "Parolni tasdiqlang",
-                validate: (value) =>
-                  value === form.watch("password") || "Parollar mos kelmadi",
-              }}
-              leftIcon={<Icon.passwordIcon />}
-              rightIcon={
-                <button
-                  type="button"
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setShowConfirm(
-                      showConfirm === "password" ? "text" : "password",
-                    )
-                  }
-                >
-                  {showConfirm === "password" ? <Icon.eye /> : <Icon.eyeOff />}
-                </button>
-              }
-            />
-            <label className="flex items-start gap-x-2.5 text-sm text-slate-600">
+
+            <label className="flex items-start gap-2.5 text-sm text-gray-600">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+                className="mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-200"
                 {...form.register("terms", { required: true })}
               />
               <span>
@@ -284,42 +266,48 @@ const Register = () => {
               variant="primary"
               fullWidth
               disabled={isPending}
+              loading={isPending}
               rightIcon={<Icon.arrowRight />}
-              className="mt-1 cursor-pointer"
+              className="mt-2 cursor-pointer"
             >
               Ro'yxatdan o'tish
             </Button>
           </form>
 
           {/* Ajratuvchi */}
-          <div className="my-6 flex items-center gap-x-4">
-            <span className="h-px flex-1 bg-slate-200" />
-            <span className="text-xs font-medium tracking-widest text-slate-400">
-              YOKI
+          <div className="my-3 flex items-center gap-3">
+            <span className="h-px flex-1 bg-gray-200" />
+            <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+              Yoki
             </span>
-            <span className="h-px flex-1 bg-slate-200" />
+            <span className="h-px flex-1 bg-gray-200" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="google" fullWidth leftIcon={<Icon.google />}>
-              Google
-            </Button>
-            <Button variant="apple" fullWidth leftIcon={<Icon.apple />}>
-              Apple
-            </Button>
-          </div>
-
-          <p className="mt-6 text-center text-sm text-slate-500">
-            Hisobingiz bormi?{" "}
-            <Link
-              to="/login"
-              className="font-semibold text-blue-600 hover:underline"
+          <div className="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
+            <button
+              type="button"
+              className="inline-flex min-h-[44px] items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-800 transition-all hover:border-gray-400 hover:bg-gray-50"
             >
+              <Icon.google />
+              Google
+            </button>
+            <button
+              type="button"
+              className="inline-flex min-h-[44px] items-center justify-center gap-3 rounded-lg border border-gray-900 bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-black"
+            >
+              <Icon.apple />
+              Apple
+            </button>
+          </div>
+
+          <p className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-500">
+            Hisobingiz bormi?
+            <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-700">
               Kirish
             </Link>
           </p>
-        </div>
-      </main>
+        </main>
+      </section>
     </div>
   );
 };

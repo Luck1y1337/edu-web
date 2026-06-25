@@ -32,6 +32,14 @@ import type {
   StudentEnrollmentListItemDto,
   StudentReviewDto,
   UpdateAdminStudentDto,
+  AdminInstructorListItemDto,
+  AdminInstructorDetailDto,
+  CreateInstructorDto,
+  UpdateInstructorDto,
+  AdminCourseListItemDto,
+  AdminCourseDetailDto,
+  CreateCourseDto,
+  UpdateCourseDto,
 } from "../types/api.type";
 
 export const unwrapApiData = <T>(response: { data: ApiResponse<T> | T }) => {
@@ -296,5 +304,75 @@ export const adminApi = {
       Endpoints.admin.studentPayments(id)
     );
     return unwrapApiData<{ items: AdminPaymentListItemDto[]; totalPaid: number }>(response);
+  },
+
+  // Instructors
+  getInstructors: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminInstructorListItemDto>>>(
+      Endpoints.admin.instructors,
+      { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminInstructorListItemDto>>(response);
+  },
+  getInstructor: async (id: string) => {
+    const response = await axios.get<ApiResponse<AdminInstructorDetailDto>>(
+      Endpoints.admin.instructor(id)
+    );
+    return unwrapApiData<AdminInstructorDetailDto>(response);
+  },
+  createInstructor: async (body: CreateInstructorDto) => {
+    const response = await axios.post<ApiResponse<AdminInstructorDetailDto>>(
+      Endpoints.admin.instructors,
+      body
+    );
+    return unwrapApiData<AdminInstructorDetailDto>(response);
+  },
+  updateInstructor: async (id: string, body: UpdateInstructorDto) => {
+    const response = await axios.patch<ApiResponse<AdminInstructorDetailDto>>(
+      Endpoints.admin.instructor(id),
+      body
+    );
+    return unwrapApiData<AdminInstructorDetailDto>(response);
+  },
+  deleteInstructor: async (id: string) => {
+    const response = await axios.delete<ApiResponse<{ success: boolean }>>(
+      Endpoints.admin.instructor(id)
+    );
+    return unwrapApiData<{ success: boolean }>(response);
+  },
+
+  // Courses
+  getCourses: async (params?: Record<string, unknown>) => {
+    const response = await axios.get<ApiResponse<PaginatedResponse<AdminCourseListItemDto>>>(
+      Endpoints.admin.courses,
+      { params }
+    );
+    return unwrapApiData<PaginatedResponse<AdminCourseListItemDto>>(response);
+  },
+  getCourse: async (id: string) => {
+    const response = await axios.get<ApiResponse<AdminCourseDetailDto>>(
+      Endpoints.admin.course(id)
+    );
+    return unwrapApiData<AdminCourseDetailDto>(response);
+  },
+  createCourse: async (body: CreateCourseDto) => {
+    const response = await axios.post<ApiResponse<AdminCourseDetailDto>>(
+      Endpoints.admin.courses,
+      body
+    );
+    return unwrapApiData<AdminCourseDetailDto>(response);
+  },
+  updateCourse: async (id: string, body: UpdateCourseDto) => {
+    const response = await axios.patch<ApiResponse<AdminCourseDetailDto>>(
+      Endpoints.admin.course(id),
+      body
+    );
+    return unwrapApiData<AdminCourseDetailDto>(response);
+  },
+  deleteCourse: async (id: string) => {
+    const response = await axios.delete<ApiResponse<{ success: boolean }>>(
+      Endpoints.admin.course(id)
+    );
+    return unwrapApiData<{ success: boolean }>(response);
   },
 };

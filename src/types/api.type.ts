@@ -392,3 +392,172 @@ export interface AdminPaymentListItemDto {
     lastName?: string;
   } | null;
 }
+
+/* ───────── Admin · Instructors ───────── */
+
+export type AdminInstructorStatus = "active" | "inactive";
+
+export interface InstructorSocialLinksDto {
+  github?: string;
+  linkedin?: string;
+  telegram?: string;
+}
+
+export interface AdminInstructorListItemDto {
+  id: string;
+  specialty: string;
+  experience?: number;
+  bio?: string | null;
+  status: AdminInstructorStatus;
+  rating?: number | string | null;
+  socialLinks?: InstructorSocialLinksDto | null;
+  coursesCount?: number;
+  studentsCount?: number;
+  user: {
+    id: string;
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+    middleName?: string | null;
+    avatarUrl?: string | null;
+    status: UserStatus;
+    createdAt?: string;
+  };
+}
+
+export interface AdminInstructorDetailDto extends AdminInstructorListItemDto {}
+
+export interface CreateInstructorDto {
+  email: string;
+  phone: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  birthDate?: string;
+  gender?: "male" | "female";
+  address?: string;
+  specialty: string;
+  experience?: number;
+  bio?: string;
+  socialLinks?: InstructorSocialLinksDto;
+  status?: AdminInstructorStatus;
+}
+
+export interface UpdateInstructorDto {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  birthDate?: string;
+  gender?: "male" | "female";
+  address?: string;
+  specialty?: string;
+  experience?: number;
+  bio?: string;
+  socialLinks?: InstructorSocialLinksDto;
+  status?: AdminInstructorStatus;
+  userStatus?: UserStatus;
+}
+
+/* ───────── Admin · Courses ───────── */
+
+export type AdminCourseStatus = "published" | "draft" | "archived";
+
+export interface CreateCourseLessonDto {
+  title: string;
+  durationMinutes: number;
+  order: number;
+  videoUrl?: string;
+  content?: string;
+  isPreview?: boolean;
+}
+
+export interface CreateCourseModuleDto {
+  title: string;
+  order: number;
+  lessons?: CreateCourseLessonDto[];
+}
+
+export interface AdminCourseListItemDto {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  category: string;
+  level: "beginner" | "intermediate" | "advanced";
+  price: number;
+  oldPrice?: number | null;
+  durationMonths: number;
+  lessonsCount: number;
+  imageUrl?: string | null;
+  isFeatured?: boolean;
+  status: AdminCourseStatus;
+  studentsCount?: number;
+  instructor?: {
+    id: string;
+    firstName?: string;
+    lastName?: string;
+  } | null;
+  createdAt?: string;
+}
+
+export interface AdminCourseDetailDto extends AdminCourseListItemDto {
+  longDescription?: string;
+  previewVideoUrl?: string | null;
+  instructorId?: string | null;
+  modules?: {
+    id: string;
+    title: string;
+    order: number;
+    lessons: {
+      id: string;
+      title: string;
+      order: number;
+      durationMinutes: number;
+      videoUrl?: string | null;
+      content?: string | null;
+      isPreview?: boolean;
+    }[];
+  }[];
+}
+
+export interface CreateCourseDto {
+  name: string;
+  slug: string;
+  description: string;
+  longDescription: string;
+  category: string;
+  level?: "beginner" | "intermediate" | "advanced";
+  price: number;
+  oldPrice?: number;
+  durationMonths: number;
+  lessonsCount?: number;
+  imageUrl?: string;
+  previewVideoUrl?: string;
+  instructorId?: string;
+  isFeatured?: boolean;
+  status?: AdminCourseStatus;
+  modules?: CreateCourseModuleDto[];
+}
+
+export interface UpdateCourseDto {
+  name?: string;
+  slug?: string;
+  description?: string;
+  longDescription?: string;
+  category?: string;
+  level?: "beginner" | "intermediate" | "advanced";
+  price?: number;
+  oldPrice?: number;
+  durationMonths?: number;
+  lessonsCount?: number;
+  imageUrl?: string;
+  previewVideoUrl?: string;
+  instructorId?: string;
+  isFeatured?: boolean;
+  status?: AdminCourseStatus;
+  modules?: CreateCourseModuleDto[];
+}

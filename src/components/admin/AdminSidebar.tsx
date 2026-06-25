@@ -19,6 +19,8 @@ const adminNav: NavGroup[] = [
     title: "Asosiy",
     items: [
       { label: "Dashboard", path: "/admin", icon: "home", end: true },
+      { label: "Kurslar", path: "/admin/courses", icon: "book" },
+      { label: "O'qituvchilar", path: "/admin/instructors", icon: "user" },
       { label: "Talabalar", path: "/admin/students", icon: "user" },
     ],
   },

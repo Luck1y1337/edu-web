@@ -155,6 +155,3 @@ MIT
 
 ---
 
-<p align="center">
-  <sub>Ishlab chiqildi Toshkent, O'zbekiston</sub>
-</p>

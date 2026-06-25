@@ -5,7 +5,7 @@ import useUserStore from "../store/user.store";
 import Endpoints from "./endpoints";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || "http://3.90.217.113/api/v1",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "/api/v1",
 });
 
 instance.interceptors.request.use(

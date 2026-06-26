@@ -1,30 +1,23 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useChangePassword } from "../hooks/api/useChangePassword";
 import { useSessions, useDeleteSession } from "../hooks/api/useSessions";
-import { toast } from "react-toastify";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import useUserStore from "../store/user.store";
+import { changePasswordSchema, type ChangePasswordForm } from "../schemas/auth.schema";
 
 const StudentSettings = () => {
   const [activeTab, setActiveTab] = useState("profil");
   const user = useUserStore((state) => state.user);
 
   // Password Form
-  interface PasswordForm {
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-  }
-
-  const { register: registerPwd, handleSubmit: handlePwdSubmit, reset: resetPwd, formState: { errors: errorsPwd } } = useForm<PasswordForm>();
+  const { register: registerPwd, handleSubmit: handlePwdSubmit, reset: resetPwd, formState: { errors: errorsPwd } } = useForm<ChangePasswordForm>({
+    resolver: zodResolver(changePasswordSchema),
+  });
   const { mutate: changePassword, isPending: isPwdPending } = useChangePassword();
 
-  const onPasswordSubmit = (data: PasswordForm) => {
-    if (data.newPassword !== data.confirmPassword) {
-      toast.error("Yangi parollar mos kelmadi");
-      return;
-    }
+  const onPasswordSubmit = (data: ChangePasswordForm) => {
     changePassword({ currentPassword: data.currentPassword, newPassword: data.newPassword }, {
       onSuccess: () => resetPwd()
     });

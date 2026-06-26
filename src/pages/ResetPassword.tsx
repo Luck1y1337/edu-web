@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
 import { useResetPassword } from "../hooks/api/useAuthActions";
 import { toast } from "react-toastify";
+import { resetPasswordSchema, type ResetPasswordForm } from "../schemas/auth.schema";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const navigate = useNavigate();
-  
-  interface ResetPasswordForm {
-    newPassword: string;
-    confirmPassword: string;
-  }
 
-  const form = useForm<ResetPasswordForm>();
+  const form = useForm<ResetPasswordForm>({
+    resolver: zodResolver(resetPasswordSchema),
+  });
   const { mutateAsync, isPending } = useResetPassword();
   const { formState: { errors } } = form;
   const [showPassword, setShowPassword] = useState("password");
@@ -27,11 +26,7 @@ const ResetPassword = () => {
       toast.error("Yaroqsiz havola. Qaytadan urinib ko'ring.");
       return;
     }
-    if (values.newPassword !== values.confirmPassword) {
-      toast.error("Parollar mos kelmadi");
-      return;
-    }
-    
+
     try {
       await mutateAsync({ token, newPassword: values.newPassword });
       setTimeout(() => navigate("/login"), 2000);
@@ -80,17 +75,6 @@ const ResetPassword = () => {
               required
               leftIcon={<Icon.lock />}
               error={errors.newPassword?.message as string}
-              rules={{
-                required: "Yangi parol kiritilishi shart",
-                minLength: {
-                  value: 8,
-                  message: "Kamida 8 ta belgi bo'lishi kerak",
-                },
-                pattern: {
-                  value: /^(?=.*[A-Z])(?=.*\d).+$/,
-                  message: "Kamida 1 ta katta harf va 1 ta raqam bo'lishi kerak"
-                }
-              }}
               rightIcon={
                 <button
                   type="button"
@@ -110,9 +94,6 @@ const ResetPassword = () => {
               required
               leftIcon={<Icon.lock />}
               error={errors.confirmPassword?.message as string}
-              rules={{
-                required: "Parolni tasdiqlash shart",
-              }}
             />
 
             <Button

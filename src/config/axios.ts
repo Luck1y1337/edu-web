@@ -3,9 +3,10 @@ import { toast } from "react-toastify";
 import { getItem, getRefreshToken, setItem, clearTokens } from "../utils/localstorage";
 import useUserStore from "../store/user.store";
 import Endpoints from "./endpoints";
+import { env } from "./env";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || "/api/v1",
+  baseURL: env.BACKEND_URL || "/api/v1",
 });
 
 instance.interceptors.request.use(

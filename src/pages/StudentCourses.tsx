@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import GlobalSpinner from "../components/ui/GlobalSpinner";
 import StatTileGrid from "../components/ui/StatTile";
 import type { StatTileItem } from "../components/ui/StatTile";
 import { useEnrollments } from "../hooks/api/useEnrollments";
 import { useCertificates } from "../hooks/api/useCertificates";
 import type { StudentEnrollmentListItemDto } from "../types/api.type";
+import { SkeletonCard } from "../components/ui/Skeleton";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
@@ -114,12 +114,32 @@ const StudentCourses = () => {
   const enrollmentsQuery = useEnrollments();
   const certificatesQuery = useCertificates();
 
-  if (enrollmentsQuery.isLoading) return <GlobalSpinner />;
+  if (enrollmentsQuery.isLoading) {
+    return (
+      <div className="space-y-7">
+        <div className="flex flex-col gap-2">
+          <div className="h-7 w-64 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-4 w-96 animate-pulse rounded-lg bg-gray-200" />
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      </div>
+    );
+  }
   if (enrollmentsQuery.isError) {
     return (
-      <p className="py-20 text-center text-sm text-red-600">
-        Kurslarni yuklab bo'lmadi.
-      </p>
+      <div className="flex flex-col items-center gap-3 py-20 text-center">
+        <p className="text-sm text-red-600">Kurslarni yuklab bo'lmadi.</p>
+        <button
+          onClick={() => enrollmentsQuery.refetch()}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+          Qayta urinish
+        </button>
+      </div>
     );
   }
 

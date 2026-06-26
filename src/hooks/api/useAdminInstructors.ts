@@ -2,18 +2,19 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
 import { adminApi } from "../../services/api";
+import { queryKeys } from "../../config/queryKeys";
 import type { CreateInstructorDto, UpdateInstructorDto } from "../../types/api.type";
 
 export const useAdminInstructors = (params?: Record<string, unknown>) => {
   return useQuery({
-    queryKey: ["admin", "instructors", params],
+    queryKey: queryKeys.admin.instructors(params),
     queryFn: () => adminApi.getInstructors(params),
   });
 };
 
 export const useAdminInstructor = (id: string) => {
   return useQuery({
-    queryKey: ["admin", "instructor", id],
+    queryKey: queryKeys.admin.instructor(id),
     queryFn: () => adminApi.getInstructor(id),
     enabled: Boolean(id),
     retry: false,
@@ -27,7 +28,7 @@ export const useCreateAdminInstructor = () => {
     mutationFn: async (body: CreateInstructorDto) => adminApi.createInstructor(body),
     onSuccess: () => {
       toast.success("O'qituvchi qo'shildi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "instructors"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.instructors() });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "O'qituvchini qo'shib bo'lmadi");
@@ -42,8 +43,8 @@ export const useUpdateAdminInstructor = (id: string) => {
     mutationFn: async (body: UpdateInstructorDto) => adminApi.updateInstructor(id, body),
     onSuccess: () => {
       toast.success("Ma'lumotlar yangilandi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "instructors"] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "instructor", id] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.instructors() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.instructor(id) });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "Yangilab bo'lmadi");
@@ -58,7 +59,7 @@ export const useDeleteAdminInstructor = () => {
     mutationFn: async (id: string) => adminApi.deleteInstructor(id),
     onSuccess: () => {
       toast.success("O'qituvchi o'chirildi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "instructors"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.instructors() });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "O'chirib bo'lmadi");

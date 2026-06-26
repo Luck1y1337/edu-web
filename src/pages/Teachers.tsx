@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import PageHero from "../components/ui/PageHero";
 import TeachersToolbar from "../components/teachers/TeachersToolbar";
 import TeachersGrid from "../components/teachers/TeachersGrid";
-import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { publicApi } from "../services/api";
 import { mapApiTeacherToTeacher } from "../services/mappers";
+import { SkeletonCard } from "../components/ui/Skeleton";
+import { queryKeys } from "../config/queryKeys";
 
 const Teachers = () => {
   const teachersQuery = useQuery({
-    queryKey: ["public", "instructors", "all"],
+    queryKey: queryKeys.public.instructors("all"),
     queryFn: () => publicApi.getInstructors({ limit: 100 }),
   });
 
@@ -30,11 +31,22 @@ const Teachers = () => {
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
           <TeachersToolbar />
           {teachersQuery.isLoading ? (
-            <GlobalSpinner />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </div>
           ) : teachersQuery.isError ? (
-            <p className="py-20 text-center text-sm text-red-600">
-              O'qituvchilarni yuklab bo'lmadi.
-            </p>
+            <div className="flex flex-col items-center gap-3 py-20 text-center">
+              <p className="text-sm text-red-600">O'qituvchilarni yuklab bo'lmadi.</p>
+              <button
+                onClick={() => teachersQuery.refetch()}
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              >
+                Qayta urinish
+              </button>
+            </div>
           ) : visibleTeachers.length === 0 ? (
             <p className="py-20 text-center text-sm text-gray-500">
               Hozircha o'qituvchilar ro'yxati bo'sh.

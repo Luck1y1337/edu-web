@@ -5,6 +5,7 @@ import { useAdminStudents } from "../hooks/api/useAdminStudents";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import StatTileGrid from "../components/ui/StatTile";
 import type { StatTileItem } from "../components/ui/StatTile";
+import { queryKeys } from "../config/queryKeys";
 
 
 const formatDate = (iso?: string | null) => {
@@ -61,7 +62,7 @@ const statusBadge = (status?: string) => {
 const AdminDashboard = () => {
   const studentsQuery = useAdminStudents({ page: 1, limit: 5 });
   const statsQuery = useQuery({
-    queryKey: ["public", "stats"],
+    queryKey: queryKeys.public.stats,
     queryFn: publicApi.getStats,
   });
 

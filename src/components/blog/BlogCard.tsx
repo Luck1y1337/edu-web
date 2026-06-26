@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import type { BlogPost } from "../../data/blog.data";
 import { badgeStyles } from "../../data/blog.data";
@@ -6,7 +7,7 @@ interface Props {
   post: BlogPost;
 }
 
-const BlogCard = ({ post }: Props) => {
+const BlogCard = memo(({ post }: Props) => {
   const badge = badgeStyles[post.badgeColor];
 
   return (
@@ -99,6 +100,6 @@ const BlogCard = ({ post }: Props) => {
       </div>
     </article>
   );
-};
+});
 
 export default BlogCard;

@@ -9,6 +9,7 @@ import Teachers from "../components/home/Teachers";
 import Testimonials from "../components/home/Testimonials";
 import { stats as statsFallback } from "../data/home.data";
 import { publicApi } from "../services/api";
+import { queryKeys } from "../config/queryKeys";
 import {
   mapApiCourseToHomeCourse,
   mapApiStats,
@@ -18,19 +19,19 @@ import {
 
 const Home = () => {
   const statsQuery = useQuery({
-    queryKey: ["public", "stats"],
+    queryKey: queryKeys.public.stats,
     queryFn: publicApi.getStats,
   });
   const coursesQuery = useQuery({
-    queryKey: ["public", "courses", "featured"],
+    queryKey: queryKeys.public.courses("featured"),
     queryFn: () => publicApi.getCourses({ featured: true, limit: 8 }),
   });
   const instructorsQuery = useQuery({
-    queryKey: ["public", "instructors", "home"],
+    queryKey: queryKeys.public.instructors("home"),
     queryFn: () => publicApi.getInstructors({ limit: 6 }),
   });
   const testimonialsQuery = useQuery({
-    queryKey: ["public", "testimonials"],
+    queryKey: queryKeys.public.testimonials,
     queryFn: publicApi.getTestimonials,
   });
 

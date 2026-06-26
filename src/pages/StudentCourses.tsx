@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import StatTileGrid from "../components/ui/StatTile";
 import type { StatTileItem } from "../components/ui/StatTile";
@@ -10,7 +11,7 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
 
 /* ───────── Active course card ───────── */
-const ActiveCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => {
+const ActiveCourseCard = memo(({ e }: { e: StudentEnrollmentListItemDto }) => {
   const completedLessons = e.course.lessonsCount
     ? Math.round((e.progressPercent / 100) * e.course.lessonsCount)
     : 0;
@@ -66,10 +67,10 @@ const ActiveCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => {
       </div>
     </article>
   );
-};
+});
 
 /* ───────── Completed course card ───────── */
-const CompletedCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => (
+const CompletedCourseCard = memo(({ e }: { e: StudentEnrollmentListItemDto }) => (
   <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white opacity-95 transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
     {/* Image */}
     <div className="relative h-36 bg-gray-100">
@@ -107,7 +108,7 @@ const CompletedCourseCard = ({ e }: { e: StudentEnrollmentListItemDto }) => (
       </div>
     </div>
   </article>
-);
+));
 
 /* ───────── Page ───────── */
 const StudentCourses = () => {

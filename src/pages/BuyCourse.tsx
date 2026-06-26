@@ -6,6 +6,7 @@ import { publicApi } from "../services/api";
 import { useCheckout } from "../hooks/api/useEnrollments";
 import { formatPrice } from "../services/mappers";
 import type { CheckoutDto } from "../types/api.type";
+import { queryKeys } from "../config/queryKeys";
 
 type PaymentMethod = CheckoutDto["paymentMethod"];
 
@@ -22,7 +23,7 @@ const BuyCourse = () => {
   const slug = params.get("course") || params.get("slug") || "";
 
   const courseQuery = useQuery({
-    queryKey: ["public", "course", slug],
+    queryKey: queryKeys.public.course(slug),
     queryFn: () => publicApi.getCourse(slug),
     enabled: Boolean(slug),
     retry: false,

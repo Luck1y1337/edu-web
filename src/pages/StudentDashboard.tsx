@@ -5,10 +5,11 @@ import DashboardStats from "../components/dashboard/DashboardStats";
 import ActiveCourses from "../components/dashboard/ActiveCourses";
 import WeeklyGoal from "../components/dashboard/WeeklyGoal";
 import RecommendedCourses from "../components/dashboard/RecommendedCourses";
-import GlobalSpinner from "../components/ui/GlobalSpinner";
+import Skeleton, { SkeletonCard } from "../components/ui/Skeleton";
 import { useEnrollments } from "../hooks/api/useEnrollments";
 import { useCertificates } from "../hooks/api/useCertificates";
 import { publicApi } from "../services/api";
+import { queryKeys } from "../config/queryKeys";
 import useUserStore from "../store/user.store";
 
 const StudentDashboard = () => {
@@ -16,7 +17,7 @@ const StudentDashboard = () => {
   const enrollmentsQuery = useEnrollments();
   const certificatesQuery = useCertificates();
   const recommendedQuery = useQuery({
-    queryKey: ["public", "courses", "recommended"],
+    queryKey: queryKeys.public.courses("recommended"),
     queryFn: () => publicApi.getCourses({ featured: true, limit: 4 }),
   });
 
@@ -85,7 +86,26 @@ const StudentDashboard = () => {
     },
   ];
 
-  if (enrollmentsQuery.isLoading) return <GlobalSpinner />;
+  if (enrollmentsQuery.isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-8 w-72" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }, (_, i) => (
+            <Skeleton key={i} className="h-24 rounded-xl" />
+          ))}
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import type { Course } from "../../data/courses.data";
 
@@ -5,7 +6,7 @@ interface Props {
   course: Course;
 }
 
-const CourseCard = ({ course }: Props) => {
+const CourseCard = memo(({ course }: Props) => {
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Image */}
@@ -105,6 +106,6 @@ const CourseCard = ({ course }: Props) => {
       </div>
     </article>
   );
-};
+});
 
 export default CourseCard;

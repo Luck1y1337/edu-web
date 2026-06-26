@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import GlobalSpinner from "../components/ui/GlobalSpinner";
+import { SkeletonCard } from "../components/ui/Skeleton";
 import { publicApi } from "../services/api";
 import { formatPrice } from "../services/mappers";
 import { useEnrollments } from "../hooks/api/useEnrollments";
@@ -118,9 +118,24 @@ const DashboardCatalog = () => {
       </div>
 
       {coursesQuery.isLoading ? (
-        <GlobalSpinner />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
       ) : coursesQuery.isError ? (
-        <p className="py-20 text-center text-sm text-red-600">Kurslarni yuklab bo'lmadi.</p>
+        <div className="flex flex-col items-center gap-3 py-20 text-center">
+          <p className="text-sm text-red-600">Kurslarni yuklab bo'lmadi.</p>
+          <button
+            onClick={() => coursesQuery.refetch()}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          >
+            Qayta urinish
+          </button>
+        </div>
       ) : courses.length === 0 ? (
         <p className="py-20 text-center text-sm text-gray-500">
           Berilgan filtr bo'yicha kurslar topilmadi.

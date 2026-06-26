@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
 import { adminApi } from "../../services/api";
+import { queryKeys } from "../../config/queryKeys";
 import type {
   CreateAdminStudentDto,
   UpdateAdminStudentDto,
@@ -9,14 +10,14 @@ import type {
 
 export const useAdminStudents = (params?: Record<string, unknown>) => {
   return useQuery({
-    queryKey: ["admin", "students", params],
+    queryKey: queryKeys.admin.students(params),
     queryFn: () => adminApi.getStudents(params),
   });
 };
 
 export const useAdminStudent = (id: string) => {
   return useQuery({
-    queryKey: ["admin", "student", id],
+    queryKey: queryKeys.admin.student(id),
     queryFn: () => adminApi.getStudent(id),
     enabled: Boolean(id),
     retry: false,
@@ -25,7 +26,7 @@ export const useAdminStudent = (id: string) => {
 
 export const useAdminStudentEnrollments = (id: string) => {
   return useQuery({
-    queryKey: ["admin", "student", id, "enrollments"],
+    queryKey: queryKeys.admin.studentEnrollments(id),
     queryFn: () => adminApi.getStudentEnrollments(id),
     enabled: Boolean(id),
     retry: false,
@@ -34,7 +35,7 @@ export const useAdminStudentEnrollments = (id: string) => {
 
 export const useAdminStudentPayments = (id: string) => {
   return useQuery({
-    queryKey: ["admin", "student", id, "payments"],
+    queryKey: queryKeys.admin.studentPayments(id),
     queryFn: () => adminApi.getStudentPayments(id),
     enabled: Boolean(id),
     retry: false,
@@ -48,7 +49,7 @@ export const useCreateAdminStudent = () => {
     mutationFn: async (body: CreateAdminStudentDto) => adminApi.createStudent(body),
     onSuccess: () => {
       toast.success("Talaba qo'shildi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "students"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.students() });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "Talabani qo'shib bo'lmadi");
@@ -63,8 +64,8 @@ export const useUpdateAdminStudent = (id: string) => {
     mutationFn: async (body: UpdateAdminStudentDto) => adminApi.updateStudent(id, body),
     onSuccess: () => {
       toast.success("Ma'lumotlar yangilandi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "students"] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "student", id] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.students() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.student(id) });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "Yangilab bo'lmadi");
@@ -79,7 +80,7 @@ export const useDeleteAdminStudent = () => {
     mutationFn: async (id: string) => adminApi.deleteStudent(id),
     onSuccess: () => {
       toast.success("Talaba o'chirildi");
-      queryClient.invalidateQueries({ queryKey: ["admin", "students"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.students() });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "O'chirib bo'lmadi");

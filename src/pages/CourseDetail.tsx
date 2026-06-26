@@ -6,13 +6,14 @@ import CourseSidebar from "../components/courseDetail/CourseSidebar";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { publicApi } from "../services/api";
 import { mapApiCourseToDetail, mapApiCourseToCourse } from "../services/mappers";
+import { queryKeys } from "../config/queryKeys";
 
 const CourseDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const courseSlug = slug || "";
 
   const courseQuery = useQuery({
-    queryKey: ["public", "course", courseSlug],
+    queryKey: queryKeys.public.course(courseSlug),
     queryFn: () => publicApi.getCourse(courseSlug),
     enabled: Boolean(courseSlug),
     retry: false,
@@ -20,7 +21,7 @@ const CourseDetail = () => {
 
   /* Fetch all courses for "similar courses" section */
   const allCoursesQuery = useQuery({
-    queryKey: ["public", "courses", "all"],
+    queryKey: queryKeys.public.courses("all"),
     queryFn: () => publicApi.getCourses({ limit: 100 }),
     enabled: Boolean(courseQuery.data),
   });

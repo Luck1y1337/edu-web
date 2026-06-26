@@ -1,10 +1,10 @@
-import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useEnrollments } from "../hooks/api/useEnrollments";
+import { SkeletonTable } from "../components/ui/Skeleton";
 
 const StudentResults = () => {
   const enrollmentsQuery = useEnrollments();
 
-  if (enrollmentsQuery.isLoading) return <GlobalSpinner />;
+  if (enrollmentsQuery.isLoading) return <SkeletonTable rows={5} />;
   const enrollments = enrollmentsQuery.data ?? [];
 
   const completed = enrollments.filter((e) => e.status === "completed");

@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import type { Teacher } from "../../types/home.type";
 
 const toSlug = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
+const TeacherCard = memo(({ teacher }: { teacher: Teacher }) => {
   const slug = teacher.id || toSlug(teacher.name);
   return (
     <Link
@@ -37,6 +38,6 @@ const TeacherCard = ({ teacher }: { teacher: Teacher }) => {
       </div>
     </Link>
   );
-};
+});
 
 export default TeacherCard;

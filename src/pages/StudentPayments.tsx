@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import GlobalSpinner from "../components/ui/GlobalSpinner";
 import StatTileGrid from "../components/ui/StatTile";
 import type { StatTileItem } from "../components/ui/StatTile";
 import { useEnrollments } from "../hooks/api/useEnrollments";
+import { SkeletonTable } from "../components/ui/Skeleton";
 
 const formatDate = (iso: string) => {
   try {
@@ -59,7 +59,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 const StudentPayments = () => {
   const enrollmentsQuery = useEnrollments();
 
-  if (enrollmentsQuery.isLoading) return <GlobalSpinner />;
+  if (enrollmentsQuery.isLoading) return <SkeletonTable rows={5} />;
   const enrollments = enrollmentsQuery.data ?? [];
 
   const totalCourses = enrollments.length;

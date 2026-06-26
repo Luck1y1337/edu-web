@@ -6,13 +6,14 @@ import TeacherSidebar from "../components/teacherDetail/TeacherSidebar";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { publicApi } from "../services/api";
 import { mapApiTeacherToDetail } from "../services/mappers";
+import { queryKeys } from "../config/queryKeys";
 
 const TeacherDetail = () => {
   const { id } = useParams<{ id: string }>();
   const teacherId = id || "";
 
   const teacherQuery = useQuery({
-    queryKey: ["public", "instructor", teacherId],
+    queryKey: queryKeys.public.instructor(teacherId),
     queryFn: () => publicApi.getInstructor(teacherId),
     enabled: Boolean(teacherId),
     retry: false,

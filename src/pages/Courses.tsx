@@ -4,10 +4,11 @@ import CoursesGrid from "../components/courses/CoursesGrid";
 import { publicApi } from "../services/api";
 import { mapApiCourseToCourse } from "../services/mappers";
 import { SkeletonCard } from "../components/ui/Skeleton";
+import { queryKeys } from "../config/queryKeys";
 
 const Courses = () => {
   const coursesQuery = useQuery({
-    queryKey: ["public", "courses", "all"],
+    queryKey: queryKeys.public.courses("all"),
     queryFn: () => publicApi.getCourses({ limit: 100 }),
   });
 

@@ -11,6 +11,7 @@ export interface SessionData {
   os: string;
   ip: string;
   lastActive: string;
+  createdAt?: string;
   isCurrent: boolean;
   location?: string;
 }

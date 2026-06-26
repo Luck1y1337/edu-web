@@ -11,10 +11,16 @@ const StudentSettings = () => {
   const user = useUserStore((state) => state.user);
 
   // Password Form
-  const { register: registerPwd, handleSubmit: handlePwdSubmit, reset: resetPwd, formState: { errors: errorsPwd } } = useForm();
+  interface PasswordForm {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }
+
+  const { register: registerPwd, handleSubmit: handlePwdSubmit, reset: resetPwd, formState: { errors: errorsPwd } } = useForm<PasswordForm>();
   const { mutate: changePassword, isPending: isPwdPending } = useChangePassword();
 
-  const onPasswordSubmit = (data: any) => {
+  const onPasswordSubmit = (data: PasswordForm) => {
     if (data.newPassword !== data.confirmPassword) {
       toast.error("Yangi parollar mos kelmadi");
       return;
@@ -175,7 +181,7 @@ const StudentSettings = () => {
                   <input
                     type="tel"
                     id="phone"
-                    defaultValue={(user as any)?.phone || "+998 90 123 45 67"}
+                    defaultValue={user?.phone || "+998 90 123 45 67"}
                     className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -361,7 +367,7 @@ const StudentSettings = () => {
                           <span className="text-sm font-bold text-gray-900">{session.device || session.os} - {session.browser}</span>
                           {session.isCurrent && <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">Joriy</span>}
                         </div>
-                        <span className="text-xs text-gray-500">{session.location || "Noma'lum hudud"} · {session.isCurrent ? "Hozir" : (session.lastActive || (session as any).createdAt ? new Date(session.lastActive || (session as any).createdAt).toLocaleString() : "Yaqinda")}</span>
+                        <span className="text-xs text-gray-500">{session.location || "Noma'lum hudud"} · {session.isCurrent ? "Hozir" : (session.lastActive || session.createdAt ? new Date(session.lastActive || session.createdAt!).toLocaleString() : "Yaqinda")}</span>
                       </div>
                     </div>
                     {!session.isCurrent && (

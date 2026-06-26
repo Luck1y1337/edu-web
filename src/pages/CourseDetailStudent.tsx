@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useEnrollment } from "../hooks/api/useEnrollments";
 import type { EnrollmentModuleDto } from "../types/api.type";
+import { sanitizeHtml } from "../utils/sanitize";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
@@ -247,7 +248,7 @@ const CourseDetailStudent = () => {
               {course.longDescription && (
                 <div
                   className="prose prose-gray max-w-none text-gray-500 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: course.longDescription }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(course.longDescription) }}
                 />
               )}
 

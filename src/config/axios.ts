@@ -19,6 +19,31 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let refreshPromise: Promise<string | null> | null = null;
+
+const doRefresh = async (): Promise<string | null> => {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return null;
+
+  try {
+    const res = await axios.post(
+      `${instance.defaults.baseURL}${Endpoints.auth.refresh}`,
+      { refreshToken }
+    );
+    const newAccessToken =
+      res.data?.data?.tokens?.accessToken || res.data?.data?.accessToken;
+    return newAccessToken || null;
+  } catch {
+    return null;
+  }
+};
+
+const forceLogout = () => {
+  clearTokens();
+  useUserStore.getState().logout();
+  window.location.replace("/login");
+};
+
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -29,35 +54,24 @@ instance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // If 401 and not already retrying
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = getRefreshToken();
 
-      if (refreshToken) {
-        try {
-          // Use base axios to avoid infinite loops with interceptors
-          const res = await axios.post(
-            `${instance.defaults.baseURL}${Endpoints.auth.refresh}`,
-            { refreshToken }
-          );
-
-          const newAccessToken = res.data?.data?.tokens?.accessToken || res.data?.data?.accessToken;
-          
-          if (newAccessToken) {
-            setItem(newAccessToken);
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return instance(originalRequest);
-          }
-        } catch {
-          // Refresh failed — fall through to logout below
-        }
+      if (!refreshPromise) {
+        refreshPromise = doRefresh().finally(() => {
+          refreshPromise = null;
+        });
       }
 
-      // If no refresh token or refresh failed
-      clearTokens();
-      useUserStore.getState().logout();
-      window.location.replace("/login");
+      const newAccessToken = await refreshPromise;
+
+      if (newAccessToken) {
+        setItem(newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return instance(originalRequest);
+      }
+
+      forceLogout();
     }
 
     return Promise.reject(error);

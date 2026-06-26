@@ -3,10 +3,11 @@ import axios from "../../config/axios";
 import Endpoints from "../../config/endpoints";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
+import type { ChangePasswordDto } from "../../types/api.type";
 
 export const useChangePassword = () => {
   return useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: ChangePasswordDto) => {
       return axios.patch(Endpoints.user.changePassword, data);
     },
     onSuccess: () => {

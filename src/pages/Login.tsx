@@ -43,7 +43,8 @@ const Login = () => {
     toast.success("Tizimga muvaffaqiyatli kirdingiz");
     const fallback =
       user?.role === "admin" || user?.role === "super_admin" ? "/admin" : "/dashboard";
-    const target = nextParam && nextParam.startsWith("/") ? nextParam : fallback;
+    const isSafePath = nextParam && /^\/[a-zA-Z0-9]/.test(nextParam);
+    const target = isSafePath ? nextParam : fallback;
     navigate(target, { replace: true });
   }, [isSuccess, navigate, nextParam, user]);
 

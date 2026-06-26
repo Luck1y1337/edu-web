@@ -12,12 +12,17 @@ const ResetPassword = () => {
   const token = searchParams.get("token");
   const navigate = useNavigate();
   
-  const form = useForm<any>();
+  interface ResetPasswordForm {
+    newPassword: string;
+    confirmPassword: string;
+  }
+
+  const form = useForm<ResetPasswordForm>();
   const { mutateAsync, isPending } = useResetPassword();
   const { formState: { errors } } = form;
   const [showPassword, setShowPassword] = useState("password");
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: ResetPasswordForm) => {
     if (!token) {
       toast.error("Yaroqsiz havola. Qaytadan urinib ko'ring.");
       return;

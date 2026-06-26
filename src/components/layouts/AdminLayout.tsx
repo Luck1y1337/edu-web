@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import AdminSidebar from "../admin/AdminSidebar";
 import AdminTopbar from "../admin/AdminTopbar";
 import LogoutModal from "../LogoutModal";
+import ErrorBoundary from "../ui/ErrorBoundary";
 import useUserStore from "../../store/user.store";
 
 const AdminLayout = () => {
@@ -16,7 +17,9 @@ const AdminLayout = () => {
 
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
-            <Outlet />
+            <ErrorBoundary>
+              <Outlet />
+            </ErrorBoundary>
           </div>
         </main>
       </div>

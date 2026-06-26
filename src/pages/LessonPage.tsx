@@ -8,6 +8,7 @@ import type {
   StudentEnrollmentDetailDto,
   StudentEnrollmentListItemDto,
 } from "../types/api.type";
+import { sanitizeHtml } from "../utils/sanitize";
 
 /* ── Helpers ────────────────────────────────────────────── */
 
@@ -425,7 +426,7 @@ const LessonPage = () => {
             <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               <div
                 className="prose prose-gray max-w-none"
-                dangerouslySetInnerHTML={{ __html: lesson.content }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.content) }}
               />
             </article>
           )}

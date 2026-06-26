@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { FadeIn } from "../ui/Motion";
 
 const Cta = () => {
   return (
     <section className="pb-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <FadeIn>
         <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-linear-to-br from-blue-600 to-violet-700 p-10 text-white lg:grid-cols-2 lg:p-14">
           <div>
             <h2 className="font-manrope text-3xl font-bold leading-tight sm:text-4xl">
@@ -31,6 +33,7 @@ const Cta = () => {
             className="h-64 w-full rounded-2xl object-cover"
           />
         </div>
+        </FadeIn>
       </div>
     </section>
   );

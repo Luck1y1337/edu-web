@@ -1,18 +1,22 @@
 import SectionHeading from "../ui/SectionHeading";
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
 import { faqs } from "../../data/home.data";
 
 const Faq = () => {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Tez-tez beriladigan savollar"
-          title="Sizni qiziqtirgan savollar"
-          subtitle="Topa olmagan savolingiz bo'lsa, biz bilan bog'laning."
-        />
+        <FadeIn>
+          <SectionHeading
+            badge="Tez-tez beriladigan savollar"
+            title="Sizni qiziqtirgan savollar"
+            subtitle="Topa olmagan savolingiz bo'lsa, biz bilan bog'laning."
+          />
+        </FadeIn>
 
-        <div className="mt-10 space-y-3">
+        <StaggerContainer className="mt-10 space-y-3">
           {faqs.map((faq, index) => (
+            <StaggerItem key={faq.question}>
             <details
               key={faq.question}
               open={index === 0}
@@ -40,8 +44,9 @@ const Faq = () => {
                 {faq.answer}
               </p>
             </details>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

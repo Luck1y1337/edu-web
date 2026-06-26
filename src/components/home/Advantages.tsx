@@ -1,6 +1,7 @@
 import SectionHeading from "../ui/SectionHeading";
 import { advantages } from "../../data/home.data";
 import { Icon } from "../ui/Icon";
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
 
 const iconMap: Record<string, () => React.JSX.Element> = {
   "✓": Icon.checkSquare,
@@ -15,19 +16,21 @@ const Advantages = () => {
   return (
     <section className="bg-gray-50 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Nima uchun biz"
-          title="O'quv markazimizning afzalliklari"
-          subtitle="Eng yaxshi natijaga erishish uchun barcha imkoniyatlarni sizga taqdim etamiz."
-        />
+        <FadeIn>
+          <SectionHeading
+            badge="Nima uchun biz"
+            title="O'quv markazimizning afzalliklari"
+            subtitle="Eng yaxshi natijaga erishish uchun barcha imkoniyatlarni sizga taqdim etamiz."
+          />
+        </FadeIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {advantages.map((item) => {
             const IconComponent = iconMap[item.icon];
             return (
+              <StaggerItem key={item.title}>
               <div
-                key={item.title}
-                className="rounded-xl border border-gray-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
                 <span
                   className={`flex h-12 w-12 items-center justify-center rounded-xl ${item.color}`}
@@ -41,9 +44,10 @@ const Advantages = () => {
                   {item.desc}
                 </p>
               </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

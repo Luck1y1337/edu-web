@@ -8,7 +8,7 @@ interface Props {
 
 const CourseCard = memo(({ course }: Props) => {
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       {/* Image */}
       <Link to={`/courses/${course.slug}`} className="block overflow-hidden">
         <img

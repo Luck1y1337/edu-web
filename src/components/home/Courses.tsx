@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
 import type { Course } from "../../types/home.type";
 
 interface Props {
@@ -12,17 +13,19 @@ const Courses = ({ items }: Props) => {
   return (
     <section id="kurslar" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Mashhur kurslar"
-          title="Eng yaxshi ko'rinadigan kurslarimiz"
-          subtitle="Mehnat bozorida eng talab qilinadigan zamonaviy yo'nalishlar bo'yicha amaliy ta'lim."
-        />
+        <FadeIn>
+          <SectionHeading
+            badge="Mashhur kurslar"
+            title="Eng yaxshi ko'rinadigan kurslarimiz"
+            subtitle="Mehnat bozorida eng talab qilinadigan zamonaviy yo'nalishlar bo'yicha amaliy ta'lim."
+          />
+        </FadeIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((course) => (
+            <StaggerItem key={course.title}>
             <article
-              key={course.title}
-              className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg"
+              className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <img
                 src={course.image}
@@ -65,17 +68,18 @@ const Courses = ({ items }: Props) => {
                 </div>
               </div>
             </article>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
-        <div className="mt-12 text-center">
+        <FadeIn delay={0.3} className="mt-12 text-center">
           <Link
             to="/courses"
             className="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             Barcha kurslarni ko'rish <Icon.arrowRight />
           </Link>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

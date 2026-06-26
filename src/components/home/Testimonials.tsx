@@ -1,5 +1,6 @@
 import { Icon } from "../ui/Icon";
 import SectionHeading from "../ui/SectionHeading";
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
 import type { Testimonial } from "../../types/home.type";
 
 interface Props {
@@ -12,17 +13,19 @@ const Testimonials = ({ items }: Props) => {
   return (
     <section className="bg-gray-50/70 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Sharhlar"
-          title="Talabalarimiz fikri"
-          subtitle="5000+ bitiruvchi o'z fikrini bildirdi. Mana, ulardan ba'zilari."
-        />
+        <FadeIn>
+          <SectionHeading
+            badge="Sharhlar"
+            title="Talabalarimiz fikri"
+            subtitle="5000+ bitiruvchi o'z fikrini bildirdi. Mana, ulardan ba'zilari."
+          />
+        </FadeIn>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <StaggerContainer className="mt-12 grid gap-6 lg:grid-cols-3">
           {items.map((item, idx) => (
+            <StaggerItem key={`${item.name}-${idx}`}>
             <figure
-              key={`${item.name}-${idx}`}
-              className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+              className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
             >
               <span className="text-4xl leading-none text-blue-200">"</span>
               <div className="mt-2 flex gap-x-0.5">
@@ -45,8 +48,9 @@ const Testimonials = ({ items }: Props) => {
                 </div>
               </figcaption>
             </figure>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

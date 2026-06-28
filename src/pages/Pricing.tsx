@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FadeIn, StaggerContainer, StaggerItem } from "../components/ui/Motion";
 
 /* ── Data ── */
 const plans = [
@@ -140,13 +141,13 @@ const Pricing = () => {
       {/* Pricing Cards */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-3">
+          <StaggerContainer className="grid gap-6 lg:grid-cols-3">
             {plans.map((plan) => (
-              <article
+              <StaggerItem
                 key={plan.name}
-                className={`relative flex flex-col rounded-2xl p-8 ${
+                className={`relative flex flex-col rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
                   plan.featured
-                    ? "border-2 border-blue-600 bg-white shadow-xl"
+                    ? "border-2 border-blue-600 bg-white shadow-xl lg:-translate-y-2"
                     : "border border-gray-200 bg-white"
                 }`}
               >
@@ -192,9 +193,9 @@ const Pricing = () => {
                 >
                   Kurslarni ko'rish
                 </Link>
-              </article>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
           {/* Note */}
           <p className="mt-6 text-center text-sm text-gray-400">
@@ -219,18 +220,18 @@ const Pricing = () => {
               Chegirmalar bir-biri bilan qo'shilmaydi — eng kattasi qo'llanadi.
             </p>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {discounts.map((d) => (
-              <article key={d.title} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-6">
+              <StaggerItem key={d.title} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
                   {d.icon}
                 </span>
                 <p className="font-manrope text-2xl font-extrabold text-emerald-600">{d.percent}</p>
                 <h3 className="font-manrope text-lg font-bold text-gray-900">{d.title}</h3>
                 <p className="text-sm leading-relaxed text-gray-500">{d.desc}</p>
-              </article>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -246,7 +247,7 @@ const Pricing = () => {
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-gray-200">
+          <FadeIn className="overflow-x-auto rounded-2xl border border-gray-200">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
@@ -302,14 +303,14 @@ const Pricing = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-50 px-8 py-8 text-center sm:flex-row sm:text-left">
+          <FadeIn className="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-50 px-8 py-8 text-center sm:flex-row sm:text-left">
             <div>
               <h3 className="font-manrope text-xl font-bold text-gray-900">
                 Qaysi kursni tanlashni bilmayapsizmi?
@@ -332,7 +333,7 @@ const Pricing = () => {
                 Kurs katalogiga o'tish
               </Link>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </section>
     </>

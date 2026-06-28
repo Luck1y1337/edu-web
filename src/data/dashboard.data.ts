@@ -24,6 +24,7 @@ export const dashboardNav: DashboardNavGroup[] = [
       { label: "Profil", icon: "user", path: "/dashboard/profile" },
       { label: "To'lovlar", icon: "creditCard", path: "/dashboard/payments" },
       { label: "Sozlamalar", icon: "settings", path: "/dashboard/settings" },
+      { label: "Yordam (FAQ)", icon: "helpCircle", path: "/faq" },
     ],
   },
 ];

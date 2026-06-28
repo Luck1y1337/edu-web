@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -25,6 +25,7 @@ interface FadeInProps {
   delay?: number;
   duration?: number;
   className?: string;
+  style?: CSSProperties;
   once?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const FadeIn = ({
   delay = 0,
   duration = 0.6,
   className,
+  style,
   once = true,
 }: FadeInProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ export const FadeIn = ({
       animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
       transition={{ duration, delay, ease: "easeOut" }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>

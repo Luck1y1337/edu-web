@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { BlogPost } from "../../data/blog.data";
+import { FadeIn } from "../ui/Motion";
 
 interface Props {
   post: BlogPost;
@@ -7,7 +8,7 @@ interface Props {
 
 const BlogFeatured = ({ post }: Props) => {
   return (
-    <article className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:flex">
+    <FadeIn className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:flex">
       {/* Image */}
       <Link
         to={`/blog/${post.slug}`}
@@ -55,7 +56,7 @@ const BlogFeatured = ({ post }: Props) => {
           <span>{post.readTime}</span>
         </div>
       </div>
-    </article>
+    </FadeIn>
   );
 };
 

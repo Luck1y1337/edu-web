@@ -3,6 +3,7 @@ import type { BlogPost } from "../../data/blog.data";
 import type { BlogCategoryDto } from "../../types/api.type";
 import BlogCard from "./BlogCard";
 import BlogSidebar from "./BlogSidebar";
+import { StaggerContainer, StaggerItem } from "../ui/Motion";
 
 const POSTS_PER_PAGE = 8;
 
@@ -42,11 +43,13 @@ const BlogGrid = ({ posts, categories }: Props) => {
             Hozircha maqolalar yo'q.
           </p>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2">
+          <StaggerContainer key={page} className="grid gap-6 sm:grid-cols-2">
             {visible.map((post) => (
-              <BlogCard key={post.id} post={post} />
+              <StaggerItem key={post.id}>
+                <BlogCard post={post} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         )}
 
         {/* Pagination */}

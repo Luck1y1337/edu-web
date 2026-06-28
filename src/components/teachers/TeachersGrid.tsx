@@ -1,5 +1,6 @@
 import { Icon } from "../ui/Icon";
 import TeacherCard from "../ui/TeacherCard";
+import { StaggerContainer, StaggerItem } from "../ui/Motion";
 import type { Teacher } from "../../types/home.type";
 
 const pages = ["1", "2", "3"];
@@ -11,11 +12,13 @@ interface Props {
 const TeachersGrid = ({ items }: Props) => {
   return (
     <div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((teacher) => (
-          <TeacherCard key={teacher.id || teacher.name} teacher={teacher} />
+          <StaggerItem key={teacher.id || teacher.name}>
+            <TeacherCard teacher={teacher} />
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
 
       {items.length > 8 && (
         <nav className="mt-8 flex justify-center" aria-label="Sahifa navigatsiyasi">

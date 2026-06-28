@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { FadeIn, StaggerContainer, StaggerItem } from "../components/ui/Motion";
 
 /* ── FAQ Data ── */
 const faqData: Record<string, { q: string; a: string }[]> = {
@@ -102,11 +104,21 @@ const AccordionItem = ({ q, a }: { q: string; a: string }) => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {open && (
-        <div className="border-t border-gray-100 px-5 pb-5 pt-4">
-          <p className="text-base leading-relaxed text-gray-500">{a}</p>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-gray-100 px-5 pb-5 pt-4">
+              <p className="text-base leading-relaxed text-gray-500">{a}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -183,20 +195,22 @@ const FaqPage = () => {
           </div>
 
           {/* Accordion */}
-          <div className="flex flex-col gap-2">
+          <StaggerContainer key={activeTab + search} className="flex flex-col gap-2">
             {items.length > 0 ? (
               items.map((item) => (
-                <AccordionItem key={item.q} q={item.q} a={item.a} />
+                <StaggerItem key={item.q}>
+                  <AccordionItem q={item.q} a={item.a} />
+                </StaggerItem>
               ))
             ) : (
               <p className="py-8 text-center text-gray-400">
                 Hech narsa topilmadi. Boshqa kalit so'z bilan qidiring.
               </p>
             )}
-          </div>
+          </StaggerContainer>
 
           {/* CTA Card */}
-          <div
+          <FadeIn
             className="relative mt-16 overflow-hidden rounded-3xl border border-blue-100 p-10 text-center"
             style={{ background: "linear-gradient(108.3deg, #EFF6FF 0%, #F5F3FF 100%)" }}
           >
@@ -233,7 +247,7 @@ const FaqPage = () => {
                 +998 71 123 45 67
               </a>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </section>
     </>

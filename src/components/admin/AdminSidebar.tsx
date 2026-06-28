@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import useUserStore from "../../store/user.store";
@@ -47,15 +48,17 @@ const adminNav: NavGroup[] = [
   },
 ];
 
-const AdminSidebar = () => {
+/* ── Shared sidebar content (used by desktop aside + mobile drawer) ── */
+const SidebarBody = ({ onNavigate }: { onNavigate?: () => void }) => {
   const { user, setLogoutModalOpen } = useUserStore();
   const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Admin";
 
   return (
-    <aside className="hidden w-65 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
+    <>
       {/* Logo */}
       <Link
         to="/"
+        onClick={onNavigate}
         className="flex h-18 items-center gap-3 border-b border-gray-100 px-6 transition-colors hover:bg-gray-50"
       >
         <svg className="h-9 w-9 shrink-0" viewBox="0 0 36 36" fill="none">
@@ -81,6 +84,7 @@ const AdminSidebar = () => {
                     <NavLink
                       to={item.path}
                       end={item.end}
+                      onClick={onNavigate}
                       className={({ isActive }) =>
                         `relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                           isActive
@@ -125,20 +129,90 @@ const AdminSidebar = () => {
         </div>
         <Link
           to="/"
+          onClick={onNavigate}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
         >
           <Icon.home />
           Bosh sahifa
         </Link>
         <button
-          onClick={() => setLogoutModalOpen(true)}
+          onClick={() => {
+            onNavigate?.();
+            setLogoutModalOpen(true);
+          }}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:border-red-200 hover:bg-red-50"
         >
           <Icon.logout />
           Chiqish
         </button>
       </footer>
-    </aside>
+    </>
+  );
+};
+
+interface AdminSidebarProps {
+  mobileOpen?: boolean;
+  onClose?: () => void;
+}
+
+const AdminSidebar = ({ mobileOpen = false, onClose }: AdminSidebarProps) => {
+  // Escape to close + lock body scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mobileOpen, onClose]);
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden w-65 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
+        <SidebarBody />
+      </aside>
+
+      {/* Mobile drawer */}
+      <div
+        className={`fixed inset-0 z-50 lg:hidden ${mobileOpen ? "" : "pointer-events-none"}`}
+        aria-hidden={!mobileOpen}
+      >
+        {/* Overlay */}
+        <div
+          onClick={onClose}
+          className={`absolute inset-0 bg-gray-900/50 transition-opacity duration-200 ${
+            mobileOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+        {/* Panel */}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigatsiya"
+          className={`absolute inset-y-0 left-0 flex w-72 max-w-[80%] flex-col bg-white shadow-xl transition-transform duration-200 ease-out ${
+            mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Yopish"
+            className="absolute right-3 top-5 z-10 flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+          <SidebarBody onNavigate={onClose} />
+        </div>
+      </div>
+    </>
   );
 };
 

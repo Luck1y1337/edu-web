@@ -43,13 +43,17 @@ const AdminStudentNew = React.lazy(() => import("../pages/AdminStudentNew"));
 const AdminStudentProfile = React.lazy(() => import("../pages/AdminStudentProfile"));
 const AdminInstructors = React.lazy(() => import("../pages/AdminInstructors"));
 const AdminInstructorNew = React.lazy(() => import("../pages/AdminInstructorNew"));
+const AdminInstructorProfile = React.lazy(() => import("../pages/AdminInstructorProfile"));
 const AdminCourses = React.lazy(() => import("../pages/AdminCourses"));
 const AdminCourseNew = React.lazy(() => import("../pages/AdminCourseNew"));
+const AdminCourseProfile = React.lazy(() => import("../pages/AdminCourseProfile"));
 const AdminPayments = React.lazy(() => import("../pages/AdminPayments"));
 const AdminCertificates = React.lazy(() => import("../pages/AdminCertificates"));
 const AdminReviews = React.lazy(() => import("../pages/AdminReviews"));
 const AdminBlogPosts = React.lazy(() => import("../pages/AdminBlogPosts"));
+const AdminBlogNew = React.lazy(() => import("../pages/AdminBlogNew"));
 const AdminContactMessages = React.lazy(() => import("../pages/AdminContactMessages"));
+const AdminSettings = React.lazy(() => import("../pages/AdminSettings"));
 
 const withSuspense = (Component: React.ComponentType) => (
   <Suspense fallback={<GlobalSpinner />}>
@@ -116,13 +120,17 @@ const routes = createBrowserRouter([
           { path: "students/:id", element: withSuspense(AdminStudentProfile) },
           { path: "instructors", element: withSuspense(AdminInstructors) },
           { path: "instructors/new", element: withSuspense(AdminInstructorNew) },
+          { path: "instructors/:id", element: withSuspense(AdminInstructorProfile) },
           { path: "courses", element: withSuspense(AdminCourses) },
           { path: "courses/new", element: withSuspense(AdminCourseNew) },
+          { path: "courses/:id", element: withSuspense(AdminCourseProfile) },
           { path: "payments", element: withSuspense(AdminPayments) },
           { path: "certificates", element: withSuspense(AdminCertificates) },
           { path: "reviews", element: withSuspense(AdminReviews) },
           { path: "blog", element: withSuspense(AdminBlogPosts) },
+          { path: "blog/new", element: withSuspense(AdminBlogNew) },
           { path: "contact", element: withSuspense(AdminContactMessages) },
+          { path: "settings", element: withSuspense(AdminSettings) },
         ],
       },
     ],

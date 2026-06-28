@@ -1,12 +1,26 @@
 import { Icon } from "../ui/Icon";
 import useUserStore from "../../store/user.store";
 
-const AdminTopbar = () => {
+interface AdminTopbarProps {
+  onMenuClick?: () => void;
+}
+
+const AdminTopbar = ({ onMenuClick }: AdminTopbarProps) => {
   const { user, setLogoutModalOpen } = useUserStore();
   const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Admin";
 
   return (
     <header className="flex h-18 shrink-0 items-center border-b border-gray-100 bg-white px-4 sm:px-6 lg:px-10">
+      {/* Mobile menu trigger */}
+      <button
+        type="button"
+        onClick={onMenuClick}
+        aria-label="Menyuni ochish"
+        className="mr-1 flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 lg:hidden"
+      >
+        <Icon.menu />
+      </button>
+
       {/* Mobile logo */}
       <div className="flex items-center gap-3 lg:hidden">
         <svg className="h-9 w-9 shrink-0" viewBox="0 0 36 36" fill="none">

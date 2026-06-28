@@ -8,11 +8,22 @@ import GlobalSpinner from "../components/ui/GlobalSpinner";
 import useUserStore from "../store/user.store";
 import { changePasswordSchema, type ChangePasswordForm } from "../schemas/auth.schema";
 
-const Toggle = ({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) => (
+const Toggle = ({
+  enabled,
+  onToggle,
+  label,
+}: {
+  enabled: boolean;
+  onToggle: () => void;
+  label?: string;
+}) => (
   <button
     type="button"
+    role="switch"
+    aria-checked={enabled}
+    aria-label={label}
     onClick={onToggle}
-    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 ${
       enabled ? "bg-blue-600" : "bg-gray-200"
     }`}
   >
@@ -378,6 +389,7 @@ const StudentSettings = () => {
                   <Toggle
                     enabled={notifications[item.key]}
                     onToggle={() => toggleNotification(item.key)}
+                    label={item.title}
                   />
                 </div>
               ))}
@@ -624,7 +636,7 @@ const StudentSettings = () => {
                     Interfeysni qorong'u fonga o'tkazish
                   </span>
                 </div>
-                <Toggle enabled={darkMode} onToggle={toggleDarkMode} />
+                <Toggle enabled={darkMode} onToggle={toggleDarkMode} label="Qorong'u rejim" />
               </div>
 
               <div className="mt-2 flex justify-end">

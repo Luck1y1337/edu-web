@@ -92,6 +92,7 @@ const AccordionItem = ({ q, a }: { q: string; a: string }) => {
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       <button
         onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
         className="flex w-full items-center justify-between px-5 py-4 text-left"
       >
         <span className="text-base font-semibold text-gray-900">{q}</span>

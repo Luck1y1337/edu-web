@@ -32,7 +32,8 @@ const TeacherCard = memo(({ teacher }: { teacher: Teacher }) => {
           {stats.map((s) => (
             <div key={s.label}>
               <p className="text-lg font-bold text-gray-900">{s.value}</p>
-              <p className="text-xs text-gray-400">{s.label}</p>
+              <p className="text-xs text-gray-500">{s.label}</p>
+
             </div>
           ))}
         </div>

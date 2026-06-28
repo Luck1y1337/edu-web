@@ -80,6 +80,13 @@ const DashboardSidebar = () => {
           </div>
         </div>
         <Link
+          to="/faq"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        >
+          <Icon.helpCircle />
+          Yordam (FAQ)
+        </Link>
+        <Link
           to="/"
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
         >

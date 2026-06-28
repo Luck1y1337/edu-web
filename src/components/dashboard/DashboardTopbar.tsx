@@ -48,6 +48,13 @@ const DashboardTopbar = () => {
             <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
           </div>
           <Link
+            to="/faq"
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors hover:bg-blue-50 hover:text-blue-600 lg:hidden"
+            aria-label="Yordam (FAQ)"
+          >
+            <Icon.helpCircle />
+          </Link>
+          <Link
             to="/"
             className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors hover:bg-blue-50 hover:text-blue-600 lg:hidden"
             aria-label="Bosh sahifa"

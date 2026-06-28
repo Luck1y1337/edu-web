@@ -22,7 +22,10 @@ const Login = () => {
   const location = useLocation();
   const form = useForm<LoginForm>();
   const { mutateAsync, isSuccess, isPending } = useLogin();
-  const [showPassword, setShowPassword] = useState("password");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(
+    () => localStorage.getItem("rememberMe") === "true"
+  );
   const {
     formState: { errors },
     watch,
@@ -40,13 +43,18 @@ const Login = () => {
 
   useEffect(() => {
     if (!isSuccess) return;
+    if (rememberMe) {
+      localStorage.setItem("rememberMe", "true");
+    } else {
+      localStorage.removeItem("rememberMe");
+    }
     toast.success("Tizimga muvaffaqiyatli kirdingiz");
     const fallback =
       user?.role === "admin" || user?.role === "super_admin" ? "/admin" : "/dashboard";
     const isSafePath = nextParam && /^\/[a-zA-Z0-9]/.test(nextParam);
     const target = isSafePath ? nextParam : fallback;
     navigate(target, { replace: true });
-  }, [isSuccess, navigate, nextParam, user]);
+  }, [isSuccess, navigate, nextParam, user, rememberMe]);
 
   return (
     <div className="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">
@@ -141,7 +149,7 @@ const Login = () => {
             />
             <Input
               name="password"
-              type={showPassword}
+              type={showPassword ? "text" : "password"}
               form={form}
               placeholder="••••••••"
               label="Parol"
@@ -159,19 +167,19 @@ const Login = () => {
                 <button
                   type="button"
                   className="cursor-pointer"
-                  onClick={() =>
-                    setShowPassword(showPassword === "password" ? "text" : "password")
-                  }
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword === "password" ? <Icon.eye /> : <Icon.eyeOff />}
+                  {showPassword ? <Icon.eyeOff /> : <Icon.eye />}
                 </button>
               }
             />
 
             <div className="my-1 flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-gray-600">
+              <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                 <input
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-200"
                 />
                 Meni eslab qol

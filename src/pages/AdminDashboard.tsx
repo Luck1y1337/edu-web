@@ -159,7 +159,7 @@ const AdminDashboard = () => {
       <StatTileGrid items={tiles} columns={4} />
 
       {/* ── Two-column grid ── */}
-      <section className="grid items-start gap-5" style={{ gridTemplateColumns: "1.6fr 1fr" }}>
+      <section className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.6fr_1fr]">
         {/* Left: Yangi talabalar table */}
         <article className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
           <header className="flex items-center justify-between border-b border-gray-100 px-5 py-4">

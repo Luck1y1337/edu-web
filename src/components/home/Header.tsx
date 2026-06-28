@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "../ui/Icon";
 import { navLinks } from "../../data/home.data";
 import useUserStore from "../../store/user.store";
@@ -59,13 +60,6 @@ const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          <button className="hidden items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 sm:flex">
-            <span className="text-base">🌐</span> O'zbek
-            <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
-              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-
           {isAuthenticated ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -167,64 +161,74 @@ const Header = () => {
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen && (
-        <nav className="border-t border-gray-100 bg-white px-4 pb-4 pt-2 lg:hidden">
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.label}
-                to={link.path}
-                end={link.path === "/"}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </div>
-          {isAuthenticated ? (
-            <div className="mt-3 flex flex-col gap-1 border-t border-gray-100 pt-3">
-              <Link
-                to={dashPath}
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
-                Dashboard
-              </Link>
-              <button
-                type="button"
-                onClick={() => { setMobileOpen(false); setLogoutModalOpen(true); }}
-                className="rounded-lg px-4 py-2.5 text-left text-sm font-medium text-red-600 hover:bg-red-50"
-              >
-                Chiqish
-              </button>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-gray-100 bg-white lg:hidden"
+          >
+            <div className="px-4 pb-4 pt-2">
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <NavLink
+                    key={link.label}
+                    to={link.path}
+                    end={link.path === "/"}
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                        isActive
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-600 hover:bg-gray-50"
+                      }`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </div>
+              {isAuthenticated ? (
+                <div className="mt-3 flex flex-col gap-1 border-t border-gray-100 pt-3">
+                  <Link
+                    to={dashPath}
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => { setMobileOpen(false); setLogoutModalOpen(true); }}
+                    className="rounded-lg px-4 py-2.5 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+                  >
+                    Chiqish
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-3 flex gap-3 border-t border-gray-100 pt-3">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 rounded-lg border border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Kirish
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 rounded-lg bg-blue-600 py-2.5 text-center text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    Ro'yxatdan o'tish
+                  </Link>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="mt-3 flex gap-3 border-t border-gray-100 pt-3">
-              <Link
-                to="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-lg border border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Kirish
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-lg bg-blue-600 py-2.5 text-center text-sm font-semibold text-white hover:bg-blue-700"
-              >
-                Ro'yxatdan o'tish
-              </Link>
-            </div>
-          )}
-        </nav>
-      )}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

@@ -99,7 +99,59 @@ const AdminContactMessages = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((msg) => (
+              <li key={msg.id} className="flex flex-col gap-2 p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-gray-900">{msg.name}</p>
+                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusColors[msg.status]}`}>
+                    {statusLabels[msg.status]}
+                  </span>
+                </div>
+                <p className="truncate text-xs text-gray-500">{msg.email}</p>
+                {msg.subject && <p className="text-sm font-medium text-gray-700">{msg.subject}</p>}
+                <p className="text-sm text-gray-600 whitespace-pre-wrap">{msg.message}</p>
+                {msg.phone && <p className="text-xs text-gray-500">Tel: {msg.phone}</p>}
+                <p className="text-xs text-gray-400">{formatDate(msg.createdAt)}</p>
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  {msg.status === "new" && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange(msg.id, "read")}
+                      disabled={updateStatus.isPending}
+                      className="rounded-lg border border-amber-200 px-3 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 disabled:opacity-60"
+                    >
+                      O'qilgan
+                    </button>
+                  )}
+                  {(msg.status === "new" || msg.status === "read") && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange(msg.id, "replied")}
+                      disabled={updateStatus.isPending}
+                      className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-600 hover:bg-emerald-50 disabled:opacity-60"
+                    >
+                      Javob berilgan
+                    </button>
+                  )}
+                  {msg.status !== "closed" && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange(msg.id, "closed")}
+                      disabled={updateStatus.isPending}
+                      className="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+                    >
+                      Yopish
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

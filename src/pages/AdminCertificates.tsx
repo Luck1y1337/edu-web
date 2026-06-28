@@ -63,7 +63,43 @@ const AdminCertificates = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((c) => {
+              const revoked = isRevoked(c.revokedAt);
+              const studentName = [c.student?.firstName, c.student?.lastName].filter(Boolean).join(" ") || "—";
+              return (
+                <li key={c.id} className="flex items-start gap-3 p-4">
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+                    {getInitials(c.student?.firstName, c.student?.lastName)}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="truncate font-semibold text-gray-900">{studentName}</p>
+                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${revoked ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-700"}`}>
+                        {revoked ? "Bekor qilingan" : "Faol"}
+                      </span>
+                    </div>
+                    <p className="truncate text-xs text-gray-500">{c.course?.name ?? "—"}</p>
+                    <p className="font-mono text-xs text-gray-500">{c.serialNumber} · {formatDate(c.issuedAt)}</p>
+                    {!revoked && (
+                      <button
+                        type="button"
+                        onClick={() => handleRevoke(c.id, c.serialNumber)}
+                        disabled={revokeCert.isPending}
+                        className="mt-2 rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        Bekor qilish
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

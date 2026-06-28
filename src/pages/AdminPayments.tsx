@@ -165,7 +165,68 @@ const AdminPayments = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((p) => {
+              const studentName = [p.student?.firstName, p.student?.lastName].filter(Boolean).join(" ") || "—";
+              const txnId = `#TXN-${p.id.slice(0, 6).toUpperCase()}`;
+              return (
+                <li key={p.id} className="flex flex-col gap-2 p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
+                        {getInitials(p.student?.firstName, p.student?.lastName)}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-gray-900">{studentName}</p>
+                        <p className="font-mono text-xs text-gray-500">{txnId}</p>
+                      </div>
+                    </div>
+                    <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadge(p.status)}`}>
+                      {statusLabel(p.status)}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                    <span className="font-bold text-gray-900">{formatAmount(p.amount)}</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${methodBadge(p.method)}`}>
+                      {methodLabel(p.method)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500">{p.course?.name ?? "—"} · {formatDate(p.paidAt || p.createdAt)}</p>
+                  <div className="flex items-center gap-2 pt-1">
+                    {editingStatusId === p.id ? (
+                      <StatusChanger
+                        paymentId={p.id}
+                        currentStatus={p.status}
+                        onClose={() => setEditingStatusId(null)}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setEditingStatusId(p.id)}
+                        className="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                      >
+                        Holatni o'zgartirish
+                      </button>
+                    )}
+                    {p.status === "paid" && editingStatusId !== p.id && (
+                      <button
+                        type="button"
+                        onClick={() => handleRefund(p.id)}
+                        disabled={refundPayment.isPending}
+                        className="rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        Qaytarish
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

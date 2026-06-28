@@ -122,7 +122,47 @@ const AdminBlogPosts = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((post) => (
+              <li key={post.id} className="flex flex-col gap-2 p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-gray-900">{post.title}</p>
+                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadge(post.status)}`}>
+                    {statusLabel(post.status)}
+                  </span>
+                </div>
+                {post.excerpt && <p className="text-xs text-gray-500 line-clamp-2">{post.excerpt}</p>}
+                <p className="text-xs text-gray-400">
+                  {post.category?.name ? `${post.category.name} · ` : ""}
+                  {formatDate(post.publishedAt || post.createdAt)}
+                </p>
+                <div className="flex items-center gap-2 pt-1">
+                  {post.status === "draft" && (
+                    <button
+                      type="button"
+                      onClick={() => handlePublish(post.id)}
+                      disabled={publishPost.isPending}
+                      className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-600 hover:bg-emerald-50 disabled:opacity-60"
+                    >
+                      Nashr etish
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(post.id, post.title)}
+                    disabled={deletePost.isPending}
+                    className="rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+                  >
+                    O'chirish
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

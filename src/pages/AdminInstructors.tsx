@@ -114,7 +114,59 @@ const AdminInstructors = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((inst) => {
+              const u = inst.user;
+              if (!u) return null;
+              const name = [u.firstName, u.lastName].filter(Boolean).join(" ");
+              return (
+                <li key={inst.id} className="flex items-start gap-3 p-4">
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700">
+                    {getInitials(u.firstName, u.lastName)}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <Link
+                        to={`/admin/instructors/${inst.id}`}
+                        className="truncate font-semibold text-gray-900 hover:text-blue-600"
+                      >
+                        {name}
+                      </Link>
+                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadge(inst.status)}`}>
+                        {statusLabel(inst.status)}
+                      </span>
+                    </div>
+                    <p className="truncate text-xs text-gray-500">{u.email}</p>
+                    <p className="mt-0.5 text-xs text-gray-500">
+                      {inst.specialty}
+                      {inst.experience != null ? ` · ${inst.experience} yil` : ""}
+                      {` · ${inst.coursesCount ?? 0} kurs`}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <Link
+                        to={`/admin/instructors/${inst.id}`}
+                        className="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                      >
+                        Profil
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(inst.id, name)}
+                        disabled={deleteInstructor.isPending}
+                        className="rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        O'chirish
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

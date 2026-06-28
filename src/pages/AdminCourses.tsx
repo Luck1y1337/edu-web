@@ -149,7 +149,68 @@ const AdminCourses = () => {
         </p>
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: card list */}
+          <ul className="divide-y divide-gray-100 md:hidden">
+            {items.map((course) => {
+              const instructorName = course.instructor
+                ? [course.instructor.firstName, course.instructor.lastName].filter(Boolean).join(" ")
+                : "—";
+              return (
+                <li key={course.id} className="flex items-start gap-3 p-4">
+                  {course.imageUrl ? (
+                    <img
+                      src={course.imageUrl}
+                      alt={course.name}
+                      className="h-12 w-16 shrink-0 rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                      <svg className="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <Link
+                        to={`/admin/courses/${course.id}`}
+                        className="truncate font-semibold text-gray-900 hover:text-blue-600"
+                      >
+                        {course.name}
+                      </Link>
+                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadgeBg(course.status)}`}>
+                        {statusLabel(course.status)}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-xs text-gray-500">
+                      {instructorName} · {formatPrice(course.price)} · {(course.studentsCount ?? 0).toLocaleString("uz-UZ")} o'quvchi
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <Link
+                        to={`/admin/courses/${course.id}`}
+                        className="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                      >
+                        Ko'rish
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(course.id, course.name)}
+                        disabled={deleteCourse.isPending}
+                        className="rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        O'chirish
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Desktop: table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-50">
                 <tr>

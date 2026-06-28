@@ -426,7 +426,7 @@ export interface AdminInstructorListItemDto {
   };
 }
 
-export interface AdminInstructorDetailDto extends AdminInstructorListItemDto {}
+export type AdminInstructorDetailDto = AdminInstructorListItemDto;
 
 export interface CreateInstructorDto {
   email: string;

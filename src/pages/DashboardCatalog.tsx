@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { SkeletonCard } from "../components/ui/Skeleton";
@@ -22,10 +22,12 @@ const DashboardCatalog = () => {
 
   // Keep the search box in sync when navigated here with a ?search= query (e.g. from the topbar).
   const urlSearch = searchParams.get("search") ?? "";
-  useEffect(() => {
+  const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearch);
+  if (prevUrlSearch !== urlSearch) {
+    setPrevUrlSearch(urlSearch);
     setSearchTerm(urlSearch);
     setPage(1);
-  }, [urlSearch]);
+  }
 
   const sortMap: Record<string, { sortBy?: string; order?: "asc" | "desc" }> = {
     popular: {},

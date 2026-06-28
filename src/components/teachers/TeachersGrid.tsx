@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import TeacherCard from "../ui/TeacherCard";
 import { StaggerContainer, StaggerItem } from "../ui/Motion";
@@ -14,10 +14,12 @@ const TeachersGrid = ({ items }: Props) => {
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
 
-  // Reset to first page whenever the filtered list changes.
-  useEffect(() => {
+  // Reset to first page whenever the filtered list changes (render-phase, no effect).
+  const [prevItems, setPrevItems] = useState(items);
+  if (prevItems !== items) {
+    setPrevItems(items);
     setPage(1);
-  }, [items]);
+  }
 
   const visible = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 

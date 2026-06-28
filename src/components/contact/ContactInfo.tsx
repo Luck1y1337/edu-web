@@ -11,6 +11,14 @@ const detailIcons: Record<ContactIconName, () => ReactElement> = {
   clock: Icon.clock,
 };
 
+// TODO: replace placeholder handles with the center's real social profiles.
+const socialUrls: Record<string, string> = {
+  Telegram: "https://t.me/oquvmarkaz",
+  Instagram: "https://instagram.com/oquvmarkaz",
+  Facebook: "https://facebook.com/oquvmarkaz",
+  YouTube: "https://youtube.com/@oquvmarkaz",
+};
+
 const socialIcons: Record<string, ReactElement> = {
   Telegram: (
     <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor">
@@ -102,7 +110,9 @@ const ContactInfo = () => {
           {socials.map((name) => (
             <li key={name}>
               <a
-                href="#"
+                href={socialUrls[name] ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={name}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:-translate-y-0.5 hover:bg-blue-600 hover:text-white"
               >

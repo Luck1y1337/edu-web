@@ -1,12 +1,21 @@
-import { Link, NavLink } from "react-router-dom";
+import { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { dashboardNav } from "../../data/dashboard.data";
 import useUserStore from "../../store/user.store";
 
 const DashboardTopbar = () => {
   const { user, setLogoutModalOpen } = useUserStore();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
   const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba";
   const initials = [user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase() || "T";
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const term = searchTerm.trim();
+    navigate(term ? `/dashboard/catalog?search=${encodeURIComponent(term)}` : "/dashboard/catalog");
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur">
@@ -22,14 +31,21 @@ const DashboardTopbar = () => {
           </span>
         </NavLink>
 
-        <div className="mx-auto hidden w-full max-w-md items-center gap-x-2.5 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-400 md:flex">
-          <Icon.search />
+        <form
+          onSubmit={handleSearch}
+          className="mx-auto hidden w-full max-w-md items-center gap-x-2.5 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-400 focus-within:border-blue-400 focus-within:bg-white md:flex"
+        >
+          <button type="submit" aria-label="Qidirish" className="shrink-0 transition-colors hover:text-blue-600">
+            <Icon.search />
+          </button>
           <input
-            type="text"
+            type="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Kurs qidirish..."
             className="w-full bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
           />
-        </div>
+        </form>
 
         <div className="ml-auto flex items-center gap-x-3 border-l border-gray-100 pl-4">
           {user?.avatarUrl ? (

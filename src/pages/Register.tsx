@@ -274,32 +274,6 @@ const Register = () => {
             </Button>
           </form>
 
-          {/* Ajratuvchi */}
-          <div className="my-3 flex items-center gap-3">
-            <span className="h-px flex-1 bg-gray-200" />
-            <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
-              Yoki
-            </span>
-            <span className="h-px flex-1 bg-gray-200" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
-            <button
-              type="button"
-              className="inline-flex min-h-[44px] items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-800 transition-all hover:border-gray-400 hover:bg-gray-50"
-            >
-              <Icon.google />
-              Google
-            </button>
-            <button
-              type="button"
-              className="inline-flex min-h-[44px] items-center justify-center gap-3 rounded-lg border border-gray-900 bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-black"
-            >
-              <Icon.apple />
-              Apple
-            </button>
-          </div>
-
           <p className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-500">
             Hisobingiz bormi?
             <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-700">

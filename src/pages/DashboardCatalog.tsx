@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { SkeletonCard } from "../components/ui/Skeleton";
 import { publicApi } from "../services/api";
@@ -13,11 +13,19 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
 
 const DashboardCatalog = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get("search") ?? "");
   const [category, setCategory] = useState("");
   const [level, setLevel] = useState("");
   const [sort, setSort] = useState("popular");
   const [page, setPage] = useState(1);
+
+  // Keep the search box in sync when navigated here with a ?search= query (e.g. from the topbar).
+  const urlSearch = searchParams.get("search") ?? "";
+  useEffect(() => {
+    setSearchTerm(urlSearch);
+    setPage(1);
+  }, [urlSearch]);
 
   const sortMap: Record<string, { sortBy?: string; order?: "asc" | "desc" }> = {
     popular: {},

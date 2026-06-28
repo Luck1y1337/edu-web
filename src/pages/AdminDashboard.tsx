@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { publicApi } from "../services/api";
 import { useAdminStudents } from "../hooks/api/useAdminStudents";
+import { useAdminReviews } from "../hooks/api/useAdminReviews";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import StatTileGrid from "../components/ui/StatTile";
 import type { StatTileItem } from "../components/ui/StatTile";
@@ -65,12 +67,44 @@ const AdminDashboard = () => {
     queryKey: queryKeys.public.stats,
     queryFn: publicApi.getStats,
   });
+  const reviewsQuery = useAdminReviews({ page: 1, limit: 1 });
 
   if (studentsQuery.isLoading) return <GlobalSpinner />;
 
   const studentsTotal = studentsQuery.data?.total ?? 0;
   const recentStudents = studentsQuery.data?.items ?? [];
   const stats = statsQuery.data;
+  const reviewsTotal = reviewsQuery.data?.total;
+
+  const handleExportReport = () => {
+    if (recentStudents.length === 0) {
+      toast.info("Eksport uchun ma'lumot yo'q");
+      return;
+    }
+    const header = ["Ism", "Familiya", "Email", "Telefon", "Holat", "Sana"];
+    const rows = recentStudents.map((s) => {
+      const u = s.user ?? {};
+      return [
+        u.firstName ?? "",
+        u.lastName ?? "",
+        u.email ?? "",
+        u.phone ?? "",
+        s.status ?? "",
+        formatDate(s.enrolledAt || u.createdAt),
+      ];
+    });
+    const csv = [header, ...rows]
+      .map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `talabalar-hisoboti-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success("Hisobot yuklab olindi");
+  };
 
   const tiles: StatTileItem[] = [
     {
@@ -140,6 +174,7 @@ const AdminDashboard = () => {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
+            onClick={handleExportReport}
             className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
           >
             <DownloadIcon />
@@ -305,7 +340,7 @@ const AdminDashboard = () => {
                   <span className="text-xs text-gray-500">Jami sharhlar soni</span>
                 </div>
                 <span className="text-sm font-bold text-gray-900 shrink-0">
-                  {"—"}
+                  {reviewsTotal ?? "—"}
                 </span>
               </li>
             </ol>

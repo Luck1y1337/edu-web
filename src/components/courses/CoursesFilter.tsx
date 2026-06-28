@@ -11,9 +11,11 @@ interface FilterState {
 
 interface Props {
   onFilter: (f: FilterState) => void;
+  /** Called after Apply/Clear — used to close the mobile drawer. */
+  onClose?: () => void;
 }
 
-const CoursesFilter = ({ onFilter }: Props) => {
+const CoursesFilter = ({ onFilter, onClose }: Props) => {
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     level: "Barchasi",
@@ -40,7 +42,10 @@ const CoursesFilter = ({ onFilter }: Props) => {
     }));
   };
 
-  const handleApply = () => onFilter(filters);
+  const handleApply = () => {
+    onFilter(filters);
+    onClose?.();
+  };
 
   const handleClear = () => {
     const cleared: FilterState = {
@@ -52,11 +57,11 @@ const CoursesFilter = ({ onFilter }: Props) => {
     };
     setFilters(cleared);
     onFilter(cleared);
+    onClose?.();
   };
 
   return (
-    <aside className="hidden w-64 shrink-0 lg:block" aria-label="Filtr">
-      <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
         {/* Kategoriya */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-gray-900">Kategoriya</h3>
@@ -162,8 +167,7 @@ const CoursesFilter = ({ onFilter }: Props) => {
             Tozalash
           </button>
         </div>
-      </div>
-    </aside>
+    </div>
   );
 };
 

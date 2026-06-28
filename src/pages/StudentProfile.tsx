@@ -30,7 +30,7 @@ const StudentProfile = () => {
     ? Math.round(enrollments.reduce((acc, e) => acc + e.progressPercent, 0) / enrollments.length)
     : 0;
 
-  const avatar = user.avatarUrl || `https://i.pravatar.cc/112?u=${user.id}`;
+  const initials = [user.firstName?.[0], user.lastName?.[0]].filter(Boolean).join("").toUpperCase() || "T";
   const statusLabel = user.status === "active" ? "Aktiv" : user.status === "banned" ? "Bloklangan" : "Nofaol";
 
   return (
@@ -40,11 +40,17 @@ const StudentProfile = () => {
         style={{ background: "linear-gradient(96.42deg, #EFF6FF 0%, #F5F3FF 100%)" }}
       >
         <div className="flex items-center gap-6">
-          <img
-            src={avatar}
-            alt={fullName}
-            className="h-28 w-28 rounded-full object-cover ring-4 ring-white"
-          />
+          {user.avatarUrl ? (
+            <img
+              src={user.avatarUrl}
+              alt={fullName}
+              className="h-28 w-28 rounded-full object-cover ring-4 ring-white"
+            />
+          ) : (
+            <span className="flex h-28 w-28 items-center justify-center rounded-full bg-blue-100 text-3xl font-bold text-blue-700 ring-4 ring-white">
+              {initials}
+            </span>
+          )}
           <div className="space-y-1">
             <div className="flex items-center gap-3">
               <h2 className="font-manrope text-2xl font-bold text-gray-900">{fullName}</h2>

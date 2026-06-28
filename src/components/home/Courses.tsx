@@ -50,11 +50,9 @@ const Courses = ({ items }: Props) => {
                   {course.desc}
                 </p>
                 <p className="mt-4 flex items-center gap-x-2 border-b border-gray-100 pb-4 text-xs text-gray-500">
-                  <img
-                    src={`https://i.pravatar.cc/40?u=${course.teacher}`}
-                    alt={course.teacher}
-                    className="h-5 w-5 rounded-full"
-                  />
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700">
+                    {course.teacher.charAt(0).toUpperCase()}
+                  </span>
                   O'qituvchi: {course.teacher}
                 </p>
                 <div className="mt-4 flex items-center justify-between">

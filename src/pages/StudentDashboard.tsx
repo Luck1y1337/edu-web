@@ -34,6 +34,12 @@ const StudentDashboard = () => {
   const enrolledIds = new Set(enrollments.map((e) => e.course.id));
   const recommendedFiltered = recommended.filter((c) => !enrolledIds.has(c.id));
 
+  const avgProgress = enrollments.length
+    ? Math.round(
+        enrollments.reduce((sum, e) => sum + (e.progressPercent ?? 0), 0) / enrollments.length
+      )
+    : 0;
+
   const stats = [
     {
       iconBg: "#EFF6FF",
@@ -56,9 +62,8 @@ const StudentDashboard = () => {
           <polyline points="12 6 12 12 16 14" />
         </>
       ),
-      value: String(enrollments.length),
-      label: "O'rganilgan soat",
-      trend: "+4s",
+      value: `${avgProgress}%`,
+      label: "O'rtacha progress",
     },
     {
       iconBg: "#ECFDF5",
@@ -142,7 +147,12 @@ const StudentDashboard = () => {
       {/* Active courses + Weekly goal (2fr / 1fr) */}
       <div className="grid gap-5 lg:grid-cols-[2fr_1fr]">
         <ActiveCourses items={activeEnrollments.slice(0, 4)} />
-        <WeeklyGoal />
+        <WeeklyGoal
+          avgProgress={avgProgress}
+          completed={completedEnrollments.length}
+          total={enrollments.length}
+          activeCount={activeEnrollments.length}
+        />
       </div>
 
       {/* Recommended courses */}

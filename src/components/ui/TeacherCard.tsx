@@ -7,6 +7,11 @@ const toSlug = (name: string) =>
 
 const TeacherCard = memo(({ teacher }: { teacher: Teacher }) => {
   const slug = teacher.id || toSlug(teacher.name);
+  const stats = [
+    { value: teacher.courses, label: "Kurs" },
+    { value: teacher.students, label: "Talaba" },
+    { value: teacher.rating, label: "Reyting" },
+  ].filter((s) => s.value !== "" && s.value != null);
   return (
     <Link
       to={`/teachers/${slug}`}
@@ -22,20 +27,16 @@ const TeacherCard = memo(({ teacher }: { teacher: Teacher }) => {
       <p className="mt-3 text-sm leading-relaxed text-gray-500 line-clamp-2">
         {teacher.desc}
       </p>
-      <div className="mt-5 flex w-full items-center justify-center gap-5 border-t border-gray-100 pt-4">
-        <div>
-          <p className="text-lg font-bold text-gray-900">{teacher.courses}</p>
-          <p className="text-xs text-gray-400">Kurs</p>
+      {stats.length > 0 && (
+        <div className="mt-5 flex w-full items-center justify-center gap-5 border-t border-gray-100 pt-4">
+          {stats.map((s) => (
+            <div key={s.label}>
+              <p className="text-lg font-bold text-gray-900">{s.value}</p>
+              <p className="text-xs text-gray-400">{s.label}</p>
+            </div>
+          ))}
         </div>
-        <div>
-          <p className="text-lg font-bold text-gray-900">{teacher.students}</p>
-          <p className="text-xs text-gray-400">Talaba</p>
-        </div>
-        <div>
-          <p className="text-lg font-bold text-gray-900">{teacher.rating}</p>
-          <p className="text-xs text-gray-400">Reyting</p>
-        </div>
-      </div>
+      )}
     </Link>
   );
 });

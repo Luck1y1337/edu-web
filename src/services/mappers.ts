@@ -119,9 +119,11 @@ export const mapApiTeacherToTeacher = (teacher: PublicTeacherDto): Teacher => ({
   name: `${teacher.firstName} ${teacher.lastName}`,
   role: teacher.specialty,
   desc: teacher.bio || `${teacher.specialty} bo'yicha tajribali o'qituvchi.`,
-  courses: "0",
-  students: "0",
-  rating: String(teacher.rating || "4.8"),
+  // Real per-instructor aggregates aren't returned by the public API yet —
+  // leave blank so the card hides empty metrics instead of showing fake zeros.
+  courses: "",
+  students: "",
+  rating: teacher.rating != null ? String(teacher.rating) : "",
   id: teacher.id,
 });
 

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PageHero from "../components/ui/PageHero";
 import { FadeIn, StaggerContainer, StaggerItem } from "../components/ui/Motion";
 
 /* ── Data ── */
@@ -119,24 +120,11 @@ const Pricing = () => {
   return (
     <>
       {/* Hero */}
-      <section style={{ background: "linear-gradient(98.58deg, #EFF6FF 0%, #F5F3FF 100%)" }}>
-        <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-gray-500">
-            <Link to="/" className="hover:text-gray-700">Bosh sahifa</Link>
-            <svg className="h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="font-semibold text-gray-900">Narxlar</span>
-          </nav>
-          <h1 className="font-manrope text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Har bir kurs uchun adolatli narx
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-gray-500">
-            Har kurs — bir martalik to'lov va umrbod kirish. Yashirin to'lovlar yo'q, demo darslar bepul. Quyida darajalar bo'yicha narxlar.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumb="Narxlar"
+        title="Har bir kurs uchun adolatli narx"
+        subtitle="Har kurs — bir martalik to'lov va umrbod kirish. Yashirin to'lovlar yo'q, demo darslar bepul. Quyida darajalar bo'yicha narxlar."
+      />
 
       {/* Pricing Cards */}
       <section className="py-16">

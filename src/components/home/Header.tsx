@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-18 max-w-360 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5">
           <svg className="h-9 w-9 shrink-0" viewBox="0 0 36 36" fill="none">

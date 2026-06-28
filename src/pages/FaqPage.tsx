@@ -138,7 +138,7 @@ const FaqPage = () => {
   return (
     <>
       {/* Hero */}
-      <section style={{ background: "linear-gradient(99.79deg, #EFF6FF 0%, #F5F3FF 100%)" }}>
+      <section className="bg-linear-to-br from-blue-50 to-indigo-50">
         <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-gray-500">

@@ -11,7 +11,7 @@ const Contact = () => {
         subtitle="Savollaringiz bormi? Bepul konsultatsiya olishni xohlaysizmi? Bizga yozing — javob beramiz."
       />
       <section className="py-10 sm:py-12 md:py-14">
-        <div className="mx-auto grid max-w-360 grid-cols-1 gap-7 px-4 sm:px-6 lg:grid-cols-[1.2fr_1fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-7 px-4 sm:px-6 lg:grid-cols-[1.2fr_1fr] lg:px-8">
           <ContactForm />
           <ContactInfo />
         </div>

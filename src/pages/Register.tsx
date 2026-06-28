@@ -18,7 +18,7 @@ const Register = () => {
   const navigate = useNavigate();
   const form = useForm<RegisterForm>();
   const { mutateAsync, isSuccess, isPending } = useRegister();
-  const [showPassword, setShowPassword] = useState("password");
+  const [showPassword, setShowPassword] = useState(false);
   const {
     formState: { errors },
   } = form;
@@ -200,7 +200,7 @@ const Register = () => {
             />
             <Input
               name="password"
-              type={showPassword}
+              type={showPassword ? "text" : "password"}
               form={form}
               placeholder="Kamida 8 ta belgi"
               label="Parol"
@@ -226,13 +226,9 @@ const Register = () => {
                 <button
                   type="button"
                   className="cursor-pointer"
-                  onClick={() =>
-                    setShowPassword(
-                      showPassword === "password" ? "text" : "password",
-                    )
-                  }
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword === "password" ? <Icon.eye /> : <Icon.eyeOff />}
+                  {showPassword ? <Icon.eyeOff /> : <Icon.eye />}
                 </button>
               }
             />

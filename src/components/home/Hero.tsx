@@ -5,7 +5,7 @@ import { FadeIn } from "../ui/Motion";
 
 const Hero = () => {
   return (
-    <div className="mx-auto grid max-w-360 items-center gap-12 px-4 pb-12 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
+    <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-12 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
       <FadeIn direction="right">
         <span className="inline-flex items-center gap-x-2 rounded-full border border-blue-200 bg-white px-3.5 py-1.5 text-xs font-medium text-blue-600">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />

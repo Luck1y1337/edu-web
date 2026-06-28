@@ -9,7 +9,7 @@ interface PageHeroProps {
 const PageHero = ({ breadcrumb, title, subtitle }: PageHeroProps) => {
   return (
     <section className="border-b border-gray-200 bg-linear-to-br from-blue-50 to-indigo-50 py-10 sm:py-12 md:py-14">
-      <div className="mx-auto max-w-360 px-4 text-center sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
         <nav aria-label="Breadcrumb" className="mb-5 inline-flex">
           <ol className="flex items-center gap-x-2 text-sm">
             <li>

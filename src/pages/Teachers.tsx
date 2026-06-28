@@ -57,7 +57,7 @@ const Teachers = () => {
         }
       />
       <section className="py-10 sm:py-12 md:py-14">
-        <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <TeachersToolbar
             search={search}
             onSearchChange={setSearch}

@@ -5,6 +5,7 @@ export const navLinks: NavLink[] = [
   { label: "Kurslar", path: "/courses" },
   { label: "O'qituvchilar", path: "/teachers" },
   { label: "Blog", path: "/blog" },
+  { label: "FAQ", path: "/faq" },
   { label: "Aloqa", path: "/contact" },
 ];
 
@@ -164,6 +165,7 @@ export const footerPages: NavLink[] = [
   { label: "O'qituvchilar", path: "/teachers" },
   { label: "Blog", path: "/blog" },
   { label: "Biz haqimizda", path: "/about" },
+  { label: "FAQ", path: "/faq" },
   { label: "Aloqa", path: "/contact" },
 ];
 

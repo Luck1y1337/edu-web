@@ -5,6 +5,7 @@ import { publicApi } from "../services/api";
 import { mapApiCourseToCourse } from "../services/mappers";
 import { SkeletonCard } from "../components/ui/Skeleton";
 import { queryKeys } from "../config/queryKeys";
+import Seo from "../components/ui/Seo";
 
 const Courses = () => {
   const coursesQuery = useQuery({
@@ -16,6 +17,10 @@ const Courses = () => {
 
   return (
     <>
+      <Seo
+        title="Kurslar"
+        description="35+ zamonaviy IT va dizayn yo'nalishi. Frontend, backend, mobil, dizayn va marketing kurslari — boshlovchidan mutaxassisgacha."
+      />
       <CoursesHero />
       <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

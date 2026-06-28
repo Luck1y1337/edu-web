@@ -10,6 +10,7 @@ import Testimonials from "../components/home/Testimonials";
 import { stats as statsFallback } from "../data/home.data";
 import { publicApi } from "../services/api";
 import { queryKeys } from "../config/queryKeys";
+import Seo from "../components/ui/Seo";
 import {
   mapApiCourseToHomeCourse,
   mapApiStats,
@@ -42,6 +43,10 @@ const Home = () => {
 
   return (
     <>
+      <Seo
+        title="Bosh sahifa"
+        description="Toshkentdagi yetakchi IT va dizayn ta'lim markazi. Zamonaviy kurslar, tajribali o'qituvchilar va kafolatlangan natija."
+      />
       <section className="bg-linear-to-b from-blue-50/60 to-white">
         <Hero />
         <Stats items={visibleStats} />

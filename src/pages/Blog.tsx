@@ -4,6 +4,7 @@ import BlogGrid from "../components/blog/BlogGrid";
 import { useBlogPosts, useBlogCategories } from "../hooks/api/useBlog";
 import { mapApiBlogPost } from "../services/mappers";
 import { SkeletonCard } from "../components/ui/Skeleton";
+import Seo from "../components/ui/Seo";
 
 const Blog = () => {
   const postsQuery = useBlogPosts({ limit: 50 });
@@ -16,6 +17,10 @@ const Blog = () => {
 
   return (
     <>
+      <Seo
+        title="Blog"
+        description="IT, dizayn va karyera bo'yicha foydali maqolalar, maslahatlar va yangiliklar."
+      />
       <BlogHero />
 
       <section className="py-16 sm:py-20">

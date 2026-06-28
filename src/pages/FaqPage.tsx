@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "../components/ui/Motion";
+import Seo from "../components/ui/Seo";
 
 /* ── FAQ Data ── */
 const faqData: Record<string, { q: string; a: string }[]> = {
@@ -138,6 +139,10 @@ const FaqPage = () => {
 
   return (
     <>
+      <Seo
+        title="FAQ"
+        description="Kurslar, to'lov va sertifikatlar haqidagi eng ko'p so'raladigan savollarga javoblar."
+      />
       {/* Hero */}
       <section className="bg-linear-to-br from-blue-50 to-indigo-50">
         <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">

@@ -1,10 +1,15 @@
 import PageHero from "../components/ui/PageHero";
 import ContactForm from "../components/contact/ContactForm";
 import ContactInfo from "../components/contact/ContactInfo";
+import Seo from "../components/ui/Seo";
 
 const Contact = () => {
   return (
     <>
+      <Seo
+        title="Aloqa"
+        description="Biz bilan bog'laning — savollaringizga javob beramiz va bepul konsultatsiya beramiz."
+      />
       <PageHero
         breadcrumb="Aloqa"
         title="Biz bilan bog'laning"

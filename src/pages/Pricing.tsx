@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PageHero from "../components/ui/PageHero";
+import Seo from "../components/ui/Seo";
 import { FadeIn, StaggerContainer, StaggerItem } from "../components/ui/Motion";
 
 /* ── Data ── */
@@ -119,6 +120,10 @@ const Cross = () => (
 const Pricing = () => {
   return (
     <>
+      <Seo
+        title="Narxlar"
+        description="Kurslar narxlari va chegirmalar. Bir martalik to'lov, umrbod kirish — yashirin to'lovlarsiz."
+      />
       {/* Hero */}
       <PageHero
         breadcrumb="Narxlar"

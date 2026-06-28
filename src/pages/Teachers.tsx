@@ -7,6 +7,7 @@ import { publicApi } from "../services/api";
 import { mapApiTeacherToTeacher } from "../services/mappers";
 import { SkeletonCard } from "../components/ui/Skeleton";
 import { queryKeys } from "../config/queryKeys";
+import Seo from "../components/ui/Seo";
 
 // Maps a filter pill label to keywords that may appear in a teacher's role/specialty.
 const filterKeywords: Record<string, string[]> = {
@@ -47,6 +48,10 @@ const Teachers = () => {
 
   return (
     <>
+      <Seo
+        title="O'qituvchilar"
+        description="Soha mutaxassislaridan iborat jamoamiz bilan tanishing — tajribali IT va dizayn o'qituvchilari."
+      />
       <PageHero
         breadcrumb="O'qituvchilar"
         title="Bizning o'qituvchilar"

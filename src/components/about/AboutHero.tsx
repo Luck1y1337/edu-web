@@ -1,10 +1,12 @@
+import { FadeIn } from "../ui/Motion";
+
 const AboutHero = () => {
   return (
     <section className="bg-gray-50 py-12 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Content */}
-          <div className="flex flex-col gap-5">
+          <FadeIn direction="right" className="flex flex-col gap-5">
             <span className="inline-flex w-fit items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-700">
               Biz haqimizda
             </span>
@@ -21,10 +23,10 @@ const AboutHero = () => {
               Bizning maqsad — har bir o'zbek yoshining zamonaviy mehnat
               bozorida muvaffaqiyatli o'rin egallashiga yordam berish.
             </p>
-          </div>
+          </FadeIn>
 
           {/* Image */}
-          <div>
+          <FadeIn direction="left" delay={0.15}>
             <img
               src="/images/about/hero.jpg"
               alt="Online o'quv platformasi jamoasi"
@@ -34,7 +36,7 @@ const AboutHero = () => {
                   "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop";
               }}
             />
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>

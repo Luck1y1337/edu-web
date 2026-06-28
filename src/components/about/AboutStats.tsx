@@ -1,3 +1,5 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
+
 const achievements = [
   {
     icon: (
@@ -45,21 +47,21 @@ const AboutStats = () => {
     <section className="bg-gray-50 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-12 flex flex-col items-center text-center">
+        <FadeIn className="mb-12 flex flex-col items-center text-center">
           <span className="mb-3 text-xs font-bold uppercase tracking-widest text-blue-600">
             Yutuqlar
           </span>
           <h2 className="font-manrope text-3xl font-bold tracking-tight text-gray-900">
             Faxrimiz bo'lgan yutuqlar
           </h2>
-        </div>
+        </FadeIn>
 
         {/* Achievement cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerContainer className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {achievements.map((item) => (
-            <article
+            <StaggerItem
               key={item.title}
-              className="flex flex-col items-center gap-4 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm"
+              className="flex flex-col items-center gap-4 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
             >
               <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                 {item.icon}
@@ -68,9 +70,9 @@ const AboutStats = () => {
                 {item.title}
               </h3>
               <p className="text-sm text-gray-500">{item.text}</p>
-            </article>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

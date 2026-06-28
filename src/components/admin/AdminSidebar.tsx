@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import useUserStore from "../../store/user.store";
 
@@ -54,14 +54,17 @@ const AdminSidebar = () => {
   return (
     <aside className="hidden w-65 shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
       {/* Logo */}
-      <header className="flex h-18 items-center gap-3 border-b border-gray-100 px-6">
+      <Link
+        to="/"
+        className="flex h-18 items-center gap-3 border-b border-gray-100 px-6 transition-colors hover:bg-gray-50"
+      >
         <svg className="h-9 w-9 shrink-0" viewBox="0 0 36 36" fill="none">
           <rect width="36" height="36" rx="9" fill="#2563EB" />
           <path d="M10 13L18 8L26 13L18 18L10 13Z" fill="white" />
           <path d="M13 16V21C13 21 15.5 23 18 23C20.5 23 23 21 23 21V16" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         <span className="font-manrope text-base font-bold text-gray-900">O'quv Markaz</span>
-      </header>
+      </Link>
 
       {/* Nav sections */}
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-6">
@@ -105,25 +108,34 @@ const AdminSidebar = () => {
       </nav>
 
       {/* User footer */}
-      <footer className="flex items-center gap-3 border-t border-gray-100 px-4 py-4">
-        {user?.avatarUrl ? (
-          <img src={user.avatarUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
-        ) : (
-          <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
-            {fullName.charAt(0).toUpperCase()}
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500" />
-          </span>
-        )}
-        <div className="flex-1 min-w-0">
-          <p className="truncate text-sm font-semibold text-gray-900">{fullName}</p>
-          <p className="truncate text-xs text-gray-400">{user?.role === "super_admin" ? "Super admin" : "Admin"}</p>
+      <footer className="space-y-3 border-t border-gray-100 px-4 py-4">
+        <div className="flex items-center gap-3">
+          {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
+          ) : (
+            <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+              {fullName.charAt(0).toUpperCase()}
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500" />
+            </span>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="truncate text-sm font-semibold text-gray-900">{fullName}</p>
+            <p className="truncate text-xs text-gray-400">{user?.role === "super_admin" ? "Super admin" : "Admin"}</p>
+          </div>
         </div>
+        <Link
+          to="/"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        >
+          <Icon.home />
+          Bosh sahifa
+        </Link>
         <button
           onClick={() => setLogoutModalOpen(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
-          aria-label="Chiqish"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:border-red-200 hover:bg-red-50"
         >
           <Icon.logout />
+          Chiqish
         </button>
       </footer>
     </aside>

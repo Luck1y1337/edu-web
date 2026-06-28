@@ -11,11 +11,11 @@ const Hero = () => {
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
           Yangi guruhlar — 1 iyuldan
         </span>
-        <h1 className="mt-6 font-manrope text-5xl font-extrabold leading-tight tracking-tight">
+        <h1 className="mt-6 font-manrope text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
           Kelajak kasbingizni{" "}
           <span className="text-blue-600">bugun boshlang.</span>
         </h1>
-        <p className="mt-5 max-w-lg text-lg leading-relaxed text-gray-500">
+        <p className="mt-5 max-w-lg text-base leading-relaxed text-gray-500 sm:text-lg">
           Toshkentdagi yetakchi IT va dizayn ta'lim markazi. Tajribali
           o'qituvchilar, zamonaviy dasturlar va kafolatlangan natija. 5000+
           bitiruvchimiz IT sohada ishlamoqda.

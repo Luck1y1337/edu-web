@@ -1,12 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import DashboardSidebar from "../dashboard/DashboardSidebar";
 import DashboardTopbar from "../dashboard/DashboardTopbar";
 import LogoutModal from "../LogoutModal";
 import ErrorBoundary from "../ui/ErrorBoundary";
+import { PageTransition } from "../ui/Motion";
 import useUserStore from "../../store/user.store";
 
 const DashboardLayout = () => {
   const { isLogoutModalOpen, setLogoutModalOpen } = useUserStore();
+  const location = useLocation();
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -18,7 +20,9 @@ const DashboardLayout = () => {
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <ErrorBoundary>
-              <Outlet />
+              <PageTransition key={location.pathname}>
+                <Outlet />
+              </PageTransition>
             </ErrorBoundary>
           </div>
         </main>

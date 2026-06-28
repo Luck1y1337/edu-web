@@ -1,4 +1,5 @@
 import { missionCards } from "../../data/about.data";
+import { FadeIn, StaggerContainer, StaggerItem } from "../ui/Motion";
 
 const iconMap: Record<string, React.ReactNode> = {
   mission: (
@@ -21,23 +22,23 @@ const AboutMission = () => {
     <section className="py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-12 flex flex-col items-center text-center">
+        <FadeIn className="mb-12 flex flex-col items-center text-center">
           <span className="mb-3 text-xs font-bold uppercase tracking-widest text-blue-600">
             Maqsad va orzu
           </span>
           <h2 className="font-manrope text-3xl font-bold tracking-tight text-gray-900">
             Missiya va vizyonimiz
           </h2>
-        </div>
+        </FadeIn>
 
         {/* Cards */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <StaggerContainer className="grid gap-6 lg:grid-cols-2">
           {missionCards.map((card) => {
             const isAccent = card.id === "vision";
             return (
-              <article
+              <StaggerItem
                 key={card.id}
-                className={`flex flex-col gap-5 rounded-xl border p-8 shadow-sm sm:p-10 ${
+                className={`flex flex-col gap-5 rounded-xl border p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-10 ${
                   isAccent
                     ? "border-blue-200 bg-blue-50"
                     : "border-gray-200 bg-white"
@@ -58,10 +59,10 @@ const AboutMission = () => {
                 <p className="text-base leading-relaxed text-gray-500">
                   {card.text}
                 </p>
-              </article>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

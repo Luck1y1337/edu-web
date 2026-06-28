@@ -2,6 +2,23 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
+interface PageTransitionProps {
+  children: ReactNode;
+  className?: string;
+}
+
+/* Wraps route content so each page softly fades/slides in on navigation. */
+export const PageTransition = ({ children, className }: PageTransitionProps) => (
+  <motion.div
+    initial={{ opacity: 0, y: 12 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.35, ease: "easeOut" }}
+    className={className}
+  >
+    {children}
+  </motion.div>
+);
+
 interface FadeInProps {
   children: ReactNode;
   direction?: "up" | "down" | "left" | "right" | "none";

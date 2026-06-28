@@ -1,10 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { dashboardNav } from "../../data/dashboard.data";
 import useUserStore from "../../store/user.store";
 
 const DashboardTopbar = () => {
   const { user, setLogoutModalOpen } = useUserStore();
+  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba";
+  const initials = [user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase() || "T";
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur">
@@ -30,15 +32,28 @@ const DashboardTopbar = () => {
         </div>
 
         <div className="ml-auto flex items-center gap-x-3 border-l border-gray-100 pl-4">
-          <img
-            src="https://i.pravatar.cc/80?img=11"
-            alt={[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}
-            className="h-9 w-9 rounded-full object-cover"
-          />
+          {user?.avatarUrl ? (
+            <img
+              src={user.avatarUrl}
+              alt={fullName}
+              className="h-9 w-9 rounded-full object-cover"
+            />
+          ) : (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
+              {initials}
+            </span>
+          )}
           <div className="hidden text-right sm:block min-w-0 max-w-[150px] lg:max-w-[200px]">
-            <p className="text-sm font-semibold text-gray-900 truncate">{[user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Talaba"}</p>
+            <p className="text-sm font-semibold text-gray-900 truncate">{fullName}</p>
             <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
           </div>
+          <Link
+            to="/"
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors hover:bg-blue-50 hover:text-blue-600 lg:hidden"
+            aria-label="Bosh sahifa"
+          >
+            <Icon.home />
+          </Link>
           <button
             onClick={() => setLogoutModalOpen(true)}
             className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 lg:hidden"

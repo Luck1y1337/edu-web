@@ -13,46 +13,46 @@ const CourseDescription = ({ course }: Props) => (
         Kurs haqida
       </h2>
       <p className="text-base leading-relaxed text-gray-700">
-        JavaScript — zamonaviy web ilovalarining asosi. Bu kurs sizga hech qanday
-        oldindan tajriba kerak emas — biz noldan boshlab to'liq fullstack JavaScript
-        dasturchisigacha ko'taramiz.
+        {course.description}
       </p>
-      <p className="mt-3 text-base leading-relaxed text-gray-700">
-        Har bir mavzu nazariy darsdan keyin amaliy mashqlar bilan mustahkamlanadi. Kurs
-        davomida 5 ta real biznes loyihasi ustida ishlaysiz — bular sizning portfolioda
-        bo'ladi.
-      </p>
+      {course.longDescription && (
+        <p className="mt-3 text-base leading-relaxed text-gray-700">
+          {course.longDescription}
+        </p>
+      )}
     </div>
 
     {/* What you learn grid */}
-    <div>
-      <h3 className="font-manrope mb-4 text-lg font-bold tracking-tight text-gray-900">
-        Nimalarni o'rganasiz?
-      </h3>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {course.whatYouLearn.map((pair, i) =>
-          pair.map((item, j) => (
-            <div
-              key={`${i}-${j}`}
-              className="flex items-start gap-2.5 text-sm text-gray-700"
-            >
-              <svg
-                className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+    {course.whatYouLearn.length > 0 && (
+      <div>
+        <h3 className="font-manrope mb-4 text-lg font-bold tracking-tight text-gray-900">
+          Nimalarni o'rganasiz?
+        </h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {course.whatYouLearn.map((pair, i) =>
+            pair.map((item, j) => (
+              <div
+                key={`${i}-${j}`}
+                className="flex items-start gap-2.5 text-sm text-gray-700"
               >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              {item}
-            </div>
-          ))
-        )}
+                <svg
+                  className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                {item}
+              </div>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    )}
 
     {/* For whom */}
     <div>
@@ -184,10 +184,9 @@ const CourseTeacher = ({ course }: Props) => (
         className="h-24 w-24 shrink-0 rounded-2xl object-cover"
       />
       <div>
-        <h3 className="font-manrope text-lg font-bold text-gray-900">
+        <h3 className="mb-3 font-manrope text-lg font-bold text-gray-900">
           {course.teacher}
         </h3>
-        <p className="mb-3 text-sm text-blue-600">JavaScript Lead</p>
         <p className="text-sm leading-relaxed text-gray-600">{course.teacherBio}</p>
       </div>
     </article>

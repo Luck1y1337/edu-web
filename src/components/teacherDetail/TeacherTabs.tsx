@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import type { TeacherDetailData } from "../../data/teacherDetail.data";
-import { allCourses } from "../../data/courses.data";
+import type { Course } from "../../data/courses.data";
+import { publicApi } from "../../services/api";
+import { mapApiCourseToCourse } from "../../services/mappers";
+import { queryKeys } from "../../config/queryKeys";
 
 interface Props {
   teacher: TeacherDetailData;
@@ -74,18 +78,19 @@ const AboutTab = ({ teacher }: Props) => (
 );
 
 /* ── Kurslari tab ── */
-const CoursesTab = ({ teacher }: Props) => {
-  const teacherCourses = allCourses.filter((c) => c.teacher === teacher.name);
+const CoursesTab = ({ courses, loading }: { courses: Course[]; loading: boolean }) => {
   return (
     <div className="flex flex-col gap-5">
       <h2 className="font-manrope text-2xl font-bold tracking-tight text-gray-900">
-        Kurslari ({teacherCourses.length})
+        Kurslari ({courses.length})
       </h2>
-      {teacherCourses.length === 0 ? (
+      {loading ? (
+        <p className="text-gray-400">Yuklanmoqda...</p>
+      ) : courses.length === 0 ? (
         <p className="text-gray-400">Hozircha kurslar mavjud emas.</p>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2">
-          {teacherCourses.map((c) => (
+          {courses.map((c) => (
             <Link
               key={c.id}
               to={`/courses/${c.slug}`}
@@ -146,9 +151,21 @@ const ReviewsTab = ({ teacher }: Props) => (
 /* ── Main TeacherTabs ── */
 const TeacherTabs = ({ teacher }: Props) => {
   const [active, setActive] = useState(0);
+
+  const coursesQuery = useQuery({
+    queryKey: queryKeys.public.courses("all"),
+    queryFn: () => publicApi.getCourses({ limit: 100 }),
+  });
+  const teacherCourses = (coursesQuery.data?.items ?? [])
+    .filter((c) => c.teacher?.id === teacher.id)
+    .map((c, i) => mapApiCourseToCourse(c, i));
+
   const tabs = [
     { label: "Haqida", panel: <AboutTab teacher={teacher} /> },
-    { label: `Kurslari (${teacher.courses})`, panel: <CoursesTab teacher={teacher} /> },
+    {
+      label: `Kurslari (${teacherCourses.length})`,
+      panel: <CoursesTab courses={teacherCourses} loading={coursesQuery.isLoading} />,
+    },
     { label: `Sharhlar (${teacher.reviewCount})`, panel: <ReviewsTab teacher={teacher} /> },
   ];
 

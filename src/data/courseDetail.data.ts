@@ -2,6 +2,7 @@ import type { Course } from "./courses.data";
 import { allCourses } from "./courses.data";
 
 export interface CourseDetailData extends Course {
+  longDescription?: string;
   oldPrice: string;
   reviewCount: string;
   studentCount: string;

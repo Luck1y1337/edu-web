@@ -93,6 +93,7 @@ export const mapApiCourseToDetail = (course: PublicCourseDto, index = 0): Course
 
   return {
     ...mapped,
+    longDescription: course.longDescription || "",
     oldPrice: formatPrice(course.oldPrice),
     reviewCount: "0",
     studentCount: "0",
@@ -106,7 +107,9 @@ export const mapApiCourseToDetail = (course: PublicCourseDto, index = 0): Course
       "Mentor bilan aloqa",
       "Bo'lib to'lash mumkin",
     ],
-    whatYouLearn: [[course.description], [course.longDescription || course.description]],
+    // No structured "learning outcomes" field in the API — leave empty so the
+    // section hides instead of echoing the description back as bullet points.
+    whatYouLearn: [],
     forWhom: ["Yangi kasb o'rganmoqchi bo'lganlar uchun", "Amaliy loyiha bilan o'qishni xohlaganlar uchun"],
     requiredSkills: ["O'rganishga qiziqish", "Kompyuter savodxonligi"],
     curriculum: curriculum?.length ? curriculum : [{ title: course.name, lessons: [] }],

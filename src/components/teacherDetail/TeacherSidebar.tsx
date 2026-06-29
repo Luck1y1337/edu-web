@@ -9,6 +9,7 @@ const TeacherSidebar = ({ teacher }: Props) => {
   return (
     <aside className="flex w-full shrink-0 flex-col gap-5 lg:w-96">
       {/* Certificates */}
+      {teacher.certificates.length > 0 && (
       <div className="rounded-2xl border border-gray-200 bg-white p-6">
         <h3 className="font-manrope mb-4 text-lg font-bold tracking-tight text-gray-900">
           Sertifikatlar
@@ -29,8 +30,10 @@ const TeacherSidebar = ({ teacher }: Props) => {
           ))}
         </ul>
       </div>
+      )}
 
       {/* Schedule */}
+      {teacher.schedule.length > 0 && (
       <div className="rounded-2xl border border-gray-200 bg-white p-6">
         <h3 className="font-manrope mb-4 text-lg font-bold tracking-tight text-gray-900">
           Dars beriladigan vaqtlari
@@ -44,6 +47,7 @@ const TeacherSidebar = ({ teacher }: Props) => {
           ))}
         </ul>
       </div>
+      )}
 
       {/* CTA */}
       <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white">

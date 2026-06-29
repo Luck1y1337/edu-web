@@ -10,6 +10,15 @@ import { SkeletonCard } from "../components/ui/Skeleton";
 const fallbackImage =
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=70";
 
+const formatCompletedDate = (iso?: string | null) => {
+  if (!iso) return "";
+  try {
+    return new Intl.DateTimeFormat("uz-UZ", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
+  } catch {
+    return "";
+  }
+};
+
 /* ───────── Active course card ───────── */
 const ActiveCourseCard = memo(({ e }: { e: StudentEnrollmentListItemDto }) => {
   const completedLessons = e.course.lessonsCount
@@ -90,8 +99,11 @@ const CompletedCourseCard = memo(({ e }: { e: StudentEnrollmentListItemDto }) =>
         {e.course.name}
       </h4>
       <p className="text-sm text-gray-500">
-        Yakuniy natija: <strong className="text-emerald-700">100% (A'lo)</strong>
+        Yakuniy progress: <strong className="text-emerald-700">{e.progressPercent}%</strong>
       </p>
+      {e.completedAt && (
+        <p className="text-xs text-gray-400">Tugatilgan: {formatCompletedDate(e.completedAt)}</p>
+      )}
 
       {/* Button */}
       <div className="mt-auto pt-3">

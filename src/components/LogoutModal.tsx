@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useLogout } from "../hooks/api/useLogout";
 
 interface LogoutModalProps {
@@ -8,6 +8,45 @@ interface LogoutModalProps {
 
 const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   const { mutateAsync, isPending } = useLogout(onClose);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const confirmBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Escape to close, lock body scroll, move focus into the dialog
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevFocus = document.activeElement as HTMLElement | null;
+    confirmBtnRef.current?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key === "Tab" && panelRef.current) {
+        const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+      prevFocus?.focus();
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -16,17 +55,29 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm transition-opacity">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm transition-opacity"
+    >
       {/* Modal Container */}
-      <div className="relative w-full max-w-[480px] rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-        
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="logout-modal-title"
+        aria-describedby="logout-modal-desc"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[480px] rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+      >
+
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-manrope text-xl font-bold text-gray-900">
+          <h3 id="logout-modal-title" className="font-manrope text-xl font-bold text-gray-900">
             Tizimdan chiqasizmi?
           </h3>
           <button
             onClick={onClose}
+            aria-label="Yopish"
             className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -37,7 +88,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
 
         {/* Body */}
         <div className="mb-8">
-          <p className="text-sm leading-relaxed text-gray-500">
+          <p id="logout-modal-desc" className="text-sm leading-relaxed text-gray-500">
             Hisobingizdan chiqmoqchimisiz? Davom etish uchun qaytadan login va parolingiz bilan tizimga kirishingiz kerak bo'ladi.
           </p>
         </div>
@@ -51,6 +102,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
             Bekor qilish
           </button>
           <button
+            ref={confirmBtnRef}
             onClick={handleLogout}
             disabled={isPending}
             className={`rounded-lg px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition ${

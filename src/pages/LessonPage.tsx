@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import { useEnrollment, useEnrollments, useMarkLessonProgress } from "../hooks/api/useEnrollments";
@@ -115,6 +115,13 @@ const BookIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const ListIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+  </svg>
+);
+
 /* ── Sidebar module accordion ──────────────────────────── */
 
 const SidebarModule = ({
@@ -123,12 +130,14 @@ const SidebarModule = ({
   courseId,
   isOpen,
   onToggle,
+  onNavigate,
 }: {
   module: EnrollmentModuleDto;
   currentLessonId: string;
   courseId: string;
   isOpen: boolean;
   onToggle: () => void;
+  onNavigate?: () => void;
 }) => {
   const completed = module.lessons.filter((l) => l.progress?.status === "completed").length;
 
@@ -164,6 +173,7 @@ const SidebarModule = ({
             <li key={l.id}>
               <Link
                 to={`/dashboard/lesson/${l.id}?course=${courseId}`}
+                onClick={onNavigate}
                 className={`flex items-center gap-3 px-5 py-3 text-sm border-t border-gray-100 transition-colors ${
                   isActive
                     ? "bg-blue-50 border-l-2 border-l-blue-600 pl-4.5 font-semibold text-blue-700"
@@ -195,6 +205,55 @@ const SidebarModule = ({
     </div>
   );
 };
+
+/* ── Curriculum panel (shared by desktop aside + mobile drawer) ── */
+
+const CurriculumContent = ({
+  enrollment,
+  lessonId,
+  completedLessons,
+  total,
+  getModuleOpen,
+  toggleModule,
+  onNavigate,
+}: {
+  enrollment: StudentEnrollmentDetailDto;
+  lessonId: string;
+  completedLessons: number;
+  total: number;
+  getModuleOpen: (m: EnrollmentModuleDto) => boolean;
+  toggleModule: (moduleId: string) => void;
+  onNavigate?: () => void;
+}) => (
+  <>
+    {/* Header */}
+    <div className="px-5 py-4 border-b border-gray-200">
+      <h3 className="text-base font-bold text-gray-900 mb-3">Kurs dasturi</h3>
+      <div className="flex justify-between text-xs text-gray-500 mb-2">
+        <span>{completedLessons} / {total} dars tugallandi</span>
+        <span className="font-bold text-blue-700">{enrollment.progressPercent}%</span>
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+        <div className="h-full rounded-full bg-blue-600 transition-all" style={{ width: `${enrollment.progressPercent}%` }} />
+      </div>
+    </div>
+
+    {/* Scrollable module list */}
+    <div className="overflow-y-auto">
+      {enrollment.modules.map((m) => (
+        <SidebarModule
+          key={m.id}
+          module={m}
+          currentLessonId={lessonId}
+          courseId={enrollment.course.id}
+          isOpen={getModuleOpen(m)}
+          onToggle={() => toggleModule(m.id)}
+          onNavigate={onNavigate}
+        />
+      ))}
+    </div>
+  </>
+);
 
 /* ── Main page ─────────────────────────────────────────── */
 
@@ -228,6 +287,29 @@ const LessonPage = () => {
 
   // Track which modules are open in sidebar
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
+
+  // Mobile curriculum drawer
+  const [curriculumOpen, setCurriculumOpen] = useState(false);
+  // Close the drawer whenever the active lesson changes (adjust-state-during-render)
+  const [prevLessonId, setPrevLessonId] = useState(lessonId);
+  if (prevLessonId !== lessonId) {
+    setPrevLessonId(lessonId);
+    setCurriculumOpen(false);
+  }
+  // Escape to close + lock body scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!curriculumOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setCurriculumOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [curriculumOpen]);
 
   if (!id) return <Navigate to="/dashboard/courses" replace />;
   if (enrollmentsQuery.isLoading || enrollmentQuery.isLoading) return <GlobalSpinner />;
@@ -301,6 +383,16 @@ const LessonPage = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Mobile: open curriculum drawer */}
+          <button
+            type="button"
+            onClick={() => setCurriculumOpen(true)}
+            aria-label="Kurs dasturini ochish"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors lg:hidden"
+          >
+            <ListIcon className="w-4.5 h-4.5" />
+            <span className="hidden sm:inline">Dastur</span>
+          </button>
           {/* Progress indicator */}
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-blue-700">{enrollment.progressPercent}%</span>
@@ -432,34 +524,58 @@ const LessonPage = () => {
           )}
         </main>
 
-        {/* ── SIDEBAR: curriculum ──────────────────────── */}
+        {/* ── SIDEBAR: curriculum (desktop) ────────────── */}
         <aside className="sticky top-20 hidden lg:flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden max-h-[calc(100vh-100px)]">
-          {/* Sidebar header */}
-          <div className="px-5 py-4 border-b border-gray-200">
-            <h3 className="text-base font-bold text-gray-900 mb-3">Kurs dasturi</h3>
-            <div className="flex justify-between text-xs text-gray-500 mb-2">
-              <span>{completedLessons} / {total} dars tugallandi</span>
-              <span className="font-bold text-blue-700">{enrollment.progressPercent}%</span>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
-              <div className="h-full rounded-full bg-blue-600 transition-all" style={{ width: `${enrollment.progressPercent}%` }} />
-            </div>
-          </div>
-
-          {/* Scrollable module list */}
-          <div className="overflow-y-auto">
-            {enrollment.modules.map((m) => (
-              <SidebarModule
-                key={m.id}
-                module={m}
-                currentLessonId={lessonId}
-                courseId={enrollment.course.id}
-                isOpen={getModuleOpen(m)}
-                onToggle={() => toggleModule(m.id)}
-              />
-            ))}
-          </div>
+          <CurriculumContent
+            enrollment={enrollment}
+            lessonId={lessonId}
+            completedLessons={completedLessons}
+            total={total}
+            getModuleOpen={getModuleOpen}
+            toggleModule={toggleModule}
+          />
         </aside>
+      </div>
+
+      {/* ── Curriculum drawer (mobile) ─────────────────── */}
+      <div
+        className={`fixed inset-0 z-60 lg:hidden ${curriculumOpen ? "" : "pointer-events-none"}`}
+        aria-hidden={!curriculumOpen}
+      >
+        {/* Overlay */}
+        <div
+          onClick={() => setCurriculumOpen(false)}
+          className={`absolute inset-0 bg-gray-900/50 transition-opacity duration-200 ${
+            curriculumOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+        {/* Panel */}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Kurs dasturi"
+          className={`absolute inset-y-0 right-0 flex w-80 max-w-[85%] flex-col bg-white shadow-xl transition-transform duration-200 ease-out ${
+            curriculumOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => setCurriculumOpen(false)}
+            aria-label="Yopish"
+            className="absolute right-3 top-3.5 z-10 flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          >
+            <CloseIcon className="w-5 h-5" />
+          </button>
+          <CurriculumContent
+            enrollment={enrollment}
+            lessonId={lessonId}
+            completedLessons={completedLessons}
+            total={total}
+            getModuleOpen={getModuleOpen}
+            toggleModule={toggleModule}
+            onNavigate={() => setCurriculumOpen(false)}
+          />
+        </div>
       </div>
     </div>
   );

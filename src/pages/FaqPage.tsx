@@ -87,13 +87,16 @@ const faqData: Record<string, { q: string; a: string }[]> = {
 const TABS = Object.keys(faqData);
 
 /* ── Accordion Item ── */
+let faqIdCounter = 0;
 const AccordionItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
+  const [itemId] = useState(() => `faq-${++faqIdCounter}`);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
+        aria-controls={itemId}
         className="flex w-full items-center justify-between px-5 py-4 text-left"
       >
         <span className="text-base font-semibold text-gray-900">{q}</span>
@@ -109,6 +112,8 @@ const AccordionItem = ({ q, a }: { q: string; a: string }) => {
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            id={itemId}
+            role="region"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -173,6 +178,7 @@ const FaqPage = () => {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              aria-label="Savollarni qidirish"
               placeholder="Savolingizni qidiring…"
               className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
             />

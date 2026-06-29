@@ -349,9 +349,13 @@ const CourseTabs = ({ course }: Props) => {
       <div className="border-b border-gray-200">
         <ul className="flex gap-0 overflow-x-auto" role="tablist">
           {tabLabels.map((tab, i) => (
-            <li key={tab}>
+            <li key={tab} role="presentation">
               <button
                 role="tab"
+                id={`course-tab-${i}`}
+                aria-selected={active === i}
+                aria-controls={`course-panel-${i}`}
+                tabIndex={active === i ? 0 : -1}
                 onClick={() => setActive(i)}
                 className={`whitespace-nowrap border-b-2 px-5 py-3.5 text-sm font-medium transition-colors ${
                   active === i
@@ -367,7 +371,7 @@ const CourseTabs = ({ course }: Props) => {
       </div>
 
       {/* Tab panel */}
-      <div className="pt-8" role="tabpanel">
+      <div className="pt-8" role="tabpanel" id={`course-panel-${active}`} aria-labelledby={`course-tab-${active}`}>
         {panels[active]}
       </div>
     </div>

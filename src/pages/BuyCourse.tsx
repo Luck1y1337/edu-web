@@ -140,6 +140,7 @@ const BuyCourse = () => {
               type="text"
               value={promo}
               onChange={(e) => setPromo(e.target.value)}
+              aria-label="Promo kod"
               placeholder="Agar bo'lsa, promo kodingizni kiriting"
               className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />

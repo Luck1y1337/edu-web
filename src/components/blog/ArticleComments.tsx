@@ -65,6 +65,7 @@ const ArticleComments = ({ slug, comments }: Props) => {
         </h3>
         <input
           type="text"
+          aria-label="Ismingiz"
           placeholder="Ismingiz"
           className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           {...register("authorName", { required: "Ism kiritilishi shart", minLength: { value: 2, message: "Kamida 2 ta harf" } })}
@@ -73,6 +74,7 @@ const ArticleComments = ({ slug, comments }: Props) => {
 
         <input
           type="email"
+          aria-label="Email"
           placeholder="Email (ixtiyoriy)"
           className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           {...register("authorEmail")}
@@ -80,6 +82,7 @@ const ArticleComments = ({ slug, comments }: Props) => {
 
         <textarea
           rows={3}
+          aria-label="Izoh matni"
           placeholder="Fikringizni yozing..."
           className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           {...register("content", { required: "Izoh matnini kiriting", minLength: { value: 3, message: "Kamida 3 ta belgi" } })}

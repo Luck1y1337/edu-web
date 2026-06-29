@@ -85,6 +85,7 @@ const AdminBlogPosts = () => {
           </span>
           <input
             type="text"
+            aria-label="Blog postlarni qidirish"
             placeholder="Sarlavha bo'yicha qidiring..."
             value={search}
             onChange={(e) => {

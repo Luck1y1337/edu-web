@@ -88,6 +88,7 @@ const AdminStudents = () => {
           </span>
           <input
             type="text"
+            aria-label="Talabalarni qidirish"
             placeholder="Ism yoki email bo'yicha qidiring..."
             value={search}
             onChange={(e) => {

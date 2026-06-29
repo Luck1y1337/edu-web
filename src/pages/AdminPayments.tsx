@@ -111,6 +111,7 @@ const AdminPayments = () => {
           </span>
           <input
             type="text"
+            aria-label="To'lovlarni qidirish"
             placeholder="Tranzaksiya yoki o'quvchi bo'yicha qidiring..."
             value={search}
             onChange={(e) => {

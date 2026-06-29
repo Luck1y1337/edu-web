@@ -75,6 +75,7 @@ const DashboardCatalog = () => {
         <div className="relative flex-1 min-w-[240px]">
           <input
             type="text"
+            aria-label="Kurslarni qidirish"
             placeholder="Kurs nomi bo'yicha qidiring..."
             className="block w-full rounded-lg border border-gray-300 py-2.5 pl-4 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             value={searchTerm}
@@ -87,6 +88,7 @@ const DashboardCatalog = () => {
 
         <select
           value={category}
+          aria-label="Kategoriya bo'yicha saralash"
           onChange={(e) => {
             setPage(1);
             setCategory(e.target.value);
@@ -103,6 +105,7 @@ const DashboardCatalog = () => {
 
         <select
           value={level}
+          aria-label="Daraja bo'yicha saralash"
           onChange={(e) => {
             setPage(1);
             setLevel(e.target.value);
@@ -117,6 +120,7 @@ const DashboardCatalog = () => {
 
         <select
           value={sort}
+          aria-label="Tartib bo'yicha saralash"
           onChange={(e) => setSort(e.target.value)}
           className="rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 focus:border-blue-500"
         >

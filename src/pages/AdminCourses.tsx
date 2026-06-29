@@ -95,6 +95,7 @@ const AdminCourses = () => {
           </span>
           <input
             type="text"
+            aria-label="Kurslarni qidirish"
             placeholder="Kurs nomi bo'yicha qidiring..."
             value={search}
             onChange={(e) => {

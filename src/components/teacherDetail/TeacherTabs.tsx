@@ -173,10 +173,15 @@ const TeacherTabs = ({ teacher }: Props) => {
     <div className="flex flex-col">
       {/* Tab bar */}
       <div className="border-b border-gray-200">
-        <ul className="flex gap-1 overflow-x-auto">
+        <ul className="flex gap-1 overflow-x-auto" role="tablist">
           {tabs.map((tab, i) => (
-            <li key={tab.label}>
+            <li key={tab.label} role="presentation">
               <button
+                role="tab"
+                id={`teacher-tab-${i}`}
+                aria-selected={active === i}
+                aria-controls={`teacher-panel-${i}`}
+                tabIndex={active === i ? 0 : -1}
                 onClick={() => setActive(i)}
                 className={`whitespace-nowrap border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
                   active === i
@@ -190,7 +195,7 @@ const TeacherTabs = ({ teacher }: Props) => {
           ))}
         </ul>
       </div>
-      <div className="pt-6">{tabs[active].panel}</div>
+      <div className="pt-6" role="tabpanel" id={`teacher-panel-${active}`} aria-labelledby={`teacher-tab-${active}`}>{tabs[active].panel}</div>
     </div>
   );
 };

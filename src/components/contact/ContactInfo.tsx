@@ -11,7 +11,6 @@ const detailIcons: Record<ContactIconName, () => ReactElement> = {
   clock: Icon.clock,
 };
 
-// TODO: replace placeholder handles with the center's real social profiles.
 const socialUrls: Record<string, string> = {
   Telegram: "https://t.me/oquvmarkaz",
   Instagram: "https://instagram.com/oquvmarkaz",

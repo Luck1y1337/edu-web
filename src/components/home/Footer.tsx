@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { footerCourses, footerPages } from "../../data/home.data";
 
-// TODO: replace placeholder handles with the center's real social profiles.
 const socialLinks = [
   { name: "Telegram", url: "https://t.me/oquvmarkaz", icon: "M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" },
   { name: "Instagram", url: "https://instagram.com/oquvmarkaz", icon: "M7.5 2h9A5.5 5.5 0 0122 7.5v9a5.5 5.5 0 01-5.5 5.5h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2zm4.5 6a4 4 0 100 8 4 4 0 000-8zm5-1.5a1 1 0 100-2 1 1 0 000 2z" },

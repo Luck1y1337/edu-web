@@ -178,8 +178,6 @@ export const mapApiStats = (stats: PublicStatsDto, fallback: Stat[]): Stat[] =>
 
 /* ───────── Testimonials ───────── */
 
-const formatNumber = (n: number) => new Intl.NumberFormat("uz-UZ").format(n);
-
 export const mapApiTestimonial = (t: PublicTestimonialDto): Testimonial => {
   const firstName = t.student?.firstName || "";
   const lastName = t.student?.lastName || "";
@@ -247,6 +245,3 @@ export const mapApiBlogPost = (post: BlogPostListItemDto, index = 0): BlogPost =
     featuredLabel: post.isFeatured ? "TANLANGAN" : undefined,
   };
 };
-
-/* Counts how many published items map to a particular display unit — used in Home counter widget. */
-export const formatCount = formatNumber;

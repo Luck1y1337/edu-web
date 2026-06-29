@@ -241,14 +241,14 @@ const Register = () => {
               />
               <span>
                 <a
-                  href="#"
+                  href="/contact"
                   className="font-medium text-blue-600 hover:underline"
                 >
                   Foydalanish shartlari
                 </a>{" "}
                 va{" "}
                 <a
-                  href="#"
+                  href="/contact"
                   className="font-medium text-blue-600 hover:underline"
                 >
                   Maxfiylik siyosati

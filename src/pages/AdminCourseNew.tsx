@@ -98,7 +98,7 @@ const AdminCourseNew = () => {
       ...(values.oldPrice ? { oldPrice: Number(values.oldPrice) } : {}),
       ...(totalLessons > 0 ? { lessonsCount: totalLessons } : {}),
       ...(values.instructorId ? { instructorId: values.instructorId } : {}),
-      ...(values.isFeatured ? { isFeatured: values.isFeatured } : {}),
+      ...(values.isFeatured !== undefined ? { isFeatured: Boolean(values.isFeatured) } : {}),
       ...(values.status ? { status: values.status } : {}),
       ...(values.modules.length > 0
         ? {

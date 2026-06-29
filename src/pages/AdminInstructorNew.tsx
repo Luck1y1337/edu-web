@@ -30,7 +30,7 @@ const AdminInstructorNew = () => {
       ...(values.middleName ? { middleName: values.middleName } : {}),
       ...(values.birthDate ? { birthDate: values.birthDate } : {}),
       ...(values.gender ? { gender: values.gender } : {}),
-      ...(values.experience ? { experience: Number(values.experience) } : {}),
+      ...(values.experience !== undefined && values.experience !== null ? { experience: Number(values.experience) } : {}),
       ...(values.bio ? { bio: values.bio } : {}),
       ...(Object.keys(socialLinks).length > 0 ? { socialLinks } : {}),
       ...(values.status ? { status: values.status } : {}),

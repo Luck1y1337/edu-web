@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { publicApi } from "../services/api";
+import { publicApi, adminApi } from "../services/api";
 import { useAdminStudents } from "../hooks/api/useAdminStudents";
 import { useAdminReviews } from "../hooks/api/useAdminReviews";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
@@ -68,6 +69,7 @@ const AdminDashboard = () => {
     queryFn: publicApi.getStats,
   });
   const reviewsQuery = useAdminReviews({ page: 1, limit: 1 });
+  const [exporting, setExporting] = useState(false);
 
   if (studentsQuery.isLoading) return <GlobalSpinner />;
 
@@ -75,35 +77,43 @@ const AdminDashboard = () => {
   const recentStudents = studentsQuery.data?.items ?? [];
   const stats = statsQuery.data;
   const reviewsTotal = reviewsQuery.data?.total;
-
-  const handleExportReport = () => {
-    if (recentStudents.length === 0) {
-      toast.info("Eksport uchun ma'lumot yo'q");
-      return;
+  const handleExportReport = async () => {
+    setExporting(true);
+    try {
+      const all = await adminApi.getStudents({ limit: 1000 });
+      const items = all.items ?? [];
+      if (items.length === 0) {
+        toast.info("Eksport uchun ma'lumot yo'q");
+        return;
+      }
+      const header = ["Ism", "Familiya", "Email", "Telefon", "Holat", "Sana"];
+      const rows = items.map((s) => {
+        const u = s.user ?? {};
+        return [
+          u.firstName ?? "",
+          u.lastName ?? "",
+          u.email ?? "",
+          u.phone ?? "",
+          s.status ?? "",
+          formatDate(s.enrolledAt || u.createdAt),
+        ];
+      });
+      const csv = [header, ...rows]
+        .map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `talabalar-hisoboti-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success("Hisobot yuklab olindi");
+    } catch {
+      toast.error("Eksportda xatolik yuz berdi");
+    } finally {
+      setExporting(false);
     }
-    const header = ["Ism", "Familiya", "Email", "Telefon", "Holat", "Sana"];
-    const rows = recentStudents.map((s) => {
-      const u = s.user ?? {};
-      return [
-        u.firstName ?? "",
-        u.lastName ?? "",
-        u.email ?? "",
-        u.phone ?? "",
-        s.status ?? "",
-        formatDate(s.enrolledAt || u.createdAt),
-      ];
-    });
-    const csv = [header, ...rows]
-      .map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `talabalar-hisoboti-${new Date().toISOString().slice(0, 10)}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success("Hisobot yuklab olindi");
   };
 
   const tiles: StatTileItem[] = [
@@ -175,10 +185,11 @@ const AdminDashboard = () => {
           <button
             type="button"
             onClick={handleExportReport}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+            disabled={exporting}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:opacity-60"
           >
             <DownloadIcon />
-            Hisobot
+            {exporting ? "Yuklanmoqda..." : "Hisobot"}
           </button>
           <Link
             to="/admin/courses/new"

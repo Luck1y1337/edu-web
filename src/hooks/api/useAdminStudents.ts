@@ -78,9 +78,10 @@ export const useDeleteAdminStudent = () => {
   return useMutation({
     mutationKey: ["admin", "student", "delete"],
     mutationFn: async (id: string) => adminApi.deleteStudent(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       toast.success("Talaba o'chirildi");
       queryClient.invalidateQueries({ queryKey: queryKeys.admin.students() });
+      queryClient.removeQueries({ queryKey: queryKeys.admin.student(id) });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(error.response?.data?.message || "O'chirib bo'lmadi");

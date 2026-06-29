@@ -85,14 +85,15 @@ const TeacherHero = ({ teacher }: Props) => {
                   { label: "LinkedIn", icon: "in" },
                   { label: "GitHub", icon: "G" },
                 ].map((s) => (
-                  <a
+                  <button
                     key={s.label}
-                    href="#"
+                    type="button"
                     title={s.label}
+                    aria-label={s.label}
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-xs font-semibold text-gray-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                   >
                     {s.icon}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>

@@ -149,6 +149,7 @@ const StudentPayments = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm">
+                <caption className="sr-only">To'lovlar tarixi</caption>
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Sana</th>

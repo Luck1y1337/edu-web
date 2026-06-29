@@ -242,6 +242,7 @@ const Pricing = () => {
 
           <FadeIn className="overflow-x-auto rounded-2xl border border-gray-200">
             <table className="w-full text-sm">
+              <caption className="sr-only">Tariflar taqqoslash jadvali</caption>
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="py-4 pl-6 pr-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">

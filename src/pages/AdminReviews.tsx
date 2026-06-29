@@ -42,7 +42,7 @@ const getInitials = (firstName?: string, lastName?: string) => {
 
 /* ── Star rating component ── */
 const StarRating = ({ rating }: { rating: number }) => (
-  <div className="flex items-center gap-0.5">
+  <div className="flex items-center gap-0.5" role="img" aria-label={`Reyting: ${rating}/5`}>
     {Array.from({ length: 5 }, (_, i) => (
       <svg
         key={i}
@@ -179,6 +179,7 @@ const AdminReviews = () => {
           {/* Desktop: table */}
           <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
+              <caption className="sr-only">Sharhlar ro'yxati</caption>
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">
@@ -255,6 +256,7 @@ const AdminReviews = () => {
                               disabled={moderateReview.isPending}
                               className="inline-flex items-center justify-center rounded-lg border border-emerald-200 p-2 text-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 transition-colors disabled:opacity-60"
                               title="Tasdiqlash"
+                              aria-label="Tasdiqlash"
                             >
                               {/* check icon */}
                               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -270,6 +272,7 @@ const AdminReviews = () => {
                               disabled={moderateReview.isPending}
                               className="inline-flex items-center justify-center rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-60"
                               title="Rad etish"
+                              aria-label="Rad etish"
                             >
                               {/* X icon */}
                               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

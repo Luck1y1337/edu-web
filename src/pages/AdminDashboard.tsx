@@ -213,6 +213,7 @@ const AdminDashboard = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm">
+                <caption className="sr-only">So'nggi faoliyat</caption>
                 <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-600">
                   <tr>
                     <th className="px-5 py-3">O&rsquo;quvchi</th>

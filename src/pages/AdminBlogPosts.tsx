@@ -164,6 +164,7 @@ const AdminBlogPosts = () => {
           {/* Desktop: table */}
           <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
+              <caption className="sr-only">Blog postlari ro'yxati</caption>
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">

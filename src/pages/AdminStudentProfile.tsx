@@ -337,6 +337,7 @@ const CoursesTab = ({ query }: { query: ReturnType<typeof useAdminStudentEnrollm
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
+          <caption className="sr-only">Talaba kurslari</caption>
           <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-600">
             <tr>
               <th className="px-5 py-3">Kurs nomi</th>
@@ -418,6 +419,7 @@ const PaymentsTab = ({ query }: { query: ReturnType<typeof useAdminStudentPaymen
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
+            <caption className="sr-only">Talaba to'lovlari</caption>
             <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-600">
               <tr>
                 <th className="px-5 py-3">Kurs</th>

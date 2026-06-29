@@ -71,6 +71,7 @@ const StudentResults = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
+              <caption className="sr-only">Kurslar bo'yicha progress</caption>
               <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-600">
                 <tr>
                   <th className="px-5 py-3">Kurs</th>

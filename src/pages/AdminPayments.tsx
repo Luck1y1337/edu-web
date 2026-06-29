@@ -228,6 +228,7 @@ const AdminPayments = () => {
           {/* Desktop: table */}
           <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
+              <caption className="sr-only">To'lovlar ro'yxati</caption>
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">
@@ -308,6 +309,7 @@ const AdminPayments = () => {
                               onClick={() => setEditingStatusId(p.id)}
                               className="inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
                               title="Holatni o'zgartirish"
+                              aria-label="Holatni o'zgartirish"
                             >
                               {/* pencil icon */}
                               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -325,6 +327,7 @@ const AdminPayments = () => {
                               disabled={refundPayment.isPending}
                               className="inline-flex items-center justify-center rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-60"
                               title="Qaytarish"
+                              aria-label="Qaytarish"
                             >
                               {/* undo / refund icon */}
                               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

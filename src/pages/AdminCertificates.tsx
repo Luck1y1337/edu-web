@@ -101,6 +101,7 @@ const AdminCertificates = () => {
           {/* Desktop: table */}
           <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-left text-sm">
+              <caption className="sr-only">Sertifikatlar ro'yxati</caption>
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">
@@ -168,6 +169,7 @@ const AdminCertificates = () => {
                             disabled={revokeCert.isPending}
                             className="inline-flex items-center justify-center rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-60"
                             title="Bekor qilish"
+                            aria-label="Bekor qilish"
                           >
                             {/* ban / revoke icon */}
                             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

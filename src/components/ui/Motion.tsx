@@ -2,22 +2,38 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 
+const useReducedMotion = () => {
+  const [reduced, setReduced] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return reduced;
+};
+
 interface PageTransitionProps {
   children: ReactNode;
   className?: string;
 }
 
 /* Wraps route content so each page softly fades/slides in on navigation. */
-export const PageTransition = ({ children, className }: PageTransitionProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.35, ease: "easeOut" }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+export const PageTransition = ({ children, className }: PageTransitionProps) => {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      initial={reduced ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduced ? 0 : 0.35, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 interface FadeInProps {
   children: ReactNode;
@@ -48,13 +64,14 @@ export const FadeIn = ({
 }: FadeInProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin: "-80px" });
+  const reduced = useReducedMotion();
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, ...directionOffset[direction] }}
+      initial={reduced ? false : { opacity: 0, ...directionOffset[direction] }}
       animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
-      transition={{ duration, delay, ease: "easeOut" }}
+      transition={{ duration: reduced ? 0 : duration, delay: reduced ? 0 : delay, ease: "easeOut" }}
       className={className}
       style={style}
     >
@@ -99,17 +116,20 @@ export const StaggerItem = ({
 }: {
   children: ReactNode;
   className?: string;
-}) => (
-  <motion.div
-    variants={{
-      hidden: { opacity: 0, y: 30 },
-      visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-    }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+}) => {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      variants={{
+        hidden: reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.5, ease: "easeOut" } },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 interface AnimatedCounterProps {
   value: number;
@@ -126,10 +146,11 @@ export const AnimatedCounter = ({
 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });
-  const [display, setDisplay] = useState(0);
+  const reduced = useReducedMotion();
+  const [display, setDisplay] = useState(reduced ? value : 0);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || reduced) return;
 
     let start = 0;
     const step = value / (duration * 60);
@@ -144,7 +165,7 @@ export const AnimatedCounter = ({
     }, 1000 / 60);
 
     return () => clearInterval(timer);
-  }, [isInView, value, duration]);
+  }, [isInView, value, duration, reduced]);
 
   return (
     <span ref={ref} className={className}>
@@ -160,13 +181,16 @@ export const ScaleOnHover = ({
 }: {
   children: ReactNode;
   className?: string;
-}) => (
-  <motion.div
-    whileHover={{ scale: 1.03, y: -4 }}
-    whileTap={{ scale: 0.98 }}
-    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+}) => {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      whileHover={reduced ? {} : { scale: 1.03, y: -4 }}
+      whileTap={reduced ? {} : { scale: 0.98 }}
+      transition={reduced ? {} : { type: "spring", stiffness: 300, damping: 20 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};

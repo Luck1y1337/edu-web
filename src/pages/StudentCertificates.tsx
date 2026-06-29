@@ -247,7 +247,7 @@ const StudentCertificates = () => {
             <ClaimableCard
               key={e.id}
               enrollment={e}
-              isClaiming={claim.isPending}
+              isClaiming={claim.isPending && claim.variables === e.course.id}
               onClaim={() => claim.mutate(e.course.id)}
             />
           ))}

@@ -43,3 +43,20 @@ export const useDeleteSession = () => {
     },
   });
 };
+
+export const useLogoutOtherSessions = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(ids.map((id) => axios.delete(Endpoints.user.session(id))));
+    },
+    onSuccess: () => {
+      toast.success("Boshqa barcha sessiyalardan chiqildi");
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.sessions });
+    },
+    onError: () => {
+      toast.error("Sessiyalarni yakunlashda xatolik yuz berdi");
+    },
+  });
+};

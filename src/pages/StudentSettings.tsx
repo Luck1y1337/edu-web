@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { useChangePassword } from "../hooks/api/useChangePassword";
-import { useSessions, useDeleteSession } from "../hooks/api/useSessions";
+import { useSessions, useDeleteSession, useLogoutOtherSessions } from "../hooks/api/useSessions";
 import GlobalSpinner from "../components/ui/GlobalSpinner";
 import useUserStore from "../store/user.store";
 import { changePasswordSchema, type ChangePasswordForm } from "../schemas/auth.schema";
@@ -60,6 +60,7 @@ const StudentSettings = () => {
   // Sessions
   const { data: sessions, isLoading: sessionsLoading } = useSessions();
   const { mutate: deleteSession } = useDeleteSession();
+  const { mutate: logoutOtherSessions, isPending: isLoggingOutAll } = useLogoutOtherSessions();
 
   const handleLogoutAll = () => {
     const otherSessions = sessions?.filter((s) => !s.isCurrent) ?? [];
@@ -67,7 +68,7 @@ const StudentSettings = () => {
       toast.info("Boshqa aktiv sessiyalar yo'q");
       return;
     }
-    otherSessions.forEach((s) => deleteSession(s.id));
+    logoutOtherSessions(otherSessions.map((s) => s.id));
   };
 
   // Notifications
@@ -493,9 +494,10 @@ const StudentSettings = () => {
               <button
                 type="button"
                 onClick={handleLogoutAll}
-                className="rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700"
+                disabled={isLoggingOutAll}
+                className="rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:opacity-60"
               >
-                Hammadan chiqish
+                {isLoggingOutAll ? "Chiqilmoqda..." : "Hammadan chiqish"}
               </button>
             </div>
 

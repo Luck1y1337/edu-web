@@ -112,6 +112,20 @@ const StudentDashboard = () => {
     );
   }
 
+  if (enrollmentsQuery.isError) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-20 text-center">
+        <p className="text-sm text-red-600">Ma'lumotlarni yuklab bo'lmadi.</p>
+        <button
+          onClick={() => enrollmentsQuery.refetch()}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+          Qayta urinish
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Page header */}

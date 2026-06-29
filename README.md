@@ -124,7 +124,7 @@ src/
 
 ### Prerequisites
 
-- **Node.js** 18+ and **npm**
+- **Node.js** 18+ and **Yarn**
 - A running backend API instance
 
 ### Installation
@@ -135,14 +135,14 @@ git clone https://github.com/Luck1y1337/oquv-markaz-frontend.git
 cd oquv-markaz-frontend
 
 # Install dependencies
-npm install
+yarn
 
 # Configure environment
 cp .env.example .env
 # Edit .env and set VITE_BACKEND_URL to your API endpoint
 
 # Start development server
-npm run dev
+yarn dev
 ```
 
 The application will be available at `http://localhost:5173`.
@@ -157,10 +157,10 @@ The application will be available at `http://localhost:5173`.
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start development server with HMR |
-| `npm run build` | Production build (TypeScript check + Vite build) |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint checks |
+| `yarn dev` | Start development server with HMR |
+| `yarn build` | Production build (TypeScript check + Vite build) |
+| `yarn preview` | Preview production build locally |
+| `yarn lint` | Run ESLint checks |
 
 ## Route Map
 
@@ -256,7 +256,7 @@ Set the `VITE_BACKEND_URL` environment variable to `/api/v1` in your Vercel proj
 ### Static Export
 
 ```bash
-npm run build
+yarn build
 # Serve the dist/ directory with any static file server
 # Ensure all routes fallback to index.html
 ```

@@ -27,7 +27,7 @@ class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) return this.props.fallback;
 
       return (
-        <div className="flex min-h-[400px] flex-col items-center justify-center px-4 py-12 text-center">
+        <div className="flex min-h-100 flex-col items-center justify-center px-4 py-12 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
             <svg
               className="h-8 w-8 text-red-600"

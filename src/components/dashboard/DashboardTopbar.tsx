@@ -59,7 +59,7 @@ const DashboardTopbar = () => {
               {initials}
             </span>
           )}
-          <div className="hidden text-right sm:block min-w-0 max-w-[150px] lg:max-w-[200px]">
+          <div className="hidden text-right sm:block min-w-0 max-w-37.5 lg:max-w-50">
             <p className="text-sm font-semibold text-gray-900 truncate">{fullName}</p>
             <p className="text-xs text-gray-400 truncate">{user?.email || "Online talaba"}</p>
           </div>

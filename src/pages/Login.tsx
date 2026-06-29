@@ -59,7 +59,7 @@ const Login = () => {
   return (
     <div className="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">
       {/* Chap panel — brend */}
-      <aside className="hidden flex-col justify-between bg-gradient-to-br from-blue-600 to-violet-700 px-10 py-12 text-white lg:flex">
+      <aside className="hidden flex-col justify-between bg-linear-to-br from-blue-600 to-violet-700 px-10 py-12 text-white lg:flex">
         <Link to="/" className="inline-flex items-center gap-3 self-start">
           <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
             <Icon.graduationCap />
@@ -67,7 +67,7 @@ const Login = () => {
           <span className="font-manrope text-xl font-bold">O'quv Markaz</span>
         </Link>
 
-        <div className="flex max-w-[480px] flex-col gap-5">
+        <div className="flex max-w-120 flex-col gap-5">
           <h1 className="font-manrope text-[40px] font-extrabold leading-tight">
             Bilim — kelajakka eng yaxshi sarmoyadir.
           </h1>
@@ -116,7 +116,7 @@ const Login = () => {
           </Link>
         </div>
 
-        <main className="mx-auto flex w-full max-w-[480px] flex-1 flex-col justify-center">
+        <main className="mx-auto flex w-full max-w-120 flex-1 flex-col justify-center">
           <h2 className="font-manrope text-[32px] font-bold tracking-tight text-gray-900">
             Hisobingizga kiring
           </h2>

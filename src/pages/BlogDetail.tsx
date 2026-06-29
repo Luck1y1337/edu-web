@@ -56,7 +56,7 @@ const BlogDetail = () => {
           <svg className="h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-          <span className="font-semibold text-gray-900 line-clamp-1 max-w-[200px]">
+          <span className="font-semibold text-gray-900 line-clamp-1 max-w-50">
             {post.category}
           </span>
         </nav>
@@ -69,7 +69,7 @@ const BlogDetail = () => {
               <img
                 src={post.image}
                 alt={post.title}
-                className="h-80 w-full rounded-3xl object-cover lg:h-[420px]"
+                className="h-80 w-full rounded-3xl object-cover lg:h-105"
               />
 
               <ArticleBody content={apiPost.content || ""} />

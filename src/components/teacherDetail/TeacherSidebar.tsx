@@ -50,7 +50,7 @@ const TeacherSidebar = ({ teacher }: Props) => {
       )}
 
       {/* CTA */}
-      <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white">
+      <div className="rounded-2xl bg-linear-to-br from-blue-600 to-indigo-700 p-6 text-white">
         <h3 className="font-manrope mb-2 text-lg font-bold">
           {teacher.name.split(" ")[0]} bilan o'qishni boshlang
         </h3>

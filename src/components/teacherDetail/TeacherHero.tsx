@@ -30,7 +30,7 @@ const TeacherHero = ({ teacher }: Props) => {
             <img
               src={teacher.photo}
               alt={teacher.name}
-              className="h-44 w-44 rounded-full object-cover ring-[6px] ring-white shadow-xl"
+              className="h-44 w-44 rounded-full object-cover ring-6 ring-white shadow-xl"
             />
           </div>
 

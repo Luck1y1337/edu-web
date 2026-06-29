@@ -57,7 +57,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm transition-opacity"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm transition-opacity"
     >
       {/* Modal Container */}
       <div
@@ -67,7 +67,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose }) => {
         aria-labelledby="logout-modal-title"
         aria-describedby="logout-modal-desc"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[480px] rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-120 rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
       >
 
         {/* Header */}

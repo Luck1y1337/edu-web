@@ -72,7 +72,7 @@ const DashboardCatalog = () => {
       </header>
 
       <div className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-        <div className="relative flex-1 min-w-[240px]">
+        <div className="relative flex-1 min-w-60">
           <input
             type="text"
             aria-label="Kurslarni qidirish"

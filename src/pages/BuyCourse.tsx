@@ -147,7 +147,7 @@ const BuyCourse = () => {
           </article>
         </div>
 
-        <aside className="w-full shrink-0 lg:w-[360px]">
+        <aside className="w-full shrink-0 lg:w-90">
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <h3 className="font-manrope text-lg font-bold text-gray-900 mb-5">
               Buyurtma xulosasi

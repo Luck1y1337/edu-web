@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="public/favicon.svg" width="80" height="80" alt="EduCenter" />
+  <img src="public/favicon.svg" width="80" height="80" alt="O'quv Markaz" />
 </p>
 
-<h1 align="center">EduCenter</h1>
+<h1 align="center">O'quv Markaz</h1>
 
 <p align="center">
-  <strong>Enterprise Learning Management System — Frontend</strong><br/>
-  A full-featured single-page application for managing online education platforms.
+  <strong>Learning Management System — Frontend</strong><br/>
+  Full-featured SPA for managing an online education platform.
 </p>
 
 <p align="center">
@@ -33,42 +33,51 @@
 
 ## Overview
 
-EduCenter is a modern, production-ready frontend for an online education platform. Built with React 19 and TypeScript, it provides a seamless experience across three user roles — **public visitors**, **enrolled students**, and **administrators** — with 40+ fully implemented pages, real-time data from a REST API, and a responsive design system.
+O'quv Markaz is a modern, production-ready frontend for an online education platform. Built with React 19 and TypeScript, it provides a seamless experience across three user roles — **public visitors**, **enrolled students**, and **administrators** — with 45+ fully implemented pages, real-time data from a REST API, and a responsive design system.
 
 ## Features
 
 ### Public Portal
 - **Landing page** with hero section, course catalog preview, instructor showcase, testimonials, and FAQ
 - **Course catalog** with filtering by category, level, and price — full-text search and pagination
-- **Course detail** pages with curriculum breakdown, instructor profiles, and student reviews
-- **Blog** with featured posts, category sidebar, tag cloud, and commenting
+- **Course detail** pages with curriculum breakdown, instructor profiles, and ARIA-compliant tabs
+- **Instructor directory** with specialty filters and detailed profile pages
+- **Blog** with featured posts, category sidebar, and commenting
+- **Pricing page** with plan comparison
 - **Contact form** with validation and submission to backend
 
 ### Student Dashboard
 - **Personalized dashboard** with continue-learning banner, weekly goals, and progress tracking
-- **Enrolled courses** with module-by-module progress bars and completion status
-- **Lesson player** with video playback, curriculum sidebar, and navigation between lessons
-- **Certificate management** — view earned certificates and track progress toward new ones
-- **Payment history** with transaction details and downloadable receipts
+- **Enrolled courses** with real progress percentages and completion dates
+- **Lesson player** with video playback, responsive curriculum drawer, and lesson navigation
+- **Test results** with detailed score breakdowns
+- **Certificate management** — claim earned certificates with scoped loading states
+- **Payment history** with transaction details
+- **Settings** — password change and session management (logout all other sessions)
+- **Course catalog** — browse and purchase available courses
 
 ### Admin Panel
-- **KPI dashboard** with real-time statistics, recent registrations, and quick actions
+- **KPI dashboard** with real-time statistics, recent registrations, and CSV export
 - **Student management** — CRUD operations, profile pages with enrollment and payment tabs
 - **Instructor management** — full CRUD with specialty, experience, and social links
-- **Course builder** — create courses with nested modules and lessons via drag-free inline editor
-- **Payment management** — status tracking, inline status changes, and refund processing
+- **Course builder** — create courses with nested modules and lessons
+- **Payment management** — status tracking and inline status changes
 - **Certificate administration** — issuance tracking and revocation
-- **Review moderation** — approve or reject student reviews with rating display
+- **Review moderation** — approve or reject student reviews with star rating display
 - **Blog management** — post CRUD with draft/publish workflow
-- **Contact messages** — expandable message rows with status workflow (new → read → replied → closed)
+- **Contact messages** — expandable message rows with keyboard-accessible status workflow
+- **Platform settings** — admin configuration page
+- **Responsive tables** — mobile card view for all admin data tables
 
 ### Platform-Wide
 - **JWT authentication** with automatic token refresh and role-based routing
-- **Profile dropdown** in header with quick navigation and logout
+- **Accessibility** — ARIA tabs, dialog semantics with focus trap, screen-reader captions on all tables, labeled inputs, keyboard navigation, `prefers-reduced-motion` support
+- **Profile dropdown** in header with quick navigation and logout modal
 - **Search debounce** (300ms) across all admin list pages
-- **Global 403 handler** — user-friendly forbidden access notifications
-- **Reusable UI components** — Breadcrumb, Pagination, StatTile extracted for consistency
+- **Error boundaries** with retry functionality
+- **Loading & error states** — skeleton loaders, error blocks with retry on all data-fetching pages
 - **Responsive design** — optimized for desktop, tablet, and mobile viewports
+- **Animations** — framer-motion with automatic reduced-motion guard
 
 ## Tech Stack
 
@@ -77,20 +86,20 @@ EduCenter is a modern, production-ready frontend for an online education platfor
 | **UI Framework** | React 19 with React Compiler |
 | **Language** | TypeScript 6 (strict mode) |
 | **Build Tool** | Vite 8 |
-| **Styling** | Tailwind CSS 4 |
+| **Styling** | Tailwind CSS 4 (v4 utility syntax) |
 | **Routing** | React Router DOM 7 (`createBrowserRouter`) |
 | **Server State** | TanStack React Query 5 |
 | **Client State** | Zustand with persist middleware |
 | **HTTP Client** | Axios with JWT interceptors |
-| **Forms** | React Hook Form 7 |
+| **Forms** | React Hook Form 7 + Zod validation |
+| **Animations** | Framer Motion 12 |
 | **Notifications** | React Toastify |
-| **Typography** | Inter (body) + Manrope (headings) |
 
 ## Architecture
 
 ```
 src/
-├── config/              # Axios instance, API endpoint registry
+├── config/              # Axios instance, API endpoints, query keys
 ├── types/               # TypeScript interfaces (Swagger-derived DTOs)
 ├── services/
 │   ├── api.ts           # API call functions (auth, public, student, admin)
@@ -100,10 +109,10 @@ src/
 │   ├── api/             # React Query hooks (useAdminStudents, useAdminCourses, etc.)
 │   └── useDebounce.ts   # Generic debounce hook
 ├── components/
-│   ├── ui/              # Design system: Button, Input, Icon, Breadcrumb, Pagination, StatTile
+│   ├── ui/              # Design system: Button, Input, Icon, Motion, Skeleton, etc.
 │   ├── layouts/         # RootLayout, DashboardLayout, AdminLayout
 │   ├── auth/            # ProtectedRoute, AdminRoute (role guards)
-│   ├── admin/           # AdminSidebar (sectioned nav), AdminTopbar
+│   ├── admin/           # AdminSidebar (desktop + mobile drawer), AdminTopbar
 │   ├── home/            # Header, Footer, Hero, Stats, FAQ, CTA
 │   └── ...              # Domain-specific: courses, blog, dashboard, teachers, contact
 ├── pages/               # All route pages (lazy-loaded via React.lazy)
@@ -115,15 +124,15 @@ src/
 
 ### Prerequisites
 
-- **Node.js** 18+ and **npm** (or Yarn)
+- **Node.js** 18+ and **npm**
 - A running backend API instance
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/Luck1y1337/edu-web.git
-cd edu-web
+git clone https://github.com/Luck1y1337/oquv-markaz-frontend.git
+cd oquv-markaz-frontend
 
 # Install dependencies
 npm install
@@ -163,9 +172,11 @@ The application will be available at `http://localhost:5173`.
 | `/courses` | Course catalog with filters, search, and pagination |
 | `/courses/:slug` | Course detail — curriculum, instructor, reviews |
 | `/teachers` | Instructor directory with specialty filters |
-| `/teachers/:id` | Instructor profile |
+| `/teachers/:id` | Instructor profile — bio, courses, experience |
 | `/blog` | Blog with featured posts and category sidebar |
 | `/blog/:slug` | Article detail with comments |
+| `/pricing` | Plan comparison and pricing |
+| `/faq` | Frequently asked questions with accordion |
 | `/contact` | Contact form with info sidebar |
 | `/about` | About page — timeline, team, mission |
 
@@ -186,29 +197,36 @@ The application will be available at `http://localhost:5173`.
 | `/dashboard` | Overview — continue learning, stats, weekly goal |
 | `/dashboard/courses` | Enrolled courses with progress |
 | `/dashboard/courses/:id` | Course detail (enrolled view) |
-| `/dashboard/lesson/:id` | Lesson player with curriculum sidebar |
+| `/dashboard/lesson/:id` | Lesson player with curriculum drawer |
+| `/dashboard/results` | Test results and scores |
 | `/dashboard/certificates` | Certificate gallery (earned + locked) |
-| `/dashboard/payments` | Payment history and methods |
+| `/dashboard/payments` | Payment history |
 | `/dashboard/profile` | User profile |
+| `/dashboard/settings` | Password change and session management |
 | `/dashboard/catalog` | Browse available courses |
+| `/dashboard/buy-course` | Course purchase flow |
 
 ### Admin Panel (`/admin`)
 
 | Route | Description |
 |---|---|
-| `/admin` | Dashboard — KPI tiles, recent activity |
+| `/admin` | Dashboard — KPI tiles, recent activity, CSV export |
 | `/admin/students` | Student list — search, filter, pagination |
 | `/admin/students/new` | Create student |
 | `/admin/students/:id` | Student profile — enrollments, payments |
 | `/admin/instructors` | Instructor list |
 | `/admin/instructors/new` | Create instructor |
+| `/admin/instructors/:id` | Instructor profile |
 | `/admin/courses` | Course list — status and category filters |
 | `/admin/courses/new` | Course builder — modules and lessons |
-| `/admin/payments` | Payment management — status changes, refunds |
+| `/admin/courses/:id` | Course detail and edit |
+| `/admin/payments` | Payment management — status changes |
 | `/admin/certificates` | Certificate administration |
 | `/admin/reviews` | Review moderation |
 | `/admin/blog` | Blog post management |
+| `/admin/blog/new` | Create blog post |
 | `/admin/contact` | Contact message inbox |
+| `/admin/settings` | Platform settings |
 
 ## API Integration
 
@@ -217,7 +235,6 @@ The frontend communicates with a NestJS REST API featuring:
 - **JWT Authentication** — access + refresh token flow with automatic renewal on 401
 - **Role-based Access** — `student`, `instructor`, `admin`, `super_admin`
 - **Strict Validation** — backend enforces query parameter whitelist (no unknown params)
-- **73 Endpoints** across 5 namespaces: `auth`, `user`, `public`, `student`, `admin`
 - **Paginated Responses** — standardized `{ items, total, page, limit, totalPages }` format
 
 All API calls are centralized in `services/api.ts` with typed request/response interfaces derived from the Swagger specification.
@@ -231,7 +248,6 @@ The project includes a `vercel.json` with:
 - **SPA fallback** — all routes serve `index.html` for client-side routing
 
 ```bash
-# Deploy via Vercel CLI
 npx vercel --prod
 ```
 
@@ -241,10 +257,16 @@ Set the `VITE_BACKEND_URL` environment variable to `/api/v1` in your Vercel proj
 
 ```bash
 npm run build
-# Serve the `dist/` directory with any static file server
+# Serve the dist/ directory with any static file server
 # Ensure all routes fallback to index.html
 ```
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+<p align="center">
+  Built by <a href="https://github.com/Luck1y1337"><strong>Luck1y</strong></a>
+</p>

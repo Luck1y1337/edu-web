@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/Luck1y1337/edu-web/actions/workflows/ci.yml"><img src="https://github.com/Luck1y1337/edu-web/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <img src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=white" />
   <img src="https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript&logoColor=white" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white" />
@@ -26,6 +27,7 @@
   <a href="#route-map">Route Map</a> •
   <a href="#api-integration">API Integration</a> •
   <a href="#deployment">Deployment</a> •
+  <a href="#security">Security</a> •
   <a href="#license">License</a>
 </p>
 
@@ -131,8 +133,8 @@ src/
 
 ```bash
 # Clone the repository
-git clone https://github.com/Luck1y1337/oquv-markaz-frontend.git
-cd oquv-markaz-frontend
+git clone https://github.com/Luck1y1337/edu-web.git
+cd edu-web
 
 # Install dependencies
 yarn
@@ -260,6 +262,18 @@ yarn build
 # Serve the dist/ directory with any static file server
 # Ensure all routes fallback to index.html
 ```
+
+## Security
+
+- **No secrets in the repository** — the only runtime configuration is `VITE_BACKEND_URL`, supplied via an untracked `.env` file. `.env` is git-ignored; `.env.example` documents the expected variables.
+- **Authentication** — JWT access/refresh flow; the access token is attached via an Axios request interceptor and cleared on logout or 401.
+- **Route guards** — `ProtectedRoute` and `AdminRoute` gate authenticated and admin-only areas; access is always re-validated by the backend.
+- **XSS protection** — all user- and API-supplied HTML (blog content, rich text) is sanitized with DOMPurify before rendering.
+- **Input validation** — every form is validated client-side with Zod schemas; the backend enforces its own validation and a strict query-parameter whitelist.
+
+> **Note:** `VITE_*` variables are inlined into the client bundle at build time and are therefore public by design. Never place private secrets (API keys, database credentials) in a `VITE_`-prefixed variable.
+
+Found a vulnerability? Please open a private security advisory on GitHub rather than a public issue.
 
 ## License
 

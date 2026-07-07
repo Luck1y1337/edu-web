@@ -19,6 +19,11 @@
 </p>
 
 <p align="center">
+  <a href="https://edu-web-delta-eight.vercel.app"><strong>🚀 Live Demo</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://edu-web-delta-eight.vercel.app">Live Demo</a> •
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#architecture">Architecture</a> •
